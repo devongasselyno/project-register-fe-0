@@ -5,6 +5,7 @@ import { encode } from 'base64-arraybuffer';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import Typical from 'react-typical';
+import { useNavigate } from 'react-router-dom';
 
 const SigninPage = () => {
     const [email, setEmail] = useState('');
@@ -18,6 +19,8 @@ const SigninPage = () => {
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
     };
+
+    const navigate = useNavigate();
 
     const handleLogin = async (event) => {
         event.preventDefault()
@@ -33,6 +36,7 @@ const SigninPage = () => {
 
             if (response.status === 200) {
                 console.log('Authentication successful');
+                navigate('/dashboard');
             } else if (response.status === 401) {
                 setError('Invalid email or password');
             }
