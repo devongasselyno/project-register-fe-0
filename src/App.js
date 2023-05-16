@@ -1,9 +1,9 @@
 import './App.css';
 import Navbar from './components/Navbar';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import DashboardView from './components/DashboardView';
 import { Outlet } from 'react-router-dom';
+
 
 
 function App() {
