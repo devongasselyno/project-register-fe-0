@@ -1,4 +1,3 @@
-import Data from './Data.json'
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -13,7 +12,7 @@ const Main = () => {
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
   const records = posts.slice(firstIndex, lastIndex)
-  const npage = Math.ceil(Data.length / recordsPerPage)
+  const npage = Math.ceil(posts.length / recordsPerPage)
   const numbers = [...Array(npage + 1).keys()].slice(1)
   const navigate = useNavigate()
 
@@ -38,7 +37,7 @@ const Main = () => {
   return (
     <div className='pt-6 px-6'>
       <div className='flex items-center justify-between'>
-        <h1 className='text-2xl leading-8 font-normal cursor-pointer'>Dashboard</h1>
+        <h1 className='text-2xl leading-8 font-normal'>Dashboard</h1>
       </div>
   
       <div className='py-6'>
@@ -99,7 +98,7 @@ const Main = () => {
             {
               numbers.map((n, i ) => (
                 <li className={`page-item ${currentPage === n ? 'active:' : ''}`} key={i}>
-                  <a onClick={() => changeCPage(n)} href="#" className={`block h-8 w-8 rounded border border-gray-300 bg-white text-center leading-8 text-gray-900 hover:bg-[#4E73DF] hover:text-white ${currentPage === n ? 'bg-[#4E73DF] text-white' : ''}`}>
+                  <a onClick={() => changeCPage(n)} href="#" className={`block h-8 w-8 rounded border border-gray-300 bg-white text-center leading-8 text-gray-900 hover:bg-[#4E73DF] hover:text-white ${currentPage === n ? 'bg-[#4E73DF]' : ''}`}>
                     {n}
                   </a>
                 </li>
