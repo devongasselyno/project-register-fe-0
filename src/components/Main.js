@@ -1,5 +1,6 @@
 import Data from './Data.json'
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Main = () => {
@@ -14,6 +15,11 @@ const Main = () => {
   const records = posts.slice(firstIndex, lastIndex)
   const npage = Math.ceil(Data.length / recordsPerPage)
   const numbers = [...Array(npage + 1).keys()].slice(1)
+  const navigate = useNavigate()
+
+  const handleProspectClick = (prospectId) => {
+    navigate(`/prospect/${prospectId}`);
+  };
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -59,7 +65,7 @@ const Main = () => {
 
           <tbody>
             {records.map(row => 
-              <tr key={row.ID}>
+              <tr key={row.ID} className='cursor-pointer' onClick={() => handleProspectClick(row.ID)}>
                 <td className='border px-4 py-2'>{row.ID}</td>
                 <td className='border px-4 py-2'>{row.company.company_name}</td>
                 <td className='border px-4 py-2'>{row.client.client_name}</td>
