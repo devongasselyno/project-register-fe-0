@@ -23,7 +23,7 @@ const Router = () => {
 
                     <Route path='/prospect/create' element={<App/>}>
                         <Route index element={<CreateProspect />} />
-                    </Route>   
+                    </Route>    
                 </Routes>
             </BrowserRouter>
         </div>

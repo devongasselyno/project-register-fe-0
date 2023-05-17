@@ -18,47 +18,10 @@ const CreateProspect = () => {
     const [companies, setCompanies] = useState([]);
     const [clients, setClients] = useState([]);
 
-    // useEffect(() => {
-    //     const fetchCompanies = async () => {
-    //         try {
-    //             const response = await axios.get('/company/read');
-    //             setCompanies(response.data);
-    //         } catch (error) {
-    //             console.error('Failed to fetch companies:', error);
-    //         }
-    //     };
-
-    //     const fetchClients = async () => {
-    //         try {
-    //             const response = await axios.get('/client/read');
-    //             setClients(response.data);
-    //         } catch (error) {
-    //             console.error('Failed to fetch clients:', error);
-    //         }
-    //     };
-
-    //     const fetchTypes = async () => {
-    //         try {
-    //             const response = await axios.get('/type/read');
-    //             setTypes(response.data)
-    //         } catch (error) {
-    //             console.error('Failed to fetch types:', error);
-    //         }
-    //     };
-
-    //     fetchCompanies();
-    //     fetchClients();
-    //     fetchTypes();
-    // }, []);
-
     useEffect(() => {
         const fetchCompanies = async () => {
             try {
                 const response = await api.get('/company/read');
-                // const formattedCompanies = response.data.map(company => ({
-                //     id: company.ID,
-                //     name: company.company_name
-                // }));
                 setCompanies(response.data);
             } catch (error) {
                 console.error('Failed to fetch companies:', error);
@@ -72,10 +35,6 @@ const CreateProspect = () => {
                         limit: 100,
                     },
                 });
-                // const formattedClients = response.data.map(client => ({
-                //     id: client.ID,
-                //     name: client.client_name
-                // }));
                 setClients(response.data);
             } catch (error) {
                 console.error('Failed to fetch clients:', error);
@@ -85,10 +44,6 @@ const CreateProspect = () => {
         const fetchTypes = async () => {
             try {
                 const response = await api.get('/type/read');
-                // const formattedTypes = response.data.map(type => ({
-                //     id: type.ID,
-                //     name: type.project_name
-                // }));
                 setTypes(response.data)
             } catch (error) {
                 console.error('Failed to fetch types:', error);
@@ -141,75 +96,9 @@ const CreateProspect = () => {
     };
 
     return (
-        // <form onSubmit={handleSubmit}>
-        //     <label htmlFor="name">Prospect Name</label>
-        //     <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} />
-
-        //     <label htmlFor="type">Type</label>
-        //     {/* <select id="type" value={type} onChange={(e) => setType(e.target.value)}>
-        //         <option value="">Select Type</option>
-        //     </select> */}
-
-        //     <select id="type" value={type} onChange={(e) => setType(e.target.value)}>
-        //         <option value="">Select Type</option>
-        //         {Array.isArray(types.data) &&
-        //             types.data.map((type) => (
-        //                 <option key={type.ID} value={type.ID}>
-        //                     {type.project_name}
-        //                 </option>
-        //             ))}
-        //     </select>
-        //     <label htmlFor="year">Year</label>
-        //     <input type="text" id="year" value={year} onChange={(e) => setYear(e.target.value)} />
-
-        //     <label htmlFor="manager">Manager</label>
-        //     <input type="text" id="manager" value={manager} onChange={(e) => setManager(e.target.value)} />
-
-        //     <label htmlFor="status">Status</label>
-        //     <input type="text" id="status" value={status} onChange={(e) => setStatus(e.target.value)} />
-
-        //     <label htmlFor="amount">Amount</label>
-        //     <input type="number" id="amount" value={amount} onChange={(e) => setAmount(e.target.value)} />
-
-        //     <label htmlFor="company">Company</label>
-        //     <select id="company" value={company} onChange={(e) => setCompany(e.target.value)}>
-        //         <option value="">Select Company</option>
-        //         {Array.isArray(companies.data) &&
-        //             companies.data.map((company) => (
-        //                 <option key={company.id} value={company.id}>
-        //                     {company.name}
-        //                 </option>
-        //             ))}
-        //     </select>
-
-        //     <label htmlFor="client">Client</label>
-        //     <select id="client" value={client.data} onChange={(e) => setClient(e.target.value)}>
-        //         <option value="">Select Client</option>
-        //         {Array.isArray(clients.data) &&
-        //             clients.data.map((client) => (
-        //                 <option key={client.id} value={client.id}>
-        //                     {client.name}
-        //                 </option>
-        //             ))}
-        //     </select>
-
-        //     <label htmlFor="jira">Jira</label>
-        //     <input type="checkbox" id="jira" checked={jira} onChange={(e) => setJira(e.target.checked)} />
-
-        //     <label htmlFor="clockify">Clockify</label>
-        //     <input type="checkbox" id="clockify" checked={clockify} onChange={(e) => setClockify(e.target.checked)} />
-
-        //     <label htmlFor="pms">PMS</label>
-        //     <input type="checkbox" id="pms" checked={pms} onChange={(e) => setPMS(e.target.checked)} />
-
-        //     <label htmlFor="pcs">PCS</label>
-        //     <input type="checkbox" id="pcs" checked={pcs} onChange={(e) => setPCS(e.target.checked)} />
-
-        //     <button type="submit">Submit</button>
-        // </form>
-        <section className="flex flex-col justify-center h-screen w-screen">
+        <section className="flex flex-col justify-center py-20">
             <div className="max-w-full mx-12 items-center justify-center flex">
-                <div className="pb-3 w-1/2 bg-gray-100 rounded-2xl px-5 py-3">
+                <div className="pb-3 w-1/2 rounded-2xl px-5 py-3">
                     <div className="px-7 py-1 text-center">
                         <h2 className="text-xl py-2 font-semibold leading-7 text-gray-900">Create new prospect</h2>
                         <p className="text-base leading-6 text-gray-600">
