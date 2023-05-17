@@ -9,7 +9,7 @@ const Sidebar = () => {
         </div>
         <div className='flex items-center gap-[15px] py-[20px] border-b-[1px] border-[#EDEDED]/[0.3]'>
             <FaTachometerAlt color='white'/>
-            <p className='text-[14px] leading-5 font-bold text-white'>Dashboard</p>
+            <a href='/dashboard' className='text-[14px] leading-5 font-bold text-white'>Dashboard</a>
         </div>
         <div className='flex items-center gap-[15px] py-[20px] border-b-[1px] border-[#EDEDED]/[0.3]'>
             <FaCalendarCheck color='white'/>
