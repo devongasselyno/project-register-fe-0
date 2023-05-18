@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import api from '../api/posts';
 import axios from "axios";
 import { useParams } from 'react-router-dom';
-import api from "../api/posts"
 import { async } from "q";
 
 const ProspectDetail = () => {
@@ -133,6 +132,7 @@ const ProspectDetail = () => {
     } catch (error) {
       console.error(error)
     }
+  }
 
     return (
       <div className="py-6 px-20">

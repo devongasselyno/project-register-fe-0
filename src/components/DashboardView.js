@@ -61,7 +61,7 @@ function DashboardView() {
                             <a href=''>Profile</a>
                         </div>
                         <div className='hover:bg-blue-300'>
-                            <a href='/signin'>Log out</a>
+                            <a href='/login'>Log out</a>
                         </div>
                         </div>
                     </div>
