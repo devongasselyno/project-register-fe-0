@@ -205,14 +205,14 @@ const CreateProspect = () => {
                     <div className="px-6 py-4 justify-center">
                         <form onSubmit={handleSubmit}>
                             <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">Prospect Name</label>
-                            <input type="text" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5" id="name" value={name} onChange={(e) => {
+                            <input type="text" autoComplete='off' className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5" id="name" value={name} onChange={(e) => {
                                 console.log('Prospect Name:', e.target.value);
                                 setName(e.target.value);
                             }} placeholder='Insert Prospect Name' />
                             {errors.name && <p className="text-red-500 text-sm pt-1 pl-1">{errors.name}</p>}
 
                             <label htmlFor="manager" className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">Prospect Manager</label>
-                            <input type="text" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5" id="manager" value={manager} onChange={(e) => {
+                            <input type="text" autoComplete='off' className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5" id="manager" value={manager} onChange={(e) => {
                                 console.log('Manager Name:', e.target.value);
                                 setManager(e.target.value);
                             }} placeholder='Insert Prospect Manager' />
@@ -273,6 +273,7 @@ const CreateProspect = () => {
                             <label htmlFor="amount" className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">Amount</label>
                             <input
                                 type="text"
+                                autoComplete='off'
                                 inputMode="numeric"
                                 pattern="[0-9]*"
                                 className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded-lg focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5 appearance-none"

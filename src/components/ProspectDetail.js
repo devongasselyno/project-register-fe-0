@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import api from "../api/posts"
+import { async } from "q";
 
 const ProspectDetail = () => {
- 
+
   const [editMode, setEditMode] = useState(false);
 
   const [formData, setFormData] = useState({
     ID: '',
     prospect_name: '',
-    type:0,
+    type: 0,
     manager: '',
     amount: 0,
     clockify: false,
@@ -26,7 +28,7 @@ const ProspectDetail = () => {
   };
 
 
-  const [prospect, setProspect] = useState();
+  const [prospect, setProspect] = useState('');
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -44,7 +46,7 @@ const ProspectDetail = () => {
     try {
       const response = await axios.patch(`http://localhost:8080/api/prospect/update`, formData);
       console.log(response.data);
-      setEditMode(false); 
+      setEditMode(false);
     } catch (err) {
       console.error(err);
     }
@@ -58,6 +60,18 @@ const ProspectDetail = () => {
     setEditMode(false);
   };
 
+  const requestData = {
+    prospect_id: prospect.prospect_id
+  }
+
+  const handleConvertProspect = async () => {
+    try {
+      const response = await api.post('/prospect/convert', requestData)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <div className="py-6 px-20">
       <div className="py-6">
@@ -67,7 +81,7 @@ const ProspectDetail = () => {
       {prospect && (
         <div className="flex">
           <div className="">
-          <div className="mb-4">
+            <div className="mb-4">
               <label className="font-bold w-32 inline-block">Prospect ID</label>
               <span className="mr-2">:</span>
               {editMode ? (
@@ -270,7 +284,7 @@ const ProspectDetail = () => {
               )}
             </div>
           </div>
-          
+
         </div>
       )}
 
@@ -290,12 +304,18 @@ const ProspectDetail = () => {
         </button>
       )}
 
-        <button
-          className="ml-8 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          onClick={handleSaveClick}
-        >
-          Delete
-        </button>
+      <button
+        className="ml-8 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+        onClick={handleSaveClick}
+      >
+        Delete
+      </button>
+      <button
+        className="ml-8 bg-emerald-800 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded"
+        onClick={handleConvertProspect}
+      >
+        Convert
+      </button>
     </div>
   );
 };
