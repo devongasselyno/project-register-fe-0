@@ -1,10 +1,24 @@
 import React from 'react'
 import { useState } from 'react'
 import { FaCaretDown, FaCaretUp, FaEnvelope, FaRegBell, FaSearch, FaUser } from 'react-icons/fa'
+import Clock from 'react-live-clock'
 
 function DashboardView() {
 
     const [isOpen, setIsOpen] = useState(false)
+    const current = new Date();
+    const date = `${getDayName(current)}, ${current.getDate()} ${getMonthName(current.getMonth())} ${current.getFullYear()}`;
+
+    function getDayName(date) {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return days[date.getUTCDay()];
+    }
+
+    function getMonthName(month) {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    return months[month];
+    }
+
   return (
     <div className='flex items-center justify-between h-[70px] shadow-lg px-6'>
         <div className='flex items-center rounded-md'>
@@ -14,14 +28,14 @@ function DashboardView() {
             </div>
         </div>
         <div className='flex items-center gap-4 relative'>
-            <div className='flex items-center gap-6 border-r-2 pr-6'>
-                <FaRegBell/>
-                <FaEnvelope/>
+            <div className='items-center gap-6 border-r-2 pr-6'>
+                <h1>{date}</h1>
+                <Clock className='float-right' format={'HH:mm A'} ticking={true} timezone={'IND'} />
             </div>
             <div className='flex items-center gap-4 relative'>
-                <p>James Bond</p>
+                
                 <div onClick={() => setIsOpen((prev) => !prev)} className='   cursor-pointer flex items-center justify-center relative'>
-                    <FaUser className='border-2 rounded-full h-8 w-8 px-2 mr-2'/>
+                    <p>James Bond</p>
                     {
                         !isOpen ? (
                             <FaCaretDown className='h-5'/>

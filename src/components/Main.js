@@ -41,7 +41,7 @@ const Main = () => {
       </div>
   
       <div className='py-6'>
-        <table className='table-auto border-collapse border'>
+        <table className='table-auto border-collapse'>
           <thead>
             <tr>
               <th className='border px-4 py-2'>ID</th>
@@ -64,7 +64,7 @@ const Main = () => {
 
           <tbody>
             {records.map(row => 
-              <tr key={row.ID} className='cursor-pointer' onClick={() => handleProspectClick(row.ID)}>
+              <tr key={row.ID} className='cursor-pointer hover:bg-blue-200' onClick={() => handleProspectClick(row.ID)}>
                 <td className='border px-4 py-2'>{row.ID}</td>
                 <td className='border px-4 py-2'>{row.company.company_name}</td>
                 <td className='border px-4 py-2'>{row.client.client_name}</td>

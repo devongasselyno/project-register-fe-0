@@ -11,7 +11,7 @@ const Router = () => {
         <div>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/signin" element={<SigninPage />} />
+                    <Route path="/login" element={<SigninPage />} />
 
                     <Route path='/dashboard' element={<App />}>
                         <Route index element={<Main />} />
