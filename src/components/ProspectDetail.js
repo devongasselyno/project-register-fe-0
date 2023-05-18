@@ -1,21 +1,85 @@
 import React, { useEffect, useState } from "react";
+import api from '../api/posts';
 import axios from "axios";
+import { useParams } from 'react-router-dom';
 import api from "../api/posts"
 import { async } from "q";
 
 const ProspectDetail = () => {
+  const { id } = useParams();
+  console.log("aaaaaaaaaaaaaaaa",{id})
+  const [prospect, setProspect] = useState();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`http://127.0.0.1:8080/api/prospect/read/${id}`);
+        setProspect(res.data.data);
+      } catch (err) {
+        console.error("Error fetching prospect data:", err);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  const [types, setTypes] = useState([]);
+  const [companies, setCompanies] = useState([]);
+  const [clients, setClients] = useState([]);
+  
+  useEffect(() => {
+      const fetchCompanies = async () => {
+          try {
+              const response = await api.get('/company/read');
+              setCompanies(response.data);
+          } catch (error) {
+              console.error('Failed to fetch companies:', error);
+          }
+      };
+
+      const fetchClients = async () => {
+          try {
+              const response = await api.get('/client/read', {
+                  params: {
+                      limit: 100,
+                  },
+              });
+              setClients(response.data);
+          } catch (error) {
+              console.error('Failed to fetch clients:', error);
+          }
+      };
+
+      const fetchTypes = async () => {
+          try {
+              const response = await api.get('/type/read');
+              setTypes(response.data)
+          } catch (error) {
+              console.error('Failed to fetch types:', error);
+          }
+      };
+
+      fetchCompanies();
+      fetchClients();
+      fetchTypes();
+  }, []);
 
   const [editMode, setEditMode] = useState(false);
+  
 
   const [formData, setFormData] = useState({
+    type_id: 0,
     ID: '',
     prospect_name: '',
-    type: 0,
+    year: 0,
     manager: '',
+    status:'',
     amount: 0,
+    company_id: 0,
+    client_id: 0,
     clockify: false,
     jira: false,
-    type_id: 0,
+    pcs: 0,
+    pms: 0
   });
 
   const handleChange = (e) => {
@@ -26,21 +90,6 @@ const ProspectDetail = () => {
       [name]: fieldValue,
     }));
   };
-
-
-  const [prospect, setProspect] = useState('');
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("http://127.0.0.1:8080/api/prospect/read", prospect);
-        setProspect(res.data.data[0]);
-      } catch (err) {
-        console.error("Error fetching prospect data:", err);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const handleUpdateProspect = async () => {
     try {
@@ -60,17 +109,21 @@ const ProspectDetail = () => {
     setEditMode(false);
   };
 
-  const requestData = {
-    prospect_id: prospect.prospect_id
-  }
-
-  const handleConvertProspect = async () => {
+  const [prospectID, setProspectID] = useState('');
+  const handleDelete = async () => {
     try {
-      const response = await api.post('/prospect/convert', requestData)
+      await axios.delete('http://localhost:8080/api/prospect/delete/', {
+        data: {
+          ID: prospectID,
+        },
+      });
+      // Delete request successful
+      console.log('Prospect deleted successfully');
     } catch (error) {
-      console.error(error)
+      // Error handling
+      console.error('Error deleting prospect:', error);
     }
-  }
+  };
 
   return (
     <div className="py-6 px-20">
@@ -87,6 +140,8 @@ const ProspectDetail = () => {
               {editMode ? (
                 <input
                   type="text"
+                  name="ID"
+                  value={formData.ID}
                   className="rounded-lg"
                   placeholder={prospect.prospect_id}
                   readOnly={!editMode}
@@ -103,6 +158,8 @@ const ProspectDetail = () => {
               {editMode ? (
                 <input
                   type="text"
+                  name="prospect_name"
+                  value={formData.prospect_name}
                   className="rounded-lg"
                   placeholder={prospect.prospect_name}
                   readOnly={!editMode}
@@ -110,6 +167,24 @@ const ProspectDetail = () => {
                 />
               ) : (
                 <span>{prospect.prospect_name}</span>
+              )}
+            </div>
+
+            <div className="mb-4">
+              <label className="font-bold w-32 inline-block">Company Name</label>
+              <span className="mr-2">:</span>
+              {editMode ? (
+                <input
+                  type="text"
+                  name="company_name"
+                  value={formData.company_name}
+                  className="rounded-lg"
+                  placeholder={prospect.company.company_name}
+                  readOnly={!editMode}
+                  onChange={handleChange}
+                />
+              ) : (
+                <span>{prospect.company.company_name}</span>
               )}
             </div>
 
@@ -304,18 +379,12 @@ const ProspectDetail = () => {
         </button>
       )}
 
-      <button
-        className="ml-8 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-        onClick={handleSaveClick}
-      >
-        Delete
-      </button>
-      <button
-        className="ml-8 bg-emerald-800 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded"
-        onClick={handleConvertProspect}
-      >
-        Convert
-      </button>
+        <button
+          className="ml-8 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+          onClick={handleSaveClick}
+        >
+          Delete
+        </button>
     </div>
   );
 };
