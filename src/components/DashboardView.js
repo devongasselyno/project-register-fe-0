@@ -39,7 +39,7 @@ function DashboardView() {
         <div className='flex items-center gap-4 relative'>
             <div className='items-center gap-6 border-r-2 pr-6'>
                 <h1>{date}</h1>
-                <Clock className='float-right' format={'HH:mm A'} ticking={true} timezone={'IND'} />
+                <Clock className='float-right' format={'HH:mm A'} ticking={true}  />
             </div>
             <div className='flex items-center gap-4 relative'>
                 

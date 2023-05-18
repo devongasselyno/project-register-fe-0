@@ -1,26 +1,46 @@
 import React, { useEffect, useState } from "react";
 import api from '../api/posts';
 import axios from "axios";
-import { useParams } from 'react-router-dom';
-import { async } from "q";
+import { useNavigate, useParams } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProspectDetail = () => {
   const { id } = useParams();
-  console.log("aaaaaaaaaaaaaaaa", { id })
-  const [prospect, setProspect] = useState();
+  const [prospect, setProspect] = useState('');
+
+  const [formData, setFormData] = useState({
+    type_id: 0,
+    prospect_id: '',
+    prospect_name: '',
+    year: 0,
+    manager: '',
+    status: '',
+    amount: 0,
+    company_id: 0,
+    client_id: 0,
+    clockify: false,
+    jira: false,
+    pcs: false,
+    pms: false
+  });
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(`http://127.0.0.1:8080/api/prospect/read/${id}`);
-        setProspect(res.data.data);
+        const prospectData = res.data.data;
+        setProspect(prospectData);
       } catch (err) {
         console.error("Error fetching prospect data:", err);
       }
     };
-
+  
     fetchData();
   }, [id]);
+  
 
+  // UPDATE FORM DATA----------------------------------------------------------------------------------------------------------------------
   const [types, setTypes] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [clients, setClients] = useState([]);
@@ -63,36 +83,75 @@ const ProspectDetail = () => {
   }, []);
 
   const [editMode, setEditMode] = useState(false);
-  const [formData, setFormData] = useState({
-    type_id: 0,
-    ID: '',
-    prospect_name: '',
-    year: 0,
-    manager: '',
-    status: '',
-    amount: 0,
-    company_id: 0,
-    client_id: 0,
-    clockify: false,
-    jira: false,
-    pcs: 0,
-    pms: 0
-  });
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    const fieldValue = type === 'checkbox' ? checked : value;
+    let fieldValue;
+  
+    if (type === 'number') {
+      fieldValue = parseInt(value, 10);
+    } else if (type === 'checkbox') {
+      fieldValue = checked;
+    } else {
+      fieldValue = value;
+    }
+  
     setFormData((prevData) => ({
       ...prevData,
       [name]: fieldValue,
     }));
   };
-
+  
+  
   const handleUpdateProspect = async () => {
     try {
-      const response = await axios.patch(`http://localhost:8080/api/prospect/update`, formData);
+      let updatedFormData = { ...formData };
+
+      updatedFormData.prospect_id = prospect.prospect_id;
+      
+      if (formData.prospect_name === '') {
+        updatedFormData.prospect_name = prospect.prospect_name;
+      }
+      if (formData.year === 0) {
+        updatedFormData.year = prospect.year;
+      }
+      if (formData.manager === '') {
+        updatedFormData.manager = prospect.manager;
+      }
+      if (formData.status === '') {
+        updatedFormData.status = prospect.status;
+      }
+      if (formData.amount === 0) {
+        updatedFormData.amount = prospect.amount;
+      }
+      if (formData.company_id === 0) {
+        updatedFormData.company_id = prospect.company_id;
+      }
+      if (formData.client_id === 0) {
+        updatedFormData.client_id = prospect.client_id;
+      }
+      if (formData.type_id === 0) {
+        updatedFormData.type_id = prospect.type_id;
+      }
+
+      if (formData.clockify === false) {
+        updatedFormData.clockify = prospect.clockify;
+      }
+      if (formData.jira === false) {
+        updatedFormData.jira = prospect.jira;
+      }
+      if (formData.pcs === false) {
+        updatedFormData.pcs = prospect.pcs;
+      }
+      if (formData.pms === false) {
+        updatedFormData.pms = prospect.pms;
+      }
+
+      const response = await axios.patch(`http://localhost:8080/api/prospect/update`, updatedFormData);
       console.log(response.data);
       setEditMode(false);
+      window.location.reload();
+
     } catch (err) {
       console.error(err);
     }
@@ -111,7 +170,7 @@ const ProspectDetail = () => {
     try {
       await axios.delete('http://localhost:8080/api/prospect/delete/', {
         data: {
-          ID: prospectID,
+          prospect_id: prospectID,
         },
       });
       // Delete request successful
@@ -134,7 +193,21 @@ const ProspectDetail = () => {
     }
   }
 
+  const notify = () => {
+      toast.success('Prospect Created!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+      });
+  }
+
     return (
+      // ------------------------------------------------------------------------
       <div className="py-6 px-20">
         <div className="py-6">
           <h1 className="text-5xl leading-8 font-bold py-5">Prospect Detail</h1>
@@ -150,7 +223,7 @@ const ProspectDetail = () => {
                   <input
                     type="text"
                     name="ID"
-                    value={formData.ID}
+                    value={formData.prospect_id}
                     className="rounded-lg"
                     placeholder={prospect.prospect_id}
                     readOnly={!editMode}
@@ -170,7 +243,7 @@ const ProspectDetail = () => {
                     name="prospect_name"
                     value={formData.prospect_name}
                     className="rounded-lg"
-                    placeholder={prospect.prospect_name}
+                    placeholder={prospect.prospect_name} 
                     readOnly={!editMode}
                     onChange={handleChange}
                   />
@@ -202,8 +275,10 @@ const ProspectDetail = () => {
                 <span className="mr-2">:</span>
                 {editMode ? (
                   <input
-                    type="text"
+                    type="number"
                     className="rounded-lg"
+                    name="type_id"
+                    value={formData.type_id}
                     placeholder={prospect.type_id}
                     readOnly={!editMode}
                     onChange={handleChange}
@@ -218,8 +293,10 @@ const ProspectDetail = () => {
                 <span className="mr-2">:</span>
                 {editMode ? (
                   <input
-                    type="text"
+                    type="number"
                     className="rounded-lg"
+                    name="year"
+                    value={formData.year}
                     placeholder={prospect.year}
                     readOnly={!editMode}
                     onChange={handleChange}
@@ -236,6 +313,8 @@ const ProspectDetail = () => {
                   <input
                     type="text"
                     className="rounded-lg"
+                    name="manager"
+                    value={formData.manager}
                     placeholder={prospect.manager}
                     readOnly={!editMode}
                     onChange={handleChange}
@@ -252,6 +331,8 @@ const ProspectDetail = () => {
                   <input
                     type="text"
                     className="rounded-lg"
+                    name="status"
+                    value={formData.status}
                     placeholder={prospect.status}
                     readOnly={!editMode}
                     onChange={handleChange}
@@ -266,8 +347,10 @@ const ProspectDetail = () => {
                 <span className="mr-2">:</span>
                 {editMode ? (
                   <input
-                    type="text"
+                    type="number"
                     className="rounded-lg"
+                    name="amount"
+                    value={formData.amount}
                     placeholder={prospect.amount}
                     readOnly={!editMode}
                     onChange={handleChange}
@@ -282,8 +365,10 @@ const ProspectDetail = () => {
                 <span className="mr-2">:</span>
                 {editMode ? (
                   <input
-                    type="text"
+                    type="number"
                     className="rounded-lg"
+                    name="company_id"
+                    value={formData.company_id}
                     placeholder={prospect.company_id}
                     readOnly={!editMode}
                     onChange={handleChange}
@@ -298,8 +383,10 @@ const ProspectDetail = () => {
                 <span className="mr-2">:</span>
                 {editMode ? (
                   <input
-                    type="text"
+                    type="number"
                     className="rounded-lg"
+                    name="client_id"
+                    value={formData.client_id}
                     placeholder={prospect.client_id}
                     readOnly={!editMode}
                     onChange={handleChange}
@@ -318,11 +405,12 @@ const ProspectDetail = () => {
                 {editMode ? (
                   <input
                     type="checkbox"
-                    checked={prospect.jira}
+                    value={formData.jira}
+                    checked={prospect.Jira}
                     onChange={handleChange}
                   />
                 ) : (
-                  <input type="checkbox" checked={prospect.jira} disabled />
+                  <input type="checkbox" checked={prospect.Jira} disabled />
                 )}
               </div>
 
@@ -332,11 +420,12 @@ const ProspectDetail = () => {
                 {editMode ? (
                   <input
                     type="checkbox"
-                    checked={prospect.clockify}
+                    value={formData.clockify}
+                    checked={prospect.Clockify}
                     onChange={handleChange}
                   />
                 ) : (
-                  <input type="checkbox" checked={prospect.clockify} disabled />
+                  <input type="checkbox" checked={prospect.Clockify} disabled />
                 )}
               </div>
 
@@ -346,6 +435,7 @@ const ProspectDetail = () => {
                 {editMode ? (
                   <input
                     type="checkbox"
+                    value={formData.pcs}
                     checked={prospect.Pcs}
                     onChange={handleChange}
                   />
@@ -360,6 +450,7 @@ const ProspectDetail = () => {
                 {editMode ? (
                   <input
                     type="checkbox"
+                    Value={formData.pms}
                     checked={prospect.Pms}
                     onChange={handleChange}
                   />
@@ -390,12 +481,34 @@ const ProspectDetail = () => {
 
         <button
           className="ml-8 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          onClick={handleSaveClick}
+          onClick={handleDelete}
         >
           Delete
         </button>
+
+        <button
+          type="submit"
+          className="ml-8 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          onClick={handleConvertProspect}
+        >
+          Convert Prospect
+        </button>
+
+        <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable
+                pauseOnHover
+                theme="colored"
+            />
       </div>
     );
   };
 
   export default ProspectDetail;
+// -----------------------------------------------------------------------------------------------------------------
