@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import api from '../api/posts';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CreateProspect = () => {
     const [name, setName] = useState('');
@@ -17,6 +19,91 @@ const CreateProspect = () => {
     const [types, setTypes] = useState([]);
     const [companies, setCompanies] = useState([]);
     const [clients, setClients] = useState([]);
+    const [errors, setErrors] = useState({});
+
+    const notify = () => {
+        toast.success('Prospect Created!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+        });
+    }
+
+    const breakpoints = [
+        { width: 1600, ratio: 2 / 5 },   // Breakpoint 1: Width is 2/5 of window size when window width > 1600px
+        { width: 1200, ratio: 1 / 2 },   // Breakpoint 2: Width is 1/2 of window size when window width > 1200px
+        { width: 1000, ratio: 2 / 3 },   // Breakpoint 3: Width is 2/3 of window size when window width > 1000px
+        { width: 800, ratio: 3 / 4 },    // Breakpoint 4: Width is 3/4 of window size when window width > 800px
+        { width: 600, ratio: 4 / 5 },    // Breakpoint 5: Width is 4/5 of window size when window width > 600px
+    ];
+
+    const [width, setWidth] = useState(getWidth(window.innerWidth));
+
+    function getWidth(windowWidth) {
+        const breakpoint = breakpoints.find((bp) => windowWidth > bp.width);
+        return breakpoint ? windowWidth * breakpoint.ratio : windowWidth;
+    }
+
+    useEffect(() => {
+        const handleResize = () => {
+            const newWidth = getWidth(window.innerWidth);
+            setWidth(newWidth);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    const validateForm = () => {
+        const errors = {};
+
+        if (!name.trim()) {
+            errors.name = 'Prospect Name is required';
+        }
+
+        if (type === 0) {
+            errors.type = 'Please select a Prospect Type';
+        }
+
+        if (year === 0) {
+            errors.year = 'Year is required';
+        } else if (!/^\d{4}$/.test(year)) {
+            errors.year = 'Year must be a valid four-digit number';
+        }
+
+        if (!manager.trim()) {
+            errors.manager = 'Manager is required';
+        }
+
+        if (!status.trim()) {
+            errors.status = 'Status is required';
+        }
+
+        if (amount === 0) {
+            errors.amount = 'Amount is required';
+        } else if (!/^\d+(\.\d{1,2})?$/.test(amount)) {
+            errors.amount = 'Amount must be a valid number with up to 2 decimal places';
+        }
+
+        if (company === 0) {
+            errors.company = 'Please select a Company';
+        }
+
+        if (client === 0) {
+            errors.client = 'Please select a Client';
+        }
+
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
 
     useEffect(() => {
         const fetchCompanies = async () => {
@@ -55,50 +142,60 @@ const CreateProspect = () => {
         fetchTypes();
     }, []);
 
+
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const data = {
-            prospect_name: name,
-            type_id: type,
-            year: year,
-            manager: manager,
-            status: status,
-            amount: amount,
-            company_id: company,
-            client_id: client,
-            jira: jira,
-            clockify: clockify,
-            pcs: pcs,
-            pms: pms,
-        };
+        const isValid = validateForm();
 
-        console.log(data)
+        if (isValid) {
+            const data = {
+                prospect_name: name,
+                type_id: type,
+                year: year,
+                manager: manager,
+                status: status,
+                amount: amount,
+                company_id: company,
+                client_id: client,
+                jira: jira,
+                clockify: clockify,
+                pcs: pcs,
+                pms: pms,
+            };
 
-        try {
-            const response = await api.post('/prospect/create', data);
-            console.log('Data sent successfully:', response.data);
-            setName('');
-            setType(0);
-            setYear(0);
-            setManager('');
-            setStatus('');
-            setAmount(0);
-            setCompany(0);
-            setClient(0);
-            setJira(false);
-            setClockify(false);
-            setPMS(false);
-            setPCS(false);
-        } catch (error) {
-            console.error('Failed to send data:', error);
+            try {
+                const response = await api.post('/prospect/create', data);
+                console.log('Data sent successfully:', response.data);
+                notify();
+                setName('');
+                setType(0);
+                setYear(0);
+                setManager('');
+                setStatus('');
+                setAmount(0);
+                setCompany(0);
+                setClient(0);
+                setJira(false);
+                setClockify(false);
+                setPMS(false);
+                setPCS(false);
+            } catch (error) {
+                console.error('Failed to send data:', error);
+            }
         }
+
+
     };
 
     return (
-        <section className="flex flex-col justify-center py-20">
-            <div className="max-w-full mx-12 items-center justify-center flex">
-                <div className="pb-3 w-1/2 rounded-2xl px-5 py-3">
+        <section className="flex flex-col justify-center content-center py-5">
+            <div className="max-w-full items-center justify-center flex">
+                {/* <div className="pb-3 w-1/2 rounded-2xl px-5 py-3"> */}
+                <div className={"pb-3 rounded-2xl px-5 py-3"}
+                    style={{ width: `${width}px`, userSelect: 'none' }}
+                >
                     <div className="px-7 py-1 text-center">
                         <h2 className="text-xl py-2 font-semibold leading-7 text-gray-900">Create new prospect</h2>
                         <p className="text-base leading-6 text-gray-600">
@@ -108,10 +205,18 @@ const CreateProspect = () => {
                     <div className="px-6 py-4 justify-center">
                         <form onSubmit={handleSubmit}>
                             <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">Prospect Name</label>
-                            <input type="text" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded-lg focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5" id="name" value={name} onChange={(e) => {
+                            <input type="text" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5" id="name" value={name} onChange={(e) => {
                                 console.log('Prospect Name:', e.target.value);
                                 setName(e.target.value);
-                            }} />
+                            }} placeholder='Insert Prospect Name' />
+                            {errors.name && <p className="text-red-500 text-sm pt-1 pl-1">{errors.name}</p>}
+
+                            <label htmlFor="manager" className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">Prospect Manager</label>
+                            <input type="text" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5" id="manager" value={manager} onChange={(e) => {
+                                console.log('Manager Name:', e.target.value);
+                                setManager(e.target.value);
+                            }} placeholder='Insert Prospect Manager' />
+                            {errors.manager && <p className="text-red-500 text-sm pt-1 pl-1">{errors.manager}</p>}
 
                             <div className="flex gap-4">
                                 <div className="w-1/2 max-w-full">
@@ -119,8 +224,10 @@ const CreateProspect = () => {
                                         Year
                                     </label>
                                     <select
+                                        type="text"
+                                        inputMode="numeric"
                                         id="year"
-                                        className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded-lg focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5"
+                                        className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5"
                                         value={year}
                                         onChange={(e) => {
                                             const year = parseInt(e.target.value, 10);
@@ -139,6 +246,7 @@ const CreateProspect = () => {
                                             );
                                         })}
                                     </select>
+                                    {errors.year && <p className="text-red-500 text-sm pt-1 pl-1">{errors.year}</p>}
                                 </div>
 
                                 <div className="w-1/2 max-w-full">
@@ -147,7 +255,7 @@ const CreateProspect = () => {
                                     </label>
                                     <select
                                         id="status"
-                                        className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded-lg focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5"
+                                        className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5"
                                         value={status}
                                         onChange={(e) => {
                                             console.log('Status:', e.target.value);
@@ -155,26 +263,32 @@ const CreateProspect = () => {
                                         }}
                                     >
                                         <option value="">Select Status</option>
-                                        <option value="open">Open</option>
-                                        <option value="closed">Closed</option>
+                                        <option value="Open">Open</option>
+                                        <option value="Closed">Closed</option>
                                     </select>
+                                    {errors.status && <p className="text-red-500 text-sm pt-1 pl-1">{errors.status}</p>}
                                 </div>
                             </div>
 
                             <label htmlFor="amount" className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">Amount</label>
                             <input
-                                type="number"
+                                type="text"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
                                 className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded-lg focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5 appearance-none"
                                 id="amount"
-                                value={amount}
+                                value={amount || ''}
                                 onChange={(e) => {
                                     const amount = parseFloat(e.target.value);
                                     console.log('Amount:', amount);
                                     setAmount(amount);
                                 }}
+                                placeholder='Insert Amount'
                             />
+                            {errors.amount && <p className="text-red-500 text-sm pt-1 pl-1">{errors.amount}</p>}
+
                             <label htmlFor="type" className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">Type</label>
-                            <select type="number" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded-lg focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5" id="type" value={type} onChange={(e) => {
+                            <select type="number" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5" id="type" value={type} onChange={(e) => {
                                 const selectedTypeId = parseInt(e.target.value, 10);
                                 console.log('Type:', selectedTypeId);
                                 setType(selectedTypeId);
@@ -187,8 +301,9 @@ const CreateProspect = () => {
                                         </option>
                                     ))}
                             </select>
+                            {errors.type && <p className="text-red-500 text-sm pt-1 pl-1">{errors.type}</p>}
                             <label htmlFor="company" className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">Company</label>
-                            <select type="number" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded-lg focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5" id="company" value={company} onChange={(e) => {
+                            <select type="number" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5" id="company" value={company} onChange={(e) => {
                                 const selectedCompanyId = parseInt(e.target.value, 10);
                                 console.log('Company:', selectedCompanyId);
                                 setCompany(selectedCompanyId);
@@ -201,9 +316,10 @@ const CreateProspect = () => {
                                         </option>
                                     ))}
                             </select>
+                            {errors.company && <p className="text-red-500 text-sm pt-1 pl-1">{errors.company}</p>}
 
                             <label htmlFor="client" className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">Client</label>
-                            <select id="client" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded-lg focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5" value={client} onChange={(e) => {
+                            <select id="client" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5" value={client} onChange={(e) => {
                                 const selectedClientId = parseInt(e.target.value, 10);
                                 console.log('Client:', selectedClientId);
                                 setClient(selectedClientId);
@@ -216,6 +332,7 @@ const CreateProspect = () => {
                                         </option>
                                     ))}
                             </select>
+                            {errors.client && <p className="text-red-500 text-sm pt-1 pl-1">{errors.client}</p>}
 
                             <div className="flex flex-wrap gap-4 mx-auto my-3 px-1 py-1 justify-between">
                                 <div className="flex items-center">
@@ -287,8 +404,19 @@ const CreateProspect = () => {
                     </div>
                 </div>
             </div>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable
+                pauseOnHover
+                theme="colored"
+            />
         </section>
-
     )
 }
 
