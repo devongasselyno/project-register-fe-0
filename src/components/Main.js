@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ProspectDetail from './ProspectDetail';
 import axios from 'axios';
 
 const Main = () => {
@@ -16,8 +17,8 @@ const Main = () => {
   const numbers = [...Array(npage + 1).keys()].slice(1)
   const navigate = useNavigate()
 
-  const handleProspectClick = (prospectId) => {
-    navigate(`/prospect/${prospectId}`);
+  const handleProspectClick = (id) => {
+    navigate(`/prospect/read/${id}`);
   };
 
   useEffect(() => {

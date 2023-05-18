@@ -10,14 +10,23 @@ function DashboardView() {
     const date = `${getDayName(current)}, ${current.getDate()} ${getMonthName(current.getMonth())} ${current.getFullYear()}`;
 
     function getDayName(date) {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    return days[date.getUTCDay()];
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        return days[date.getUTCDay()];
     }
 
     function getMonthName(month) {
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    return months[month];
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        return months[month];
     }
+
+    // const fetchData = async () => {
+    //     try {
+    //         const {data} = await axios.get(`https://rickandmortyapi.com/api/character/`)
+    //         setCharacters(data.results)
+    //     } catch (error) {
+    //         console.error(error)
+    //     }
+    // }
 
   return (
     <div className='flex items-center justify-between h-[70px] shadow-lg px-6'>
