@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState , useEffect} from 'react'
-import { FaCaretDown, FaCaretUp, FaEnvelope, FaRegBell, FaSearch, FaUser } from 'react-icons/fa'
+import { FaCaretDown, FaCaretUp } from 'react-icons/fa'
 import Clock from 'react-live-clock'
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import axios from 'axios'
@@ -34,29 +34,15 @@ function DashboardView() {
         fetchData()
      }, [])
 
-    // const fetchData = async () => {
-    //     try {
-    //         const {data} = await axios.get(`https://rickandmortyapi.com/api/character/`)
-    //         setCharacters(data.results)
-    //     } catch (error) {
-    //         console.error(error)
-    //     }
-    // }
-
-
     const handleOnSearch = (string, results) => {
-        // onSearch will have as the first callback parameter
-        // the string searched and for the second the results.
         console.log(string, results)
       }
     
       const handleOnHover = (result) => {
-        // the item hovered
         console.log(result)
       }
     
       const handleOnSelect = (prospects) => {
-        // the item selected
         console.log(prospects)
       }
     
