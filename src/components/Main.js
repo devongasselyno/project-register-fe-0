@@ -36,9 +36,12 @@ const Main = () => {
   }
 
   return (
-    <div className='pt-6 px-6'>
+    <div className='pt-10 px-20'>
       <div className='flex items-center justify-between'>
         <h1 className='text-2xl leading-8 font-normal'>Dashboard</h1>
+        <a href='/prospect/create' class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 border border-blue-700 rounded">
+          Add Prospect
+        </a>
       </div>
   
       <div className='py-6'>
@@ -114,11 +117,6 @@ const Main = () => {
             </li>
           </ul>
         </nav>
-        
-        <a href='/prospect/create' class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 border border-blue-700 rounded">
-          Add Prospect
-        </a>
-        
       </div>
     </div>
   );  

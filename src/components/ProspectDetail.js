@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import api from '../api/posts';
-import axios from "axios";
-import { useNavigate, useParams } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useEffect, useState } from "react"
+import api from '../api/posts'
+import axios from "axios"
+import { useNavigate, useParams } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const ProspectDetail = () => {
-  const { id } = useParams();
-  const [prospect, setProspect] = useState('');
+  const { id } = useParams()
+  const [prospect, setProspect] = useState('')
 
   const [formData, setFormData] = useState({
     type_id: 0,
@@ -23,37 +23,37 @@ const ProspectDetail = () => {
     jira: false,
     pcs: false,
     pms: false
-  });
+  })
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`http://127.0.0.1:8080/api/prospect/read/${id}`);
-        const prospectData = res.data.data;
-        setProspect(prospectData);
+        const res = await axios.get(`http://127.0.0.1:8080/api/prospect/read/${id}`)
+        const prospectData = res.data.data
+        setProspect(prospectData)
       } catch (err) {
-        console.error("Error fetching prospect data:", err);
+        console.error("Error fetching prospect data:", err)
       }
-    };
+    }
   
-    fetchData();
-  }, [id]);
+    fetchData()
+  }, [id])
   
 
   // UPDATE FORM DATA----------------------------------------------------------------------------------------------------------------------
-  const [types, setTypes] = useState([]);
-  const [companies, setCompanies] = useState([]);
-  const [clients, setClients] = useState([]);
+  const [types, setTypes] = useState([])
+  const [companies, setCompanies] = useState([])
+  const [clients, setClients] = useState([])
 
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await api.get('/company/read');
-        setCompanies(response.data);
+        const response = await api.get('/company/read')
+        setCompanies(response.data)
       } catch (error) {
-        console.error('Failed to fetch companies:', error);
+        console.error('Failed to fetch companies:', error)
       }
-    };
+    }
 
     const fetchClients = async () => {
       try {
@@ -61,123 +61,116 @@ const ProspectDetail = () => {
           params: {
             limit: 100,
           },
-        });
-        setClients(response.data);
+        })
+        setClients(response.data)
       } catch (error) {
-        console.error('Failed to fetch clients:', error);
+        console.error('Failed to fetch clients:', error)
       }
-    };
+    }
 
     const fetchTypes = async () => {
       try {
-        const response = await api.get('/type/read');
+        const response = await api.get('/type/read')
         setTypes(response.data)
       } catch (error) {
-        console.error('Failed to fetch types:', error);
+        console.error('Failed to fetch types:', error)
       }
-    };
+    }
 
-    fetchCompanies();
-    fetchClients();
-    fetchTypes();
-  }, []);
+    fetchCompanies()
+    fetchClients()
+    fetchTypes()
+  }, [])
 
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(false)
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    let fieldValue;
+    const { name, value, type, checked } = e.target
+    let fieldValue
   
     if (type === 'number') {
-      fieldValue = parseInt(value, 10);
+      fieldValue = parseInt(value, 10)
     } else if (type === 'checkbox') {
-      fieldValue = checked;
+      fieldValue = checked
     } else {
-      fieldValue = value;
+      fieldValue = value
     }
   
     setFormData((prevData) => ({
       ...prevData,
       [name]: fieldValue,
-    }));
-  };
+    }))
+  }
   
   
   const handleUpdateProspect = async () => {
     try {
-      let updatedFormData = { ...formData };
+      let updatedFormData = { ...formData }
 
-      updatedFormData.prospect_id = prospect.prospect_id;
+      updatedFormData.prospect_id = prospect.prospect_id
       
       if (formData.prospect_name === '') {
-        updatedFormData.prospect_name = prospect.prospect_name;
+        updatedFormData.prospect_name = prospect.prospect_name
       }
       if (formData.year === 0) {
-        updatedFormData.year = prospect.year;
+        updatedFormData.year = prospect.year
       }
       if (formData.manager === '') {
-        updatedFormData.manager = prospect.manager;
+        updatedFormData.manager = prospect.manager
       }
       if (formData.status === '') {
-        updatedFormData.status = prospect.status;
+        updatedFormData.status = prospect.status
       }
       if (formData.amount === 0) {
-        updatedFormData.amount = prospect.amount;
+        updatedFormData.amount = prospect.amount
       }
       if (formData.company_id === 0) {
-        updatedFormData.company_id = prospect.company_id;
+        updatedFormData.company_id = prospect.company_id
       }
       if (formData.client_id === 0) {
-        updatedFormData.client_id = prospect.client_id;
+        updatedFormData.client_id = prospect.client_id
       }
       if (formData.type_id === 0) {
-        updatedFormData.type_id = prospect.type_id;
+        updatedFormData.type_id = prospect.type_id
       }
 
       if (formData.clockify === false) {
-        updatedFormData.clockify = prospect.clockify;
+        updatedFormData.clockify = prospect.clockify
       }
       if (formData.jira === false) {
-        updatedFormData.jira = prospect.jira;
+        updatedFormData.jira = prospect.jira
       }
       if (formData.pcs === false) {
-        updatedFormData.pcs = prospect.pcs;
+        updatedFormData.pcs = prospect.pcs
       }
       if (formData.pms === false) {
-        updatedFormData.pms = prospect.pms;
+        updatedFormData.pms = prospect.pms
       }
 
-      const response = await axios.patch(`http://localhost:8080/api/prospect/update`, updatedFormData);
-      console.log(response.data);
-      setEditMode(false);
-      window.location.reload();
+      const response = await axios.patch(`http://localhost:8080/api/prospect/update`, updatedFormData)
+      console.log(response.data)
+      setEditMode(false)
+      window.location.reload()
 
     } catch (err) {
-      console.error(err);
+      console.error(err)
     }
-  };
+  }
 
   const handleEditClick = () => {
-    setEditMode(true);
-  };
+    setEditMode(true)
+  }
 
-  const handleSaveClick = () => {
-    setEditMode(false);
-  };
-
-  const [prospectID, setProspectID] = useState('');
-  const handleDelete = async () => {
+  const handleDelete = async (prospectId) => {
     try {
-      await axios.delete('http://localhost:8080/api/prospect/delete/', {
+      await axios.delete('http://localhost:8080/api/prospect/delete', {
         data: {
-          prospect_id: prospectID,
+          prospect_id: prospectId,
         },
       });
-      // Delete request successful
       console.log('Prospect deleted successfully');
-    } catch (error) {
-      // Error handling
-      console.error('Error deleting prospect:', error);
+    } catch (err) {
+      console.error('Error deleting prospect:', err);
     }
   };
 
@@ -203,7 +196,7 @@ const ProspectDetail = () => {
           draggable: true,
           progress: undefined,
           theme: "colored",
-      });
+      })
   }
 
     return (
@@ -481,7 +474,7 @@ const ProspectDetail = () => {
 
         <button
           className="ml-8 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          onClick={handleDelete}
+          onClick={() => handleDelete(prospect.prospect_id)}
         >
           Delete
         </button>
@@ -507,8 +500,8 @@ const ProspectDetail = () => {
                 theme="colored"
             />
       </div>
-    );
-  };
+    )
+  }
 
-  export default ProspectDetail;
+  export default ProspectDetail
 // -----------------------------------------------------------------------------------------------------------------

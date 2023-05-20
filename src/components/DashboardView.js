@@ -1,7 +1,9 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState , useEffect} from 'react'
 import { FaCaretDown, FaCaretUp, FaEnvelope, FaRegBell, FaSearch, FaUser } from 'react-icons/fa'
 import Clock from 'react-live-clock'
+import { ReactSearchAutocomplete } from 'react-search-autocomplete'
+import axios from 'axios'
 
 function DashboardView() {
 
@@ -19,6 +21,19 @@ function DashboardView() {
         return months[month];
     }
 
+    const [prospects, setProspects] = useState([])
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const res = await axios.get(`http://127.0.0.1:8080/api/prospect/read`)
+            setProspects(res.data.data)
+          } catch (err) {
+            console.error("Error fetching prospect data:", err)
+          }
+        }
+        fetchData()
+     }, [])
+
     // const fetchData = async () => {
     //     try {
     //         const {data} = await axios.get(`https://rickandmortyapi.com/api/character/`)
@@ -28,14 +43,58 @@ function DashboardView() {
     //     }
     // }
 
+
+    const handleOnSearch = (string, results) => {
+        // onSearch will have as the first callback parameter
+        // the string searched and for the second the results.
+        console.log(string, results)
+      }
+    
+      const handleOnHover = (result) => {
+        // the item hovered
+        console.log(result)
+      }
+    
+      const handleOnSelect = (prospects) => {
+        // the item selected
+        console.log(prospects)
+      }
+    
+      const handleOnFocus = () => {
+        console.log('Focused')
+      }
+
+      const handleOnClear = () => {
+        console.log("Cleared");
+      };
+    
+      const formatResult = (prospects) => {
+        return (
+          <>
+            {/* <span style={{ display: 'block', textAlign: 'left' }}>id: {prospects.id}</span> */}
+            <span style={{ display: 'block', textAlign: 'left' }}>{prospects.prospect_name}</span>
+          </>
+        )
+      }
+
   return (
     <div className='flex items-center justify-between h-[70px] shadow-lg px-6'>
-        <div className='flex items-center rounded-md'>
-            <input type='text' className='bg-[#F8F9FC] h-10 outline-none pl-3 w-[350px] rounded-md placeholder:text-sm leading-5 font-normal' placeholder='Search'/>
-            <div className='bg-[#4E73DF] h-10 px-3 flex items-center justify-center cursor-pointer rounded-tr-md rounded-br-md'>
-                <FaSearch color='white'/>
-            </div>
+            {/* Search ------------------- */}
+        <div className='w-96 ml-16'>
+            <ReactSearchAutocomplete
+                items={prospects}
+                fuseOptions={{ keys: ["prospect_id", "prospect_name"] }}
+                onSearch={handleOnSearch}
+                onHover={handleOnHover}
+                onSelect={handleOnSelect}
+                onFocus={handleOnFocus}
+                onClear={handleOnClear}
+                autoFocus
+                // styling={}
+                formatResult={formatResult}
+            />
         </div>
+
         <div className='flex items-center gap-4 relative'>
             <div className='items-center gap-6 border-r-2 pr-6'>
                 <h1>{date}</h1>
