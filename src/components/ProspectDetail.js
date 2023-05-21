@@ -4,6 +4,7 @@ import axios from "axios"
 import { useNavigate, useParams } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { type } from "@testing-library/user-event/dist/type"
 
 const ProspectDetail = () => {
   const { id } = useParams()
@@ -87,14 +88,18 @@ const ProspectDetail = () => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
     let fieldValue
-  
-    if (type === 'number') {
-      fieldValue = parseInt(value, 10)
+
+    if (name === 'type_id' || name === 'company_id' || name === 'client_id') {
+      fieldValue = parseInt(value, 10);
+    } else if (type === 'number') {
+      fieldValue = parseInt(value, 10);
     } else if (type === 'checkbox') {
-      fieldValue = checked
+      fieldValue = checked;
     } else {
-      fieldValue = value
+      fieldValue = value;
     }
+
+    console.log(fieldValue)
   
     setFormData((prevData) => ({
       ...prevData,
@@ -133,7 +138,6 @@ const ProspectDetail = () => {
       if (formData.type_id === 0) {
         updatedFormData.type_id = prospect.type_id
       }
-
       if (formData.clockify === false) {
         updatedFormData.clockify = prospect.clockify
       }
@@ -267,18 +271,34 @@ const ProspectDetail = () => {
                 <label className="font-bold w-32 inline-block w-32 inline-block">Type ID</label>
                 <span className="mr-2">:</span>
                 {editMode ? (
-                  <input
-                    type="number"
-                    className="rounded-lg"
-                    name="type_id"
-                    value={formData.type_id}
-                    placeholder={prospect.type_id}
-                    readOnly={!editMode}
-                    onChange={handleChange}
-                  />
+                  // <input
+                  //   type="number"
+                  //   className="rounded-lg"
+                  //   name="type_id"
+                  //   value={formData.type_id}
+                  //   placeholder={prospect.type_id}
+                  //   readOnly={!editMode}
+                  //   onChange={handleChange}
+                  // />
+                  <select
+                  type="number"
+                  className="rounded-lg"
+                  name="type_id"
+                  value={formData.type_id}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Type</option>
+                  {Array.isArray(types.data) &&
+                      types.data.map((type) => (
+                        <option key={type.ID} value={type.ID}>
+                            {type.project_name}
+                        </option>
+                  ))}
+                </select>
                 ) : (
                   <span>{prospect.type_id}</span>
                 )}
+                
               </div>
 
               <div className="mb-4">
@@ -357,15 +377,30 @@ const ProspectDetail = () => {
                 <label className="font-bold w-32 inline-block">Company ID</label>
                 <span className="mr-2">:</span>
                 {editMode ? (
-                  <input
+                  // <input
+                  //   type="number"
+                  //   className="rounded-lg"
+                  //   name="company_id"
+                  //   value={formData.company_id}
+                  //   placeholder={prospect.company_id}
+                  //   readOnly={!editMode}
+                  //   onChange={handleChange}
+                  // />
+                  <select
                     type="number"
                     className="rounded-lg"
                     name="company_id"
                     value={formData.company_id}
-                    placeholder={prospect.company_id}
-                    readOnly={!editMode}
                     onChange={handleChange}
-                  />
+                  >
+                    <option value="">Select Company</option>
+                    {Array.isArray(companies.data) &&
+                        companies.data.map((company) => (
+                          <option key={company.ID} value={company.ID}>
+                              {company.company_name}
+                          </option>
+                    ))}
+                  </select>
                 ) : (
                   <span>{prospect.company_id}</span>
                 )}
@@ -375,15 +410,30 @@ const ProspectDetail = () => {
                 <label className="font-bold w-32 inline-block">Client ID</label>
                 <span className="mr-2">:</span>
                 {editMode ? (
-                  <input
+                  // <input
+                  //   type="number"
+                  //   className="rounded-lg"
+                  //   name="client_id"
+                  //   value={formData.client_id}
+                  //   placeholder={prospect.client_id}
+                  //   readOnly={!editMode}
+                  //   onChange={handleChange}
+                  // />
+                  <select
                     type="number"
                     className="rounded-lg"
                     name="client_id"
                     value={formData.client_id}
-                    placeholder={prospect.client_id}
-                    readOnly={!editMode}
                     onChange={handleChange}
-                  />
+                  >
+                    <option value="">Select Company</option>
+                    {Array.isArray(clients.data) &&
+                        clients.data.map((client) => (
+                          <option key={client.ID} value={client.ID}>
+                              {client.client_name}
+                          </option>
+                    ))}
+                  </select>
                 ) : (
                   <span>{prospect.client_id}</span>
                 )}
