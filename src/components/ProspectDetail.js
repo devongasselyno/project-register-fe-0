@@ -19,10 +19,10 @@ const ProspectDetail = () => {
     amount: 0,
     company_id: 0,
     client_id: 0,
-    clockify: false,
-    jira: false,
-    pcs: false,
-    pms: false
+    clockify: '',
+    jira: '',
+    pcs: '',
+    pms: ''
   })
 
   useEffect(() => {
