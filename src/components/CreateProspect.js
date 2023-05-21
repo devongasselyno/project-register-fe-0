@@ -35,11 +35,11 @@ const CreateProspect = () => {
     }
 
     const breakpoints = [
-        { width: 1600, ratio: 2 / 5 },   // Breakpoint 1: Width is 2/5 of window size when window width > 1600px
-        { width: 1200, ratio: 1 / 2 },   // Breakpoint 2: Width is 1/2 of window size when window width > 1200px
-        { width: 1000, ratio: 2 / 3 },   // Breakpoint 3: Width is 2/3 of window size when window width > 1000px
-        { width: 800, ratio: 3 / 4 },    // Breakpoint 4: Width is 3/4 of window size when window width > 800px
-        { width: 600, ratio: 4 / 5 },    // Breakpoint 5: Width is 4/5 of window size when window width > 600px
+        { width: 1600, ratio: 2 / 5 },
+        { width: 1200, ratio: 1 / 2 },
+        { width: 1000, ratio: 2 / 3 },
+        { width: 800, ratio: 3 / 4 },
+        { width: 600, ratio: 4 / 5 },
     ];
 
     const [width, setWidth] = useState(getWidth(window.innerWidth));
