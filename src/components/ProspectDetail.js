@@ -4,6 +4,7 @@ import axios from "axios"
 import { useNavigate, useParams } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { Navigate } from "react-router-dom"
 import { type } from "@testing-library/user-event/dist/type"
 
 const ProspectDetail = () => {
@@ -156,8 +157,11 @@ const ProspectDetail = () => {
       const response = await axios.patch(`http://localhost:8080/api/prospect/update`, updatedFormData)
       console.log(response.data)
       setEditMode(false)
-      window.location.reload()
-
+      notify()
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+      
     } catch (err) {
       console.error(err)
     }
@@ -167,6 +171,7 @@ const ProspectDetail = () => {
     setEditMode(true)
   }
 
+  const navigate = useNavigate()
   const handleDelete = async (prospectId) => {
     try {
       await axios.delete('http://localhost:8080/api/prospect/delete', {
@@ -175,6 +180,12 @@ const ProspectDetail = () => {
         },
       });
       console.log('Prospect deleted successfully');
+      deleteNotify()
+
+      setTimeout(() => {
+        navigate('/dashboard')
+      }, 2000);
+      
     } catch (err) {
       console.error('Error deleting prospect:', err);
     }
@@ -187,15 +198,16 @@ const ProspectDetail = () => {
   const handleConvertProspect = async () => {
     try {
       const response = await api.post('/prospect/convert', requestData)
+      convertNotify()
     } catch (error) {
       console.error(error)
     }
   }
 
   const notify = () => {
-      toast.success('Prospect Created!', {
+      toast.success('Prospect Updated!', {
           position: "top-right",
-          autoClose: 5000,
+          autoClose: 1200,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -204,6 +216,33 @@ const ProspectDetail = () => {
           theme: "colored",
       })
   }
+
+  const convertNotify = () => {
+    toast.success('Prospect Converted!', {
+        position: "top-right",
+        autoClose: 1200,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+    })
+}
+
+const deleteNotify = () => {
+  toast.success('Prospect Deleted!', {
+      position: "top-right",
+      autoClose: 1200,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+  })
+}
+
 
     return (
       // ------------------------------------------------------------------------
@@ -509,7 +548,7 @@ const ProspectDetail = () => {
 
         <ToastContainer
                 position="top-right"
-                autoClose={5000}
+                autoClose={1200}
                 hideProgressBar={false}
                 newestOnTop={false}
                 closeOnClick
