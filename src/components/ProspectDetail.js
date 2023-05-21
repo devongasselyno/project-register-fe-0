@@ -20,11 +20,34 @@ const ProspectDetail = () => {
     amount: 0,
     company_id: 0,
     client_id: 0,
-    clockify: '',
-    jira: '',
-    pcs: '',
-    pms: ''
+    clockify: false,
+    jira: false,
+    pcs: false,
+    pms: false
   })
+
+  
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target
+    let fieldValue
+
+    if (name === 'type_id' || name === 'company_id' || name === 'client_id') {
+      fieldValue = parseInt(value, 10);
+    } else if (type === 'number') {
+      fieldValue = parseInt(value, 10);
+    } else if (type === 'checkbox') {
+      fieldValue = checked;
+    } else {
+      fieldValue = value;
+    }
+
+    console.log(fieldValue)
+  
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: fieldValue,
+    }))
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,27 +108,6 @@ const ProspectDetail = () => {
 
   const [editMode, setEditMode] = useState(false)
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
-    let fieldValue
-
-    if (name === 'type_id' || name === 'company_id' || name === 'client_id') {
-      fieldValue = parseInt(value, 10);
-    } else if (type === 'number') {
-      fieldValue = parseInt(value, 10);
-    } else if (type === 'checkbox') {
-      fieldValue = checked;
-    } else {
-      fieldValue = value;
-    }
-
-    console.log(fieldValue)
-  
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: fieldValue,
-    }))
-  }
   
   
   const handleUpdateProspect = async () => {
@@ -138,18 +140,18 @@ const ProspectDetail = () => {
       if (formData.type_id === 0) {
         updatedFormData.type_id = prospect.type_id
       }
-      if (formData.clockify === false) {
-        updatedFormData.clockify = prospect.clockify
-      }
-      if (formData.jira === false) {
-        updatedFormData.jira = prospect.jira
-      }
-      if (formData.pcs === false) {
-        updatedFormData.pcs = prospect.pcs
-      }
-      if (formData.pms === false) {
-        updatedFormData.pms = prospect.pms
-      }
+ 
+        updatedFormData.clockify = formData.clockify
+      
+ 
+        updatedFormData.jira = formData.jira
+      
+      
+        updatedFormData.pcs = formData.pcs
+      
+     
+        updatedFormData.pms = formData.pms
+      
 
       const response = await axios.patch(`http://localhost:8080/api/prospect/update`, updatedFormData)
       console.log(response.data)
@@ -250,36 +252,9 @@ const ProspectDetail = () => {
               </div>
 
               <div className="mb-4">
-                <label className="font-bold w-32 inline-block">Company Name</label>
+                <label className="font-bold w-32 inline-block w-32 inline-block">Type Name</label>
                 <span className="mr-2">:</span>
                 {editMode ? (
-                  <input
-                    type="text"
-                    name="company_name"
-                    value={formData.company_name}
-                    className="rounded-lg"
-                    placeholder={prospect.company.company_name}
-                    readOnly={!editMode}
-                    onChange={handleChange}
-                  />
-                ) : (
-                  <span>{prospect.company.company_name}</span>
-                )}
-              </div>
-
-              <div className="mb-4">
-                <label className="font-bold w-32 inline-block w-32 inline-block">Type ID</label>
-                <span className="mr-2">:</span>
-                {editMode ? (
-                  // <input
-                  //   type="number"
-                  //   className="rounded-lg"
-                  //   name="type_id"
-                  //   value={formData.type_id}
-                  //   placeholder={prospect.type_id}
-                  //   readOnly={!editMode}
-                  //   onChange={handleChange}
-                  // />
                   <select
                   type="number"
                   className="rounded-lg"
@@ -296,7 +271,7 @@ const ProspectDetail = () => {
                   ))}
                 </select>
                 ) : (
-                  <span>{prospect.type_id}</span>
+                  <span>{prospect.project_type.project_name}</span>
                 )}
                 
               </div>
@@ -374,7 +349,7 @@ const ProspectDetail = () => {
               </div>
 
               <div className="mb-4">
-                <label className="font-bold w-32 inline-block">Company ID</label>
+                <label className="font-bold w-32 inline-block">Company Name</label>
                 <span className="mr-2">:</span>
                 {editMode ? (
                   // <input
@@ -402,23 +377,14 @@ const ProspectDetail = () => {
                     ))}
                   </select>
                 ) : (
-                  <span>{prospect.company_id}</span>
+                  <span>{prospect.company.company_name}</span>
                 )}
               </div>
 
               <div className="mb-4">
-                <label className="font-bold w-32 inline-block">Client ID</label>
+                <label className="font-bold w-32 inline-block">Client Name</label>
                 <span className="mr-2">:</span>
                 {editMode ? (
-                  // <input
-                  //   type="number"
-                  //   className="rounded-lg"
-                  //   name="client_id"
-                  //   value={formData.client_id}
-                  //   placeholder={prospect.client_id}
-                  //   readOnly={!editMode}
-                  //   onChange={handleChange}
-                  // />
                   <select
                     type="number"
                     className="rounded-lg"
@@ -435,7 +401,7 @@ const ProspectDetail = () => {
                     ))}
                   </select>
                 ) : (
-                  <span>{prospect.client_id}</span>
+                  <span>{prospect.client.client_name}</span>
                 )}
               </div>
             </div>
@@ -448,12 +414,13 @@ const ProspectDetail = () => {
                 {editMode ? (
                   <input
                     type="checkbox"
+                    name="jira"
                     value={formData.jira}
-                    checked={prospect.Jira}
+                    // checked={prospect.Jira}
                     onChange={handleChange}
                   />
                 ) : (
-                  <input type="checkbox" checked={prospect.Jira} disabled />
+                  <input type="checkbox" checked={prospect.jira} disabled />
                 )}
               </div>
 
@@ -463,12 +430,13 @@ const ProspectDetail = () => {
                 {editMode ? (
                   <input
                     type="checkbox"
+                    name="clockify"
                     value={formData.clockify}
-                    checked={prospect.Clockify}
+                    // checked={prospect.Clockify}
                     onChange={handleChange}
                   />
                 ) : (
-                  <input type="checkbox" checked={prospect.Clockify} disabled />
+                  <input type="checkbox" checked={prospect.clockify} disabled />
                 )}
               </div>
 
@@ -478,12 +446,13 @@ const ProspectDetail = () => {
                 {editMode ? (
                   <input
                     type="checkbox"
+                    name="pcs"
                     value={formData.pcs}
-                    checked={prospect.Pcs}
+                    // checked={prospect.Pcs}
                     onChange={handleChange}
                   />
                 ) : (
-                  <input type="checkbox" checked={prospect.Pcs} disabled />
+                  <input type="checkbox" checked={prospect.pcs} disabled />
                 )}
               </div>
 
@@ -493,12 +462,13 @@ const ProspectDetail = () => {
                 {editMode ? (
                   <input
                     type="checkbox"
+                    name="pms"
                     Value={formData.pms}
-                    checked={prospect.Pms}
+                    // checked={prospect.Pms}
                     onChange={handleChange}
                   />
                 ) : (
-                  <input type="checkbox" checked={prospect.Pms} disabled />
+                  <input type="checkbox" checked={prospect.pms} disabled />
                 )}
               </div>
             </div>
