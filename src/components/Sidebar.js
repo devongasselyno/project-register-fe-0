@@ -1,5 +1,5 @@
 import React from 'react'
-import {FaCalendarCheck, FaTachometerAlt} from 'react-icons/fa'
+import {FaCalendarCheck, FaChartLine, FaPaperPlane, FaPlus, FaTachometerAlt} from 'react-icons/fa'
 
 const Sidebar = () => {
   return (
@@ -11,12 +11,18 @@ const Sidebar = () => {
             <FaTachometerAlt color='white'/>
             <a href='/dashboard' className='text-[14px] leading-5 font-bold text-white'>Dashboard</a>
         </div>
+
+        <div className='flex items-center gap-[15px] py-[20px] border-b-[1px] border-[#EDEDED]/[0.3]'>
+          <FaPaperPlane color='white'/>
+          <a href='/prospect' className='text-[14px] leading-5 font-bold text-white'>Prospects</a>
+        </div>
         <div className='flex items-center gap-[15px] py-[20px] border-b-[1px] border-[#EDEDED]/[0.3]'>
             <FaCalendarCheck color='white'/>
-            <p className='text-[14px] leading-5 font-bold text-white'>Projects</p>
+            <a href='/project' className='text-[14px] leading-5 font-bold text-white'>Projects</a>
         </div>
-        <div>
-
+        <div className='flex items-center gap-[15px] py-[20px] border-b-[1px] border-[#EDEDED]/[0.3]'>
+            <FaChartLine color='white'/>
+            <a href='/sales' className='text-[14px] leading-5 font-bold text-white'>Sales Activity</a>
         </div>
     </div>
   )
