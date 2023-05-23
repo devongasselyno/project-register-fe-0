@@ -5,6 +5,7 @@ import Main from '../components/Main'
 import SigninPage from '../components/SingIn'
 import CreateProspect from '../components/CreateProspect'
 import ProspectDetail from '../components/ProspectDetail'
+import CreateType from '../components/CreateType'
 import ProjectList from '../components/ProjectList'
 import ProspectList from '../components/ProspectList'
 
@@ -35,7 +36,6 @@ const Router = () => {
                     <Route path='/prospect/create' element={<App/>}>
                         <Route index element={<CreateProspect />} />
                     </Route>
-
                 </Routes>
             </BrowserRouter>
         </div>
