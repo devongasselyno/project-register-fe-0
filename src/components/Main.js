@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProspectDetail from './ProspectDetail';
 import axios from 'axios';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
 
 const Main = () => {
   const [posts, setPosts] = useState([])
@@ -35,6 +37,38 @@ const Main = () => {
     return <h2>Loading...</h2>
   }
 
+  ChartJS.register(ArcElement, Tooltip, Legend);
+  const getChartData = () => {
+    const type1Count = posts.filter((post) => post.type_id === 1).length;
+    const type2Count = posts.filter((post) => post.type_id === 2).length;
+  
+    return {
+      labels: ['Prospect', 'Project'],
+      datasets: [
+        {
+          data: [type1Count, type2Count],
+          backgroundColor: ['#FF6384', '#36A2EB'],
+        },
+      ],
+    };
+  };
+
+  function prevPage() {
+    if(currentPage !== 1) {
+      setCurrentPage(currentPage - 1)
+    }
+  }
+
+  function changeCPage(id) {
+    setCurrentPage(id)
+  }
+
+  function nextPage() {
+    if(currentPage !== npage) {
+      setCurrentPage(currentPage + 1)
+    }
+  }
+  
   return (
     <div className='pt-10 px-20'>
       <div className='flex items-center justify-between'>
@@ -45,6 +79,18 @@ const Main = () => {
       </div>
   
       <div className='py-6'>
+     
+      <div className='my-10' style={{ maxWidth: '800px', maxHeight: '700px', overflow: 'auto' }}>
+        <Doughnut
+          data={getChartData()}
+          options={{
+            responsive: false,
+            maintainAspectRatio: true,
+          }}
+        />
+      </div>
+    
+
         <table className='table-auto border-collapse'>
           <thead>
             <tr>
@@ -120,22 +166,6 @@ const Main = () => {
       </div>
     </div>
   );  
-
-  function prevPage() {
-    if(currentPage !== 1) {
-      setCurrentPage(currentPage - 1)
-    }
-  }
-
-  function changeCPage(id) {
-    setCurrentPage(id)
-  }
-
-  function nextPage() {
-    if(currentPage !== npage) {
-      setCurrentPage(currentPage + 1)
-    }
-  }
 }
 
 export default Main

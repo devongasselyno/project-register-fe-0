@@ -5,16 +5,16 @@ import { useNavigate } from 'react-router-dom'
 
 const ProjectList = () => {
 
-    const [data, setData] = useState([])
+    const [posts, setPosts] = useState([])
     const [loading, setLoading]  = useState(false)
-
+  
     const [currentPage, setCurrentPage] = useState(1)
     const [recordsPerPage] = useState(5)
   
     const lastIndex = currentPage * recordsPerPage;
     const firstIndex = lastIndex - recordsPerPage;
-    const records = data.slice(firstIndex, lastIndex)
-    const npage = Math.ceil(data.length / recordsPerPage)
+    const records = posts.slice(firstIndex, lastIndex)
+    const npage = Math.ceil(posts.length / recordsPerPage)
     const numbers = [...Array(npage + 1).keys()].slice(1)
     const navigate = useNavigate()
   
@@ -22,18 +22,15 @@ const ProjectList = () => {
         navigate(`/project/read/${id}`);
       };
     
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('localhost:8080/api/projects/read');
-                setData(response.data);
-            } catch (err) {
-                console.error('Error fetching data:', err);
-            }
-        };
-
-        fetchData();
-    }, []);
+      useEffect(() => {
+        const fetchPosts = async () => {
+          setLoading(true)
+          const res = await axios.get('http://127.0.0.1:8080/api/projects/read')
+          setPosts(res.data.data)
+          setLoading(false)
+        }
+        fetchPosts();
+      }, [])
     
     return (
         <div className='pt-10 px-20'>
@@ -72,8 +69,8 @@ const ProjectList = () => {
                         <td className='border px-4 py-2'>{row.company.company_name}</td>
                         <td className='border px-4 py-2'>{row.client.client_name}</td>
                         <td className='border px-4 py-2'>{row.year}</td>
-                        <td className='border px-4 py-2'>{row.Project_id}</td>
-                        <td className='border px-4 py-2'>{row.Project_name}</td>
+                        <td className='border px-4 py-2'>{row.project_id}</td>
+                        <td className='border px-4 py-2'>{row.project_name}</td>
                         <td className='border px-4 py-2'>{row.manager}</td>
                         <td className='border px-4 py-2'>{row.status}</td>
                         <td className='border px-4 py-2'>{row.title}</td>

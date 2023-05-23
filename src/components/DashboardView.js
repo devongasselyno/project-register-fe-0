@@ -4,6 +4,8 @@ import { FaCaretDown, FaCaretUp } from 'react-icons/fa'
 import Clock from 'react-live-clock'
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import "../index"
 
 function DashboardView() {
 
@@ -21,21 +23,32 @@ function DashboardView() {
         return months[month];
     }
 
+    const navigate = useNavigate();
+
+    const handleProspectClick = (id) => {
+      window.location.href(`/prospect/read/${id}`);
+    };
+
     const [prospects, setProspects] = useState([])
     useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const res = await axios.get(`http://127.0.0.1:8080/api/prospect/read`)
-            setProspects(res.data.data)
-          } catch (err) {
-            console.error("Error fetching prospect data:", err)
-          }
+      const fetchData = async () => {
+        try {
+          const res = await axios.get('http://127.0.0.1:8080/api/prospect/read');
+          const modifiedProspects = res?.data?.data.map((prospect) => {
+            const { prospect_name, ...rest } = prospect;
+            return { name: prospect_name, ...rest };
+          });
+          setProspects(modifiedProspects);
+        } catch (err) {
+          console.error('Error fetching prospect data:', err);
         }
-        fetchData()
-     }, [])
+      };
+      fetchData();
+    }, []);
+    
 
-    const handleOnSearch = (string, results) => {
-        console.log(string, results)
+      const handleOnSearch = (string, results) => {
+          console.log(string, results)
       }
     
       const handleOnHover = (result) => {
@@ -53,30 +66,56 @@ function DashboardView() {
       const handleOnClear = () => {
         console.log("Cleared");
       };
-    
-      const formatResult = (prospects) => {
+   
+      const formatResult = (result) => {
         return (
           <>
-            {/* <span style={{ display: 'block', textAlign: 'left' }}>id: {prospects.id}</span> */}
-            <span style={{ display: 'block', textAlign: 'left' }}>{prospects.prospect_name}</span>
+            <span onClick={() => handleProspectClick(result.ID)} style={{ display: 'block', textAlign: 'left' }}>{result.name}</span>
           </>
         )
       }
+      
+      // const formatResult = (result) => {
+      //   console.log("idDDDDDDDDDDDD", result.id)
+      //   if (result?.type_id === 1) {
+      //     return (
+      //       <>
+      //         <span style={{ display: 'block', textAlign: 'left', fontWeight: 'bold' }}>Projects</span>
+      //         <span onClick={() => handleProspectClick(result?.id)} style={{ display: 'block', textAlign: 'left' }}>{result?.name}</span>
+      //       </>
+      //     );
+      //   } else if (result?.type_id === 2) {
+      //     return (
+      //       <>
+      //         <span style={{ display: 'block', textAlign: 'left', fontWeight: 'bold' }}>Prospects</span>
+      //         <span onClick={() => handleProspectClick(result?.id)} style={{ display: 'block', textAlign: 'left' }}>{result?.name}</span>
+      //       </>
+      //     );
+      //   } else {
+      //     return (
+      //       <>
+      //         <span onClick={() => handleProspectClick(result?.id)} style={{ display: 'block', textAlign: 'left' }}>{result?.name}</span>
+      //       </>
+      //     );
+      //   }
+      // };
 
+
+      const name = [...prospects, prospects.name]
   return (
     <div className='flex items-center justify-between h-[70px] shadow-lg px-6'>
             {/* Search ------------------- */}
         <div className='w-96 ml-16'>
             <ReactSearchAutocomplete
                 items={prospects}
-                fuseOptions={{ keys: ["prospect_id", "prospect_name"] }}
+                // items={items}
+                fuseOptions={{ keys: ["name"] }}
                 onSearch={handleOnSearch}
                 onHover={handleOnHover}
                 onSelect={handleOnSelect}
                 onFocus={handleOnFocus}
                 onClear={handleOnClear}
                 autoFocus
-                // styling={}
                 formatResult={formatResult}
             />
         </div>

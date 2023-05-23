@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import api from '../api/posts'
 import axios from "axios"
-import { useNavigate, useParams } from 'react-router-dom'
+import { Router, useNavigate, useParams } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Navigate } from "react-router-dom"
@@ -10,6 +10,11 @@ import { type } from "@testing-library/user-event/dist/type"
 const ProspectDetail = () => {
   const { id } = useParams()
   const [prospect, setProspect] = useState('')
+  const [editMode, setEditMode] = useState(false)
+
+  const [types, setTypes] = useState([])
+  const [companies, setCompanies] = useState([])
+  const [clients, setClients] = useState([])
 
   const [formData, setFormData] = useState({
     type_id: 0,
@@ -50,67 +55,56 @@ const ProspectDetail = () => {
     }))
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(`http://127.0.0.1:8080/api/prospect/read/${id}`)
-        const prospectData = res.data.data
-        setProspect(prospectData)
-      } catch (err) {
-        console.error("Error fetching prospect data:", err)
-      }
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(`http://127.0.0.1:8080/api/prospect/read/${id}`)
+      const prospectData = res?.data?.data
+      setProspect(prospectData)
+    } catch (err) {
+      console.error("Error fetching prospect data:", err)
     }
-  
+  }
+
+  useEffect(() => {
     fetchData()
-  }, [id])
-  
-
-  // UPDATE FORM DATA----------------------------------------------------------------------------------------------------------------------
-  const [types, setTypes] = useState([])
-  const [companies, setCompanies] = useState([])
-  const [clients, setClients] = useState([])
-
-  useEffect(() => {
-    const fetchCompanies = async () => {
-      try {
-        const response = await api.get('/company/read')
-        setCompanies(response.data)
-      } catch (error) {
-        console.error('Failed to fetch companies:', error)
-      }
-    }
-
-    const fetchClients = async () => {
-      try {
-        const response = await api.get('/client/read', {
-          params: {
-            limit: 100,
-          },
-        })
-        setClients(response.data)
-      } catch (error) {
-        console.error('Failed to fetch clients:', error)
-      }
-    }
-
-    const fetchTypes = async () => {
-      try {
-        const response = await api.get('/type/read')
-        setTypes(response.data)
-      } catch (error) {
-        console.error('Failed to fetch types:', error)
-      }
-    }
-
     fetchCompanies()
     fetchClients()
     fetchTypes()
   }, [])
 
-  const [editMode, setEditMode] = useState(false)
+  const fetchCompanies = async () => {
+    try {
+      const response = await api.get('/company/read')
+      setCompanies(response.data)
+    } catch (error) {
+      console.error('Failed to fetch companies:', error)
+    }
+  }
 
+  const fetchClients = async () => {
+    try {
+      const response = await api.get('/client/read', {
+        params: {
+          limit: 100,
+        },
+      })
+      setClients(response.data)
+    } catch (error) {
+      console.error('Failed to fetch clients:', error)
+    }
+  }
+
+  const fetchTypes = async () => {
+    try {
+      const response = await api.get('/type/read')
+      setTypes(response.data)
+    } catch (error) {
+      console.error('Failed to fetch types:', error)
+    }
+  }
   
-  
+
+
   const handleUpdateProspect = async () => {
     try {
       let updatedFormData = { ...formData }
@@ -141,26 +135,21 @@ const ProspectDetail = () => {
       if (formData.type_id === 0) {
         updatedFormData.type_id = prospect.type_id
       }
- 
         updatedFormData.clockify = formData.clockify
-      
- 
         updatedFormData.jira = formData.jira
-      
-      
         updatedFormData.pcs = formData.pcs
-      
-     
         updatedFormData.pms = formData.pms
-      
 
       const response = await axios.patch(`http://localhost:8080/api/prospect/update`, updatedFormData)
       console.log(response.data)
       setEditMode(false)
       notify()
+    
       setTimeout(() => {
-        window.location.reload();
+        fetchData()
       }, 2000);
+
+      
       
     } catch (err) {
       console.error(err)
