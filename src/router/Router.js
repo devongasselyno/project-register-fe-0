@@ -5,6 +5,7 @@ import Main from '../components/Main'
 import SigninPage from '../components/SingIn'
 import CreateProspect from '../components/CreateProspect'
 import ProspectDetail from '../components/ProspectDetail'
+import CreateType from '../components/CreateType'
 
 const Router = () => {
     return (
@@ -23,7 +24,7 @@ const Router = () => {
 
                     <Route path='/prospect/create' element={<App/>}>
                         <Route index element={<CreateProspect />} />
-                    </Route>    
+                    </Route>
                 </Routes>
             </BrowserRouter>
         </div>
