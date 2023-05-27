@@ -103,7 +103,7 @@ const ProspectDetail = () => {
       console.error('Failed to fetch types:', error)
     }
   }
-  
+
 
 
   const handleUpdateProspect = async () => {
@@ -136,22 +136,22 @@ const ProspectDetail = () => {
       if (formData.type_id === 0) {
         updatedFormData.type_id = prospect.type_id
       }
-        updatedFormData.clockify = formData.clockify
-        updatedFormData.jira = formData.jira
-        updatedFormData.pcs = formData.pcs
-        updatedFormData.pms = formData.pms
+      updatedFormData.clockify = formData.clockify
+      updatedFormData.jira = formData.jira
+      updatedFormData.pcs = formData.pcs
+      updatedFormData.pms = formData.pms
 
       const response = await axios.patch(`http://localhost:8080/api/prospect/update`, updatedFormData)
       console.log(response.data)
       setEditMode(false)
       notify()
-    
+
       setTimeout(() => {
         fetchData()
       }, 2000);
 
-      
-      
+
+
     } catch (err) {
       console.error(err)
     }
@@ -189,9 +189,17 @@ const ProspectDetail = () => {
     }
 
     try {
-      const response = await api.post('/prospect/convert', responseData)
+      await api.post('/prospect/convert', responseData)
+      try {
+        await axios.delete('http://localhost:8080/api/prospect/delete', {
+          data: {
+            prospect_id: prospect.prospect_id,
+          },
+        });
+      } catch (error) {
+        console.error(error)
+      }
       convertNotify()
-      handleDelete(prospect.prospect_id)
       setTimeout(() => {
         navigate('/dashboard')
       }, 2000);
@@ -540,20 +548,19 @@ const ProspectDetail = () => {
         nested
       >
         {close => (
-          <div className="modal bg-slate-100">
-            <div class="flex items-center justify-between p-5 border-b rounded-t">
+          <div className="modal bg-slate-100 p-6 rounded-xl">
+            <div class="flex items-center justify-between border-b rounded-t">
               <h3 class="text-xl font-medium text-gray-900">
                 Convert Prospect to Project
               </h3>
-              <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-hide="medium-modal" onClick={close}>
+              <button type="button" class="text-gray-400 text-2xl bg-transparent hover:bg-gray-200 hover:text-gray-900 outline-none rounded-lg p-1.5 ml-auto inline-flex items-center" data-modal-hide="medium-modal" onClick={close}>
                 &times;
               </button>
             </div>
-            <div class="p-6 space-y-6 block items-center">
-              <label className="font-bold w-32 inline-block w-32 inline-block">Select Type Name</label>
+            <div className="p-6 space-y-6 block items-center">
+              <label className="font-bold w-32 inline-block">Select Type Name</label>
               <span className="mr-2">:</span>
               <select
-                type="number"
                 className="rounded-lg"
                 name="type_id"
                 value={formData.type_id}
@@ -561,27 +568,22 @@ const ProspectDetail = () => {
               >
                 <option value="">Select Type</option>
                 {Array.isArray(types.data) &&
-                  types.data.map((type) => (
-                    <option key={type.ID} value={type.ID}>
-                      {type.project_name}
-                    </option>
-                  ))}
+                  types.data.map((type) => {
+                    // Exclude the specific name you want to eliminate
+                    if (type.project_type_code !== 'PRP') {
+                      return (
+                        <option key={type.ID} value={type.ID}>
+                          {type.project_name}
+                        </option>
+                      );
+                    }
+                    return null;
+                  })}
               </select>
-
             </div>
-            <div className="actions">
+            <div className="actions flex items-center gap-4 flex-wrap justify-between">
               <button
-                type="submit"
-                className="ml-8 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                onClick={async () => {
-                  await handleConvertProspect(formData.type_id)
-                  close();
-                }}
-              >
-                Convert Prospect
-              </button>
-              <button
-                className="ml-8 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-orange-500 mx-4 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
                 onClick={() => {
                   console.log('modal closed ');
                   close();
@@ -589,6 +591,17 @@ const ProspectDetail = () => {
               >
                 Cancel
               </button>
+              <button
+                type="submit"
+                className="bg-green-500 mx-4 hover:bg-green-700 text-white font-bold py-2 px-4 m-4 rounded"
+                onClick={async () => {
+                  await handleConvertProspect(formData.type_id)
+                  close();
+                }}
+              >
+                Convert Prospect
+              </button>
+
             </div>
           </div>
         )}
