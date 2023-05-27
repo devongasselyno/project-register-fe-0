@@ -191,6 +191,7 @@ const ProspectDetail = () => {
     try {
       const response = await api.post('/prospect/convert', responseData)
       convertNotify()
+      handleDelete(prospect.prospect_id)
       setTimeout(() => {
         navigate('/dashboard')
       }, 2000);
@@ -539,7 +540,7 @@ const ProspectDetail = () => {
         nested
       >
         {close => (
-          <div className="modal">
+          <div className="modal bg-slate-100">
             <div class="flex items-center justify-between p-5 border-b rounded-t">
               <h3 class="text-xl font-medium text-gray-900">
                 Convert Prospect to Project
