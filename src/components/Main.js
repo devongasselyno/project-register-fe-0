@@ -4,6 +4,10 @@ import ProspectDetail from './ProspectDetail';
 import axios from 'axios';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import LineChart from './LineChart';
+import CurveLineChart from './CurveLineChart';
+import BarChart from './BarChart';
+import FilledLineChart from './FilledLineChart';
 
 const Main = () => {
   const [posts, setPosts] = useState([])
@@ -23,15 +27,15 @@ const Main = () => {
     navigate(`/prospect/read/${id}`);
   };
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      setLoading(true)
-      const res = await axios.get('http://127.0.0.1:8080/api/prospect/read')
-      setPosts(res.data.data)
-      setLoading(false)
-    }
-    fetchPosts();
-  }, [])
+  // useEffect(() => {
+  //   const fetchPosts = async () => {
+  //     setLoading(true)
+  //     const res = await axios.get('http://127.0.0.1:8080/api/prospect/read')
+  //     setPosts(res.data.data)
+  //     setLoading(false)
+  //   }
+  //   fetchPosts();
+  // }, [])
 
   if (loading && posts.length === 0){
     return <h2>Loading...</h2>
@@ -79,6 +83,53 @@ const Main = () => {
       </div>
   
       <div className='py-6'>
+
+      <div className='flex justify-between'>
+        <div className='bg-[#321FDB] rounded-md p-5 text-white'>
+          <div className='pb-3'>
+            <h1 >Total Revenue</h1>
+            <div className='flex items-baseline gap-2'>
+              <h3 className='text-2xl'>300$ </h3>
+              <span className='text-md'>(-12.4 %)</span>
+            </div>
+          </div>
+ 
+          <CurveLineChart />
+        </div>
+
+        <div className='bg-[#3399FF] rounded-md p-5 text-white'>
+        <div className='pb-3'>
+            <h1 >Total Revenue</h1>
+            <div className='flex items-baseline gap-2'>
+              <h3 className='text-2xl'>300$ </h3>
+              <span className='text-md'>(-12.4 %)</span>
+            </div>
+          </div>
+          <LineChart />
+        </div>
+        <div className='bg-[#F9B115] rounded-md p-5 text-white'>
+        <div className='pb-3'>
+            <h1 >Total Revenue</h1>
+            <div className='flex items-baseline gap-2'>
+              <h3 className='text-2xl'>300$ </h3>
+              <span className='text-md'>(-12.4 %)</span>
+            </div>
+          </div>
+          <FilledLineChart />
+        </div>
+        <div className='bg-[#E55353] rounded-md p-5 text-white'>
+        <div className='pb-3'>
+            <h1 >Total Revenue</h1>
+            <div className='flex items-baseline gap-2'>
+              <h3 className='text-2xl'>300$ </h3>
+              <span className='text-md'>(-12.4 %)</span>
+            </div>
+          </div>
+          
+          <BarChart />
+          
+        </div>
+      </div>
      
       <div className='my-10' style={{ maxWidth: '800px', maxHeight: '700px', overflow: 'auto' }}>
         <Doughnut
