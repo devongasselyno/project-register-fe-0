@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import api from '../api/posts';
+import api from '../../api/posts';
 import sha512 from 'js-sha512';
 import { encode } from 'base64-arraybuffer';
 import Snackbar from '@material-ui/core/Snackbar';

@@ -2,12 +2,13 @@ import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import App from '../App'
 import Main from '../components/Main'
-import SigninPage from '../components/SingIn'
-import CreateProspect from '../components/CreateProspect'
-import ProspectDetail from '../components/ProspectDetail'
-import CreateType from '../components/CreateType'
+import SigninPage from '../components/forms/SingIn' 
+import CreateProspect from '../components/forms/CreateProspect'
+import ProspectDetail from '../components/forms/ProspectDetail'
+import CreateType from '../components/forms/CreateType'
 import ProjectList from '../components/ProjectList'
 import ProspectList from '../components/ProspectList'
+import CreateClientContact from '../components/forms/CreateClientContact'
 
 const Router = () => {
     return (
@@ -35,6 +36,10 @@ const Router = () => {
 
                     <Route path='/prospect/create' element={<App/>}>
                         <Route index element={<CreateProspect />} />
+                    </Route>
+
+                    <Route path='/clientcontact/create' element={<App/>}>
+                        <Route index element={<CreateClientContact />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

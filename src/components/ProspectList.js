@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ProspectDetail from './ProspectDetail';
+import ProspectDetail from './forms/ProspectDetail';
 import axios from 'axios';
 
 const ProspectList = () => {
