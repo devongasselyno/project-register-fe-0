@@ -27,15 +27,15 @@ const Main = () => {
     navigate(`/prospect/read/${id}`);
   };
 
-  // useEffect(() => {
-  //   const fetchPosts = async () => {
-  //     setLoading(true)
-  //     const res = await axios.get('http://127.0.0.1:8080/api/prospect/read')
-  //     setPosts(res.data.data)
-  //     setLoading(false)
-  //   }
-  //   fetchPosts();
-  // }, [])
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setLoading(true)
+      const res = await axios.get('http://127.0.0.1:8080/api/prospect/read')
+      setPosts(res.data.data)
+      setLoading(false)
+    }
+    fetchPosts();
+  }, [])
 
   if (loading && posts.length === 0){
     return <h2>Loading...</h2>
