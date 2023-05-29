@@ -9,6 +9,7 @@ import CreateType from '../components/forms/CreateType'
 import ProjectList from '../components/ProjectList'
 import ProspectList from '../components/ProspectList'
 import CreateClientContact from '../components/forms/CreateClientContact'
+import CreateContact from '../components/forms/CreateContact'
 
 const Router = () => {
     return (
@@ -40,6 +41,10 @@ const Router = () => {
 
                     <Route path='/clientcontact/create' element={<App/>}>
                         <Route index element={<CreateClientContact />} />
+                    </Route>
+
+                    <Route path='/contact/create' element={<App/>}>
+                        <Route index element={<CreateContact />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
