@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import api from '../api/posts'
+import api from '../../api/posts'
 import axios from "axios"
 import { Router, useNavigate, useParams } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
