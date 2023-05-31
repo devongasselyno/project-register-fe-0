@@ -180,6 +180,7 @@ const ProspectDetail = () => {
       console.error('Error deleting prospect:', err);
     }
   };
+  const [errors, setErrors] = useState('')
 
   const handleConvertProspect = async (selectedType) => {
 
@@ -189,6 +190,11 @@ const ProspectDetail = () => {
     }
 
     try {
+      if (selectedType === 0) {
+        const msg = "Please select a type"
+        setErrors(msg)
+        return
+      }
       await api.post('/prospect/convert', responseData)
       try {
         await axios.delete('http://localhost:8080/api/prospect/delete', {
@@ -199,10 +205,11 @@ const ProspectDetail = () => {
       } catch (error) {
         console.error(error)
       }
-      convertNotify()
+
       setTimeout(() => {
         navigate('/dashboard')
       }, 2000);
+      convertNotify()
     } catch (error) {
       console.error(error)
     }
@@ -580,6 +587,7 @@ const ProspectDetail = () => {
                     return null;
                   })}
               </select>
+              {errors && <p className="error-message text-sm text-red-700">{errors}</p>}
             </div>
             <div className="actions flex items-center gap-4 flex-wrap justify-between">
               <button
@@ -596,7 +604,6 @@ const ProspectDetail = () => {
                 className="bg-green-500 mx-4 hover:bg-green-700 text-white font-bold py-2 px-4 m-4 rounded"
                 onClick={async () => {
                   await handleConvertProspect(formData.type_id)
-                  close();
                 }}
               >
                 Convert Prospect
