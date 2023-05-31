@@ -1,5 +1,4 @@
 import './App.css';
-import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import DashboardView from './components/DashboardView';
 import { Outlet } from 'react-router-dom';
