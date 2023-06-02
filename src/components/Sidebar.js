@@ -1,5 +1,5 @@
 import React from 'react'
-import {FaCalendarCheck, FaChartLine, FaPaperPlane, FaPlus, FaTachometerAlt} from 'react-icons/fa'
+import {FaCalendarCheck, FaChartLine, FaPaperPlane, FaTachometerAlt} from 'react-icons/fa'
 
 const Sidebar = () => {
   return (
