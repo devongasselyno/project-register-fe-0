@@ -4,10 +4,10 @@ import ProspectDetail from './forms/ProspectDetail';
 import axios from 'axios';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import LineChart from './LineChart';
-import CurveLineChart from './CurveLineChart';
-import BarChart from './BarChart';
-import FilledLineChart from './FilledLineChart';
+import LineChart from './charts/LineChart';
+import CurveLineChart from './charts/CurveLineChart';
+import BarChart from './charts/BarChart';
+import FilledLineChart from './charts/FilledLineChart';
 
 const Main = () => {
   const [posts, setPosts] = useState([])
@@ -141,14 +141,13 @@ const Main = () => {
         />
       </div>
     
-
-        <table className='table-auto border-collapse'>
+      
+        <table className='border-collapse text-center'>
           <thead>
             <tr>
               <th className='border px-4 py-2'>ID</th>
               <th className='border px-4 py-2'>Company</th>
               <th className='border px-4 py-2'>Client</th>
-              <th className='border px-4 py-2'>Unique No</th>
               <th className='border px-4 py-2'>Year</th>
               <th className='border px-4 py-2'>Prospect ID</th>
               <th className='border px-4 py-2'>Prospect Name</th>
@@ -169,7 +168,6 @@ const Main = () => {
                 <td className='border px-4 py-2'>{row.ID}</td>
                 <td className='border px-4 py-2'>{row.company.company_name}</td>
                 <td className='border px-4 py-2'>{row.client.client_name}</td>
-                <td className='border px-4 py-2'>{row.no}</td>
                 <td className='border px-4 py-2'>{row.year}</td>
                 <td className='border px-4 py-2'>{row.prospect_id}</td>
                 <td className='border px-4 py-2'>{row.prospect_name}</td>

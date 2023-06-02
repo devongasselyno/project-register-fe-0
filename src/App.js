@@ -8,14 +8,13 @@ import { Outlet } from 'react-router-dom';
 function App() {
   return (
     <div className='flex'>
-      <div className='basis-[12%] h-[100vh]'>
+      <div className='w-[12%] fixed'>
         <Sidebar />
       </div>
-      <div className='basis-[88%] border'>
+      <div className='w-[88%] border ml-[12%]'>
         <DashboardView />
-        <div>
-          <Outlet></Outlet>
-        </div>
+        <Outlet></Outlet>
+
       </div>
     </div>
   );

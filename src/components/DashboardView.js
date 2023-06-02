@@ -101,7 +101,7 @@ function DashboardView() {
       // };
 
 
-      const name = [...prospects, prospects.name]
+    const name = [...prospects, prospects.name]
   return (
     <div className='flex items-center justify-between h-[70px] shadow-lg px-6'>
             {/* Search ------------------- */}

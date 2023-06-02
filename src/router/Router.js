@@ -10,6 +10,8 @@ import ProjectList from '../components/ProjectList'
 import ProspectList from '../components/ProspectList'
 import CreateClientContact from '../components/forms/CreateClientContact'
 import CreateContact from '../components/forms/CreateContact'
+import ClientList from '../components/ClientList'
+import ContactList from '../components/ContactList'
 
 const Router = () => {
     return (
@@ -46,6 +48,18 @@ const Router = () => {
                     <Route path='/contact/create' element={<App/>}>
                         <Route index element={<CreateContact />} />
                     </Route>
+
+                    <Route path='/client' element={<App/>}>
+                        <Route index element={<ClientList />} />
+                    </Route>
+
+                    <Route path='/contact' element={<App/>}>
+                        <Route index element={<ContactList />} />
+                    </Route>
+
+                    {/* <Route path='/clientcontact' element={<App/>}>
+                        <Route index element={<ClientContactList />} />
+                    </Route> */}
                 </Routes>
             </BrowserRouter>
         </div>
