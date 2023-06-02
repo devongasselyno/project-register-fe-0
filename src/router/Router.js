@@ -10,6 +10,7 @@ import ProjectList from '../components/ProjectList'
 import ProspectList from '../components/ProspectList'
 import CreateClientContact from '../components/forms/CreateClientContact'
 import CreateContact from '../components/forms/CreateContact'
+import TagInputForm from '../components/forms/TagInput'
 
 const Router = () => {
     return (
@@ -45,6 +46,10 @@ const Router = () => {
 
                     <Route path='/contact/create' element={<App/>}>
                         <Route index element={<CreateContact />} />
+                    </Route>
+
+                    <Route path='/taginput' element={<App/>}>
+                        <Route index element={<TagInputForm />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
