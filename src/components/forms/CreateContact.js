@@ -7,24 +7,11 @@ import { useNavigate } from 'react-router-dom';
 
 const CreateContact = () => {
 
-    const birthDate = new Date().toISOString();
-
-    const [selectedDate, setSelectedDate] = useState(null);
-    const [selectedDateString, setSelectedDateString] = useState('');
-    const [currentStep, setCurrentStep] = useState(1);
+    const [currentStep, setCurrentStep] = useState(1)
+    const [showConfirmation, setShowConfirmation] = useState(false)
 
     const handlePrevStep = () => {
         setCurrentStep((prevStep) => prevStep - 1);
-    };
-
-    const handleDateChange = (date) => {
-        setSelectedDate(date);
-    };
-
-    const convertToRFC3339 = (dateStr) => {
-        const date = moment(dateStr, 'DD MMM YYYY');
-        const rfc3339 = date.toISOString();
-        return rfc3339;
     };
 
     const [contact, setContact] = useState({
@@ -40,7 +27,7 @@ const CreateContact = () => {
             github: "",
             other: [],
         },
-        birth_date: birthDate,
+        birth_date: "",
         religion: "",
         interests: [],
         skills: [],
@@ -125,15 +112,6 @@ const CreateContact = () => {
 
     const handleNextStep = async () => {
         setCurrentStep((prevStep) => prevStep + 1);
-        if (currentStep === 2) {
-            try {
-                const response = await api.post('/contact/create', contact);
-                console.log('Data sent successfully:', response.contact);
-            } catch (error) {
-                console.error('Failed to send data:', error);
-            }
-            fetchLatestContact()
-        }
     };
 
     const [locations, setLocations] = useState({
@@ -213,35 +191,6 @@ const CreateContact = () => {
         other: '',
     });
 
-    // const handleTagInputChange = (event, field) => {
-    //     setInputValues((prevInputValues) => ({
-    //         ...prevInputValues,
-    //         [field]: event.target.value,
-    //     }));
-    // };
-    // const handleKeyPress = (event, field) => {
-    //     if (event.key === 'Enter' && inputValues[field].trim() !== '') {
-    //         event.preventDefault()
-    //         console.log(inputValues)
-    //         console.log(contact)
-    //         setContact((prevContact) => ({
-    //             ...prevContact,
-    //             [field]: [...prevContact[field], inputValues[field].trim()],
-    //         }));
-    //         setInputValues((prevInputValues) => ({
-    //             ...prevInputValues,
-    //             [field]: '',
-    //         }));
-    //     }
-    // };
-
-    // const handleRemoveTag = (field, tag) => {
-    //     setContact((prevContact) => ({
-    //         ...prevContact,
-    //         [field]: prevContact[field].filter((t) => t !== tag),
-    //     }));
-    // };
-
     const handleTagInputChange = (event, field) => {
         setInputValues((prevInputValues) => ({
             ...prevInputValues,
@@ -278,7 +227,6 @@ const CreateContact = () => {
     const handleRemoveTag = (field, tag) => {
         setContact((prevContact) => {
             if (field === 'other') {
-                
                 return {
                     ...prevContact,
                     contact_social_presence: {
@@ -299,41 +247,6 @@ const CreateContact = () => {
         console.log(contact)
     }
 
-    const handleOtherInputChange = (event, field, index) => {
-        const { value } = event.target;
-        setContact((prevContact) => ({
-            ...prevContact,
-            contact_social_presence: {
-                ...prevContact.contact_social_presence,
-                other: prevContact.contact_social_presence.other.map((item, idx) =>
-                    idx === index ? value : item
-                ),
-            },
-        }));
-    };
-
-    const handleOtherAddField = () => {
-        setContact((prevContact) => ({
-            ...prevContact,
-            contact_social_presence: {
-                ...prevContact.contact_social_presence,
-                other: [...prevContact.contact_social_presence.other, ''],
-            },
-        }));
-    };
-
-    const handleOtherRemoveField = (index) => {
-        setContact((prevContact) => ({
-            ...prevContact,
-            contact_social_presence: {
-                ...prevContact.contact_social_presence,
-                other: prevContact.contact_social_presence.other.filter(
-                    (_, idx) => idx !== index
-                ),
-            },
-        }));
-    };
-
     const handleChange = (field, values) => {
         if (["linkedin", "facebook", "twitter", "github"].includes(field)) {
             setContact((prevState) => ({
@@ -346,7 +259,6 @@ const CreateContact = () => {
         }
         else if (field === "birth_date") {
             setContact({ ...contact, [field]: values });
-            setSelectedDateString(values);
         } else {
             setContact({ ...contact, [field]: values });
         }
@@ -380,6 +292,7 @@ const CreateContact = () => {
                 });
 
                 fetchLatestContact()
+                console.log(locations)
             } catch (error) {
                 console.error('Failed to send data:', error);
             }
@@ -395,6 +308,28 @@ const CreateContact = () => {
             country: "",
             geo: ""
         })
+    }
+
+    const handleConfirmationClick = (event) => {
+        event.preventDefault()
+        setShowConfirmation(true)
+    }
+
+    const handleConfirmationSubmit = async (event) => {
+        event.preventDefault()
+        try {
+            const response = await api.post('/contact/create', contact);
+            console.log('Data sent successfully:', response.contact);
+            fetchLatestContact()
+            console.log(locations)
+            handleNextStep()
+        } catch (error) {
+            console.error('Failed to send data:', error);
+        }
+    }
+
+    const handleConfirmationClose = () => {
+        setShowConfirmation(false)
     }
 
     const renderFormStep = () => {
@@ -434,7 +369,7 @@ const CreateContact = () => {
                                     id="alias"
                                     value={contact.contact_alias}
                                     onChange={(event) => handleChange('contact_alias', event.target.value)}
-                                    placeholder='Insert Contact Name' />
+                                    placeholder='Insert Alias' />
                                 {errors.alias && <p className="text-red-500 text-sm pt-1 pl-1">{errors.alias}</p>}
                             </div>
                         </div>
@@ -496,14 +431,14 @@ const CreateContact = () => {
                                 class="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full pb-2 mb-2 p-2.5"
                                 placeholder="Select date"
                                 onChange={(event) => {
-                                    const selectedDate = new Date(event.target.value);
-                                    const formattedDate = selectedDate.toLocaleDateString('en-GB', {
-                                        year: 'numeric',
-                                        month: '2-digit',
-                                        day: '2-digit'
-                                    }).split('/').reverse().join('/');
-                                    handleChange('birth_date', formattedDate);
-                                    setSelectedDateString(formattedDate);
+                                    // const selectedDate = new Date(event.target.value);
+                                    // const formattedDate = selectedDate.toLocaleDateString('en-GB', {
+                                    //     year: 'numeric',
+                                    //     month: '2-digit',
+                                    //     day: '2-digit'
+                                    // }).split('/').reverse().join('-');
+                                    handleChange('birth_date', event.target.value);
+                                    // setSelectedDateString(formattedDate);
                                 }} />
                         </div>
                         <div className="flex gap-4">
@@ -669,8 +604,8 @@ const CreateContact = () => {
                             id="notes"
                             value={contact.notes}
                             onChange={(event) => handleChange('notes', event.target.value)} />
-                        <button type="button" onClick={handleNextStep} className="mt-4 bg-red-800 text-white text-base text-bold w-full py-2 px-4 rounded-md hover:bg-amber-700 focus:outline-none">Next</button>
-                        <button type="button" onClick={printContact} className="mt-4 bg-red-800 text-white text-base text-bold w-full py-2 px-4 rounded-md hover:bg-amber-700 focus:outline-none">Print</button>
+                        <button type="button" onClick={handleNextStep} className="mt-4 bg-red-800 font-light text-white text-base text-bold w-full py-2 px-4 rounded-md hover:bg-amber-700 focus:outline-none">Next</button>
+                        <button type="button" onClick={printContact} className="mt-4 bg-red-800 font-light text-white text-base text-bold w-full py-2 px-4 rounded-md hover:bg-amber-700 focus:outline-none">Print</button>
                     </>
                 )
             case 2:
@@ -759,16 +694,89 @@ const CreateContact = () => {
                         </div>
 
                         <div className="flex gap-5 w-full">
-                            <button type="button" onClick={handlePrevStep} className="mt-4 bg-red-800 text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-amber-700 focus:outline-none">Prev</button>
-                            <button type="submit" onClick={handleNextStep} className="mt-4 bg-red-800 text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-amber-700 focus:outline-none">Next</button>
+                            <button type="button" onClick={handlePrevStep} className="mt-4 bg-red-800 font-light text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-amber-700 focus:outline-none">Prev</button>
+                            <button type="button" onClick={handleConfirmationClick} className="mt-4 bg-red-800 font-light text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-amber-700 focus:outline-none">Next</button>
                         </div>
+
+                        {showConfirmation && (
+                            <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm'>
+                                <div className='bg-white rounded-lg py-6 px-10 w-1/3 absolute text-center'>
+                                    <div>
+                                        <FaTimes className='ml-auto hover:cursor-pointer' onClick={handleConfirmationClose} />
+                                    </div>
+                                    <h1 className="text-lg mb-4">
+                                        Confirm
+                                    </h1>
+                                    <h2 class="mb-10 text-lg font-light text-black">Submit and continue to add locations?</h2>
+                                    <div className="items-center justify-center flex gap-6">
+                                        <button type="button" onClick={handleConfirmationClose} className="bg-red-700 font-light text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-red-800 focus:outline-none">Cancel</button>
+                                        <button type="button" onClick={handleConfirmationSubmit} className="bg-emerald-700 font-light text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-emerald-800 focus:outline-none">Continue</button>
+                                    </div>
+                                </div>
+                            </div>
+                            // <div class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                            //     <div class="relative w-full max-w-md max-h-full">
+                            //         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                            //             <button type="button" onClick={handleConfirmationClose} class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-hide="popup-modal">
+                            //                 <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                            //                 <span class="sr-only">Close modal</span>
+                            //             </button>
+                            //             <div class="p-6 text-center">
+                            //                 <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            //                 <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this product?</h3>
+                            //                 <button data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                            //                     Yes, I'm sure
+                            //                 </button>
+                            //                 <button data-modal-hide="popup-modal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
+                            //             </div>
+                            //         </div>
+                            //     </div>
+                            // </div>
+
+                            // <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm'>
+                            //     <div className='bg-white rounded-lg py-6 px-10 w-1/3 absolute'>
+                            //         <div>
+                            //             <FaTimes className='ml-auto hover:cursor-pointer' onClick={handleConfirmationClose} />
+                            //         </div>
+                            //         <h1 className='text-center py-5'>Add Employment</h1>
+                            //         <form onSubmit={handleChange}>
+                            //             <div className='pb-2'>
+                            //                 <label htmlFor="job_title" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Job Title</label>
+                            //                 <input id='job_title' name='job_title' type="text" placeholder='Job title' className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5' />
+                            //                 {errors.job_title && <p className="text-red-500">{errors.job_title}</p>}
+                            //             </div>
+                            //             <div className='pb-2'>
+                            //                 <label htmlFor="job_start" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Job Start</label>
+                            //                 <input type="date" name="job_start" id="job_start" className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5' />
+                            //                 {errors.job_start && <p className="text-red-500">{errors.job_start}</p>}
+                            //             </div>
+                            //             <div className='pb-2'>
+                            //                 <label htmlFor="job_end" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Job End</label>
+                            //                 <input type="date" name="job_end" id="job_end" className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5' />
+                            //                 {errors.job_end && <p className="text-red-500">{errors.job_end}</p>}
+                            //             </div>
+                            //             <div className='pb-2'>
+                            //                 <label htmlFor="status" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Status</label>
+                            //                 <select name='status' id='status' className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'>
+                            //                     <option selected disabled value="select">Select...</option>
+                            //                     <option value="active">Active</option>
+                            //                     <option value="inactive">Inactive</option>
+                            //                 </select>
+                            //                 {errors.status && <p className="text-red-500">{errors.status}</p>}
+                            //             </div>
+                            //             <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-5 rounded float-right'>Submit</button>
+                            //         </form>
+
+                            //     </div>
+                            // </div>
+                        )}
                     </>
                 )
             case 3:
                 return (
                     <>
-                        <div className="flex gap-8">
-                            <div className="w-1/2">
+                        <div className="self-start flex text-left">
+                            <div className="w-full self-start text-left">
                                 <div className="pl-1 py-1 text-center">
                                     <h2 className="text-lg py-2 font-semibold leading-7 text-gray-900">Locations</h2>
                                 </div>
@@ -868,14 +876,9 @@ const CreateContact = () => {
                                     onChange={(event) => handleLocationChange('geo', event.target.value)}
                                     placeholder='Insert Geo' />
                                 <div className="flex gap-5 w-full">
-                                    <button type="button" onClick={handleAddLocation} className="mt-4 bg-red-800 text-white text-base text-bold w-full py-2 px-4 max-w-full rounded-md hover:bg-amber-700 focus:outline-none">Add Location</button>
-                                    <button type="button" onClick={handleClearForm} className="mt-4 bg-red-800 text-white text-base text-bold w-full py-2 px-4 max-w-full rounded-md hover:bg-amber-700 focus:outline-none">Clear</button>
-                                    <button type="submit" onClick={handleSubmitLocation} className="mt-4 bg-red-800 text-white text-base text-bold w-full py-2 px-4 max-w-full rounded-md hover:bg-amber-700 focus:outline-none">Submit & Exit</button>
-                                </div>
-                            </div>
-                            <div className="w-1/2">
-                                <div className="pl-1 py-1 text-left">
-                                    <h2 className="text-lg py-2 font-semibold leading-7 text-gray-900">Data</h2>
+                                    <button type="button" onClick={handleAddLocation} className="mt-4 font-light bg-slate-600 text-white text-base text-bold w-full py-2 px-4 max-w-full rounded-md hover:bg-slate-700 focus:outline-none">Add Location</button>
+                                    <button type="button" onClick={handleClearForm} className="mt-4 font-light bg-red-800 text-white text-base text-bold w-full py-2 px-4 max-w-full rounded-md hover:bg-amber-700 focus:outline-none">Clear</button>
+                                    <button type="submit" onClick={handleSubmitLocation} className="mt-4 font-light bg-emerald-700 text-white text-base text-bold w-full py-2 px-4 max-w-full rounded-md hover:bg-emerald-700 focus:outline-none">Submit & Exit</button>
                                 </div>
                             </div>
                         </div>
@@ -886,7 +889,7 @@ const CreateContact = () => {
     }
 
     return (
-        <section className="flex items-center justify-center py-5">
+        <section className="flex justify-center py-5">
             <div className="w-3/5 flex-col items-center content-center justify-center" style={{ userSelect: 'none' }}>
                 <div className="px-7 py-1 text-left">
                     <h2 className="text-xl py-2 font-semibold leading-7 text-gray-900">Create new contact</h2>

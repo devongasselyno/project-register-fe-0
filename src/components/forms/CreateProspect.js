@@ -5,7 +5,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const CreateProspect = () => {
     const [name, setName] = useState('');
-    const [type, setType] = useState(0);
     const [year, setYear] = useState(0);
     const [manager, setManager] = useState('');
     const [status, setStatus] = useState('');
@@ -67,10 +66,6 @@ const CreateProspect = () => {
 
         if (!name.trim()) {
             errors.name = 'Prospect Name is required';
-        }
-
-        if (type === 0) {
-            errors.type = 'Please select a Prospect Type';
         }
 
         if (year === 0) {
@@ -152,7 +147,6 @@ const CreateProspect = () => {
         if (isValid) {
             const data = {
                 prospect_name: name,
-                type_id: type,
                 year: year,
                 manager: manager,
                 status: status,
@@ -170,7 +164,6 @@ const CreateProspect = () => {
                 console.log('Data sent successfully:', response.data);
                 notify();
                 setName('');
-                setType(0);
                 setYear(0);
                 setManager('');
                 setStatus('');
@@ -288,7 +281,7 @@ const CreateProspect = () => {
                             />
                             {errors.amount && <p className="text-red-500 text-sm pt-1 pl-1">{errors.amount}</p>}
 
-                            <label htmlFor="type" className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">Type</label>
+                            {/* <label htmlFor="type" className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">Type</label>
                             <select type="number" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5" id="type" value={type} onChange={(e) => {
                                 const selectedTypeId = parseInt(e.target.value, 10);
                                 console.log('Type:', selectedTypeId);
@@ -302,7 +295,7 @@ const CreateProspect = () => {
                                         </option>
                                     ))}
                             </select>
-                            {errors.type && <p className="text-red-500 text-sm pt-1 pl-1">{errors.type}</p>}
+                            {errors.type && <p className="text-red-500 text-sm pt-1 pl-1">{errors.type}</p>} */}
                             <label htmlFor="company" className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">Company</label>
                             <select type="number" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5" id="company" value={company} onChange={(e) => {
                                 const selectedCompanyId = parseInt(e.target.value, 10);

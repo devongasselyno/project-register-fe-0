@@ -14,6 +14,7 @@ import ClientList from '../components/ClientList'
 import ContactList from '../components/ContactList'
 import ClientDetail from '../components/ClientDetail'
 import ContactDetail from '../components/ContactDetail'
+import CreateClient from '../components/forms/CreateClient'
 
 const Router = () => {
     return (
@@ -67,6 +68,9 @@ const Router = () => {
                         <Route index element={<ContactList />} />
                     </Route>
 
+                    <Route path='/client/create' element={<App/>}>
+                        <Route index element={<CreateClient />} />
+                    </Route>
                     {/* <Route path='/clientcontact' element={<App/>}>
                         <Route index element={<ClientContactList />} />
                     </Route> */}

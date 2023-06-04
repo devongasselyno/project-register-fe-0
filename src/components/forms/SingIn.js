@@ -75,14 +75,14 @@ const SigninPage = () => {
                     <div className="max-w-md mx-auto p-4">
                         <div className="flex flex-col items-center">
                             <div className="flex items-center mb-6">
-                                <img src="soluix.png" className="w-40 h-14 mr-2" alt="Logo" />
-                                <h4 className="text-xl font-bold text-slate-100 font-mono">
+                                <img src="soluix.png" className="w-40 h-14 ml-4" alt="Logo" />
+                                {/* <h4 className="text-xl font-bold text-slate-100 font-mono">
                                     <Typical
                                         steps={['Hello!', 4000, 'Welcome!', 4000]}
                                         loop={Infinity}
                                         wrapper="p"
                                     />
-                                </h4>
+                                </h4> */}
                             </div>
                         </div>
                         <h1 className="text-slate-100 mb-6 text-center text-2xl font-bold leading-9 tracking-tight">
