@@ -12,6 +12,8 @@ import CreateClientContact from '../components/forms/CreateClientContact'
 import CreateContact from '../components/forms/CreateContact'
 import ClientList from '../components/ClientList'
 import ContactList from '../components/ContactList'
+import ClientDetail from '../components/ClientDetail'
+import ContactDetail from '../components/ContactDetail'
 
 const Router = () => {
     return (
@@ -35,6 +37,14 @@ const Router = () => {
 
                     <Route path="/prospect/read/:id" element={<App />}>
                         <Route index element={<ProspectDetail />} />
+                    </Route>
+
+                    <Route path="/client/read/:id" element={<App />}>
+                        <Route index element={<ClientDetail />} />
+                    </Route>
+
+                    <Route path="/contact/read/:id" element={<App />}>
+                        <Route index element={<ContactDetail />} />
                     </Route>
 
                     <Route path='/prospect/create' element={<App/>}>
