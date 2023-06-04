@@ -647,15 +647,15 @@ const ProspectDetail = () => {
             )}
           </Popup>
         </div>
-        <div>
+        <div className="bg-slate-100 drop-shadow-xl rounded-lg py-2 px-4 mt-4">
           <label
             htmlFor="activity"
-            className="block text-lg mt-4 font-medium leading-6 text-gray-900 py-1 pl-1">
+            className="block text-lg font-medium leading-6 text-gray-900 py-1 pl-1">
             Sales Activity
           </label>
           <input
             type="text"
-            className="rounded-lg my-2 w-10/12"
+            className="rounded-lg my-2 w-full"
             name="activity"
             value={salesInputValue.activity}
             onChange={(event) => handleSalesChange(event, 'activity')}
