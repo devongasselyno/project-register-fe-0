@@ -7,25 +7,11 @@ import { useNavigate } from 'react-router-dom';
 
 const CreateContact = () => {
 
-    const birthDate = new Date().toISOString();
-
-    const [selectedDate, setSelectedDate] = useState(null)
-    const [selectedDateString, setSelectedDateString] = useState('')
     const [currentStep, setCurrentStep] = useState(1)
     const [showConfirmation, setShowConfirmation] = useState(false)
 
     const handlePrevStep = () => {
         setCurrentStep((prevStep) => prevStep - 1);
-    };
-
-    const handleDateChange = (date) => {
-        setSelectedDate(date);
-    };
-
-    const convertToRFC3339 = (dateStr) => {
-        const date = moment(dateStr, 'DD MMM YYYY');
-        const rfc3339 = date.toISOString();
-        return rfc3339;
     };
 
     const [contact, setContact] = useState({
@@ -41,7 +27,7 @@ const CreateContact = () => {
             github: "",
             other: [],
         },
-        birth_date: birthDate,
+        birth_date: "",
         religion: "",
         interests: [],
         skills: [],
@@ -273,7 +259,6 @@ const CreateContact = () => {
         }
         else if (field === "birth_date") {
             setContact({ ...contact, [field]: values });
-            setSelectedDateString(values);
         } else {
             setContact({ ...contact, [field]: values });
         }
