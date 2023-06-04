@@ -8,7 +8,7 @@ const Sidebar = () => {
       setDropdown(!dropdown);
     }
     return (
-      <div className='bg-black h-screen px-6'>
+      <div className='bg-black h-screen px-6 overflow-hidden w-44'>
         <div className='px-[15px] py-[30px] flex items-center justify-center border-b-[1px] border-[#EDEDED]/[0.3]'>
             <img src='../soluix.png'/>
         </div>

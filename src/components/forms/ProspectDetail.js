@@ -302,7 +302,7 @@ const ProspectDetail = () => {
             </div>
 
             <div className="mb-4">
-              <label className="font-bold w-32 inline-block w-32 inline-block">Type Name</label>
+              <label className="font-bold inline-block w-32">Type Name</label>
               <span className="mr-2">:</span>
               {editMode ? (
                 <select
