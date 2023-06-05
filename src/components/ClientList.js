@@ -12,8 +12,8 @@ const ClientList = () => {
   
     const lastIndex = currentPage * recordsPerPage;
     const firstIndex = lastIndex - recordsPerPage;
-    const records = contacts.slice(firstIndex, lastIndex)
-    const npage = Math.ceil(contacts.length / recordsPerPage)
+    const records = clients.slice(firstIndex, lastIndex)
+    const npage = Math.ceil(clients.length / recordsPerPage)
     const numbers = [...Array(npage + 1).keys()].slice(1)
 
     const fetchClient = async () => {
@@ -32,10 +32,6 @@ const ClientList = () => {
 
     const handleClientClick = (id) => {
         navigate(`/client/read/${id}`);
-    }
-
-    const handleContactClick = (id) => {
-        navigate(`/contact/read/${id}`);
     }
 
     function prevPage() {
