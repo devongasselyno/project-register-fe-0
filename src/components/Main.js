@@ -143,7 +143,7 @@ const Main = () => {
       </div>
     
       <div className='overflow-x-auto'>
-      <table className='border-collapse text-center'>
+        <table className='border-collapse text-center'>
           <thead>
             <tr>
               <th className='border px-4 py-2'>ID</th>

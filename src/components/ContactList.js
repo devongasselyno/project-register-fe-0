@@ -73,31 +73,33 @@ const ContactList = () => {
                 </a>
             </div>
 
-            <table className='text-center'>
-                <thead>
-                    <tr>
-                        <th className='border px-4 py-2'>ID</th>
-                        <th className='border px-4 py-2'>Contact Name</th>
-                        <th className='border px-4 py-2'>Contact Alias</th>
-                        <th className='border px-4 py-2'>Gender</th>
-                        <th className='border px-4 py-2'>Religion</th>
-                        <th className='border px-4 py-2'>Date of Birth</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {records.map(contact => 
-                        <tr key={contact.ID} className='cursor-pointer hover:bg-blue-200' onClick={() => handleContactClick(contact.ID)}>
-                            <td className='border px-4 py-2'>{contact.ID}</td>
-                            <td className='border px-4 py-2'>{contact.contact_name || '-'}</td>
-                            <td className='border px-4 py-2'>{contact.contact_alias || '-'}</td>
-                            <td className='border px-4 py-2'>{contact.gender || '-'}</td>
-                            <td className='border px-4 py-2'>{contact.religion|| '-'}</td>
-                            <td className='border px-4 py-2'>{contact.birth_date|| '-'}</td>
+            <div className='overflow-x-auto text-center'>
+                <table className='text-center'>
+                    <thead>
+                        <tr>
+                            <th className='border px-4 py-2'>ID</th>
+                            <th className='border px-4 py-2'>Contact Name</th>
+                            <th className='border px-4 py-2'>Contact Alias</th>
+                            <th className='border px-4 py-2'>Gender</th>
+                            <th className='border px-4 py-2'>Religion</th>
+                            <th className='border px-4 py-2'>Date of Birth</th>
                         </tr>
-                    )}
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody>
+                        {records.map(contact => 
+                            <tr key={contact.ID} className='cursor-pointer hover:bg-blue-200' onClick={() => handleContactClick(contact.ID)}>
+                                <td className='border px-4 py-2'>{contact.ID}</td>
+                                <td className='border px-4 py-2'>{contact.contact_name || '-'}</td>
+                                <td className='border px-4 py-2'>{contact.contact_alias || '-'}</td>
+                                <td className='border px-4 py-2'>{contact.gender || '-'}</td>
+                                <td className='border px-4 py-2'>{contact.religion|| '-'}</td>
+                                <td className='border px-4 py-2'>{contact.birth_date|| '-'}</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
 
             <nav aria-label="Page navigation example" className='pagination py-7'>
                 <ul class="inline-flex items-center -space-x-px">

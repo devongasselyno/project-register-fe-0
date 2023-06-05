@@ -25,8 +25,8 @@ const ProjectList = () => {
       useEffect(() => {
         const fetchPosts = async () => {
           setLoading(true)
-          const res = await axios.get('http://127.0.0.1:8080/api/projects/read')
-          setPosts(res.data.data)
+          const res = await axios.get('http://localhost:8080/api/projects/read')
+          setPosts(res?.data?.data)
           setLoading(false)
         }
         fetchPosts();
@@ -41,7 +41,7 @@ const ProjectList = () => {
                 </a>
             </div>
         
-            <div className='py-6'>
+            <div className='overflow-x-auto text-center'>
                 <table className='table-auto border-collapse'>
                 <thead>
                     <tr>
@@ -83,9 +83,9 @@ const ProjectList = () => {
                     )}
                 </tbody>
                 </table>
-                
-                
-                <nav aria-label="Page navigation example" className='pagination py-7'>
+            </div>
+
+            <nav aria-label="Page navigation example" className='pagination py-7'>
                 <ul class="inline-flex items-center -space-x-px">
                     <li>
                     <a onClick={prevPage} href="#" className="flex items-center justify-center h-8 w-8 rounded border border-gray-300 bg-white text-gray-900 rtl:rotate-180 hover:bg-[#4E73DF] hover:text-white">
@@ -111,8 +111,7 @@ const ProjectList = () => {
                     </a>
                     </li>
                 </ul>
-                </nav>
-            </div>
+            </nav>
             </div>
         );  
 

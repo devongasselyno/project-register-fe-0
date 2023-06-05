@@ -28,77 +28,89 @@ const ContactDetail = () => {
             <div className='flex'>
                 <div className='mr-10'>
                     <div className='py-5'>
-                        <p>ID: {contact.ID}</p>
-                        <p>Contact Name: {contact.contact_name || '-'}</p>
-                        <p>Alias: {contact.contact_alias || '-'}</p>
-                        <p>Gender: {contact.gender === "1" ? "Male" : contact.gender === "0" ? "Female" : "-"}</p>
-                        <p>Birth Date: {contact.birth_date || '-'}</p>
-                        <p>Religion: {contact.religion || '-'}</p>
-                    </div>
-
-
-                    <div className='py-5'>
-                        <p className='font-bold'>Locations</p>
-                        {contact.locations && contact.locations.map(location => (
-                            <div className='pb-3' key={location.ID}>
-                                <p>Address: {location.address || '-'}</p>
-                                <p>City: {location.city.city_name || '-'}</p>
-                                <p>Province: {location.province.province_name || '-'}</p>
-                                <p>Postal Code: {location.postal_code || '-'}</p>
-                                <p>Country: {location.country || '-'}</p>
-                                <p>Geo: {location.geo || '-'}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                <div>
-                    <div className='py-5'>
-                        <p className='font-bold'>Contact Social Presence</p>
-                        {contact.contact_social_presence && (
-                        <div>
-                            <p>LinkedIn: {contact.contact_social_presence.linkedin || '-'}</p>
-                            <p>Facebook: {contact.contact_social_presence.facebook || '-'}</p>
-                            <p>Twitter: {contact.contact_social_presence.twitter || '-'}</p>
-                            <p>Github: {contact.contact_social_presence.github || '-'}</p>
-                            <p>
-                            Other Social Media: {contact.contact_social_presence.other?.join(', ') || '-'}
-                            </p>
-                        </div>
-                        )}
+                        <p><span className='font-bold'>ID:</span>{contact.ID}</p>
+                        <p><span className='font-bold'>Contact Name:</span>{contact.contact_name || '-'}</p>
+                        <p><span className='font-bold'>Alias:</span> {contact.contact_alias || '-'}</p>
+                        <p><span className='font-bold'>Gender:</span> {contact.gender === "1" ? "Male" : contact.gender === "0" ? "Female" : "-"}</p>
+                        <p><span className='font-bold'>Birth Date:</span> {contact.birth_date || '-'}</p>
+                        <p><span className='font-bold'>Religion:</span> {contact.religion || '-'}</p>
                     </div>
 
                     <div className='space-y-3'>
                         <div>
-                            <p>Contact Emails:</p>
+                            <p className='font-bold'>Contact Emails:</p>
                             <p>{contact.contact_emails?.join(', ') || '-'}</p>
                         </div>
 
                         <div>
-                            <p>Contact Phones:</p>
+                            <p className='font-bold'>Contact Phones:</p>
                             <p>{contact.contact_phones?.join(', ') || '-'}</p>
                         </div>
 
                         <div>
-                            <p>Interests:</p>
+                            <p className='font-bold'>Interests:</p>
                             <p>{contact.interests?.join(', ') || '-'}</p>
                         </div>
 
                         <div>
-                            <p>Skills:</p>
+                            <p className='font-bold'>Skills:</p>
                             <p>{contact.skills?.join(', ') || '-'}</p>
                         </div>
 
                         <div>
-                            <p>Educations:</p>
+                            <p className='font-bold'>Educations:</p>
                             <p>{contact.educations?.join(', ') || '-'}</p>
                         </div>
 
                         
                         <div>
-                            <p>Notes:</p>
+                            <p className='font-bold'>Notes:</p>
                             <p>{contact.notes || '-'}</p>
                         </div>
+                    </div>
+
+                    <div className='py-5'>
+                        <p className='font-bold text-xl  mb-1'>Contact Social Presence</p>
+                        {contact.contact_social_presence && (
+                        <div>
+                            <p> <span className='font-bold'>LinkedIn:</span>  {contact.contact_social_presence.linkedin || '-'}</p>
+                            <p> <span className='font-bold'>Facebook:</span> {contact.contact_social_presence.facebook || '-'}</p>
+                            <p> <span className='font-bold'>Twitter:</span> {contact.contact_social_presence.twitter || '-'}</p>
+                            <p> <span className='font-bold'>Github:</span>  {contact.contact_social_presence.github || '-'}</p>
+                            <p>
+                            <span className='font-bold'>Other Social Media:</span> {contact.contact_social_presence.other?.join(', ') || '-'}
+                            </p>
+                        </div>
+                        )}
+                    </div>
+
+
+                    <div className='py-5'>
+                        <p className='font-bold text-xl mb-3'>Locations</p>
+                        <table className='border-collapse'>
+                            <thead>
+                                <tr>
+                                    <th className='border px-4 py-2'>Address</th>
+                                    <th className='border px-4 py-2'>City</th>
+                                    <th className='border px-4 py-2'>Province</th>
+                                    <th className='border px-4 py-2'>Postal Code</th>
+                                    <th className='border px-4 py-2'>Country</th>
+                                    <th className='border px-4 py-2'>Geo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {contact.locations && contact.locations.map(location => (
+                                    <tr key={location.ID}>
+                                        <td className='border px-4 py-2'>{location.address || '-'}</td>
+                                        <td className='border px-4 py-2'>{location.city.city_name || '-'}</td>
+                                        <td className='border px-4 py-2'>{location.province.province_name || '-'}</td>
+                                        <td className='border px-4 py-2'>{location.postal_code || '-'}</td>
+                                        <td className='border px-4 py-2'>{location.country || '-'}</td>
+                                        <td className='border px-4 py-2'>{location.geo || '-'}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

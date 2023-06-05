@@ -44,7 +44,7 @@ const ProspectList = () => {
         </a>
       </div>
   
-      <div className='py-6'>
+      <div className='overflow-x-auto text-center'>
         <table className='table-auto border-collapse'>
           <thead>
             <tr>
@@ -86,9 +86,8 @@ const ProspectList = () => {
             )}
           </tbody>
         </table>
-        
-        
-        <nav aria-label="Page navigation example" className='pagination py-7'>
+      </div>
+      <nav aria-label="Page navigation example" className='pagination py-7'>
           <ul class="inline-flex items-center -space-x-px">
             <li>
               <a onClick={prevPage} href="#" className="flex items-center justify-center h-8 w-8 rounded border border-gray-300 bg-white text-gray-900 rtl:rotate-180 hover:bg-[#4E73DF] hover:text-white">
@@ -115,9 +114,8 @@ const ProspectList = () => {
             </li>
           </ul>
         </nav>
-      </div>
     </div>
-  );  
+  )
 
   function prevPage() {
     if(currentPage !== 1) {

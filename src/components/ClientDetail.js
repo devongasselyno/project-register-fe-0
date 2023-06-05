@@ -28,56 +28,68 @@ const ClientDetail = () => {
             <div className='flex'>
                 <div className='mr-10'>
                     <div className='py-5'>
-                        <p>ID: {client.ID}</p>
-                        <p>Client Code: {client.client_code || '-'}</p>
-                        <p>Client Name: {client.client_name || '-'}</p>
-                        <p>Alias: {client.alias || '-'}</p>
-                        <p>Website: {client.website || '-'}</p>
+                        <p><span className='font-bold'>ID:</span> {client.ID}</p>
+                        <p><span className='font-bold'>Client Code:</span> {client.client_code || '-'}</p>
+                        <p><span className='font-bold'>Client Name:</span>  {client.client_name || '-'}</p>
+                        <p><span className='font-bold'>Alias:</span> {client.alias || '-'}</p>
+                        <p><span className='font-bold'>Website:</span> {client.website || '-'}</p>
                         {/* <p>Date: {client.date || '-'}</p> */}
                     </div>
 
-
                     <div className='py-5'>
-                        <p className='font-bold'>Locations</p>
-                        {client.locations && client.locations.map(location => (
-                            <div className='pb-3' key={location.ID}>
-                                <p>Address: {location.address || '-'}</p>
-                                <p>City: {location.city.city_name || '-'}</p>
-                                <p>Province: {location.province.province_name || '-'}</p>
-                                <p>Postal Code: {location.postal_code || '-'}</p>
-                                <p>Country: {location.country || '-'}</p>
-                                <p>Geo: {location.geo || '-'}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                <div>
-                    <div className='py-5'>
-                        <p className='font-bold'>Client Social Presence</p>
+                        <p className='font-bold text-xl mb-1'>Client Social Presence</p>
                         {client.client_social_presence && (
-                        <React.Fragment>
-                            <p>LinkedIn: {client.client_social_presence.linkedin || '-'}</p>
-                            <p>Facebook: {client.client_social_presence.facebook || '-'}</p>
-                            <p>Twitter: {client.client_social_presence.twitter || '-'}</p>
-                            <p>Github: {client.client_social_presence.github || '-'}</p>
-                            <p>
-                            Other Social Media: {client.client_social_presence.other?.join(', ') || '-'}
-                            </p>
-                        </React.Fragment>
+                        <div>
+                            <p><span className='font-bold'>LinkedIn:</span> {client.client_social_presence.linkedin || '-'}</p>
+                            <p><span className='font-bold'>Facebook:</span> {client.client_social_presence.facebook || '-'}</p>
+                            <p><span className='font-bold'>Twitter:</span> {client.client_social_presence.twitter || '-'}</p>
+                            <p><span className='font-bold'>Github:</span> {client.client_social_presence.github || '-'}</p>
+                            <p><span className='font-bold'>Other Social Media:</span> {client.client_social_presence.other?.join(', ') || '-'}</p>
+                        </div>
                         )}
                     </div>
 
                     <div>
-                        <p className='font-bold'>Subsidiary</p>
+                        <p className='font-bold text-xl mb-1'>Subsidiary</p>
                         {client.subsidiary && (
-                        <React.Fragment>
-                            <p>Subsidiaries: {client.subsidiary.subsidiaries?.join(', ') || '-'}</p>
-                            <p>Immediate Parents: {client.subsidiary.immediate_parents?.join(', ') || '-'}</p>
-                            <p>Ultimate Parents: {client.subsidiary.ultimate_parents?.join(', ') || '-'}</p>
-                        </React.Fragment>
+                        <div>
+                            <p><span className='font-bold'>Subsidiaries: </span> {client.subsidiary.subsidiaries?.join(', ') || '-'}</p>
+                            <p><span className='font-bold'>Immediate Parents: </span>  {client.subsidiary.immediate_parents?.join(', ') || '-'}</p>
+                            <p><span className='font-bold'>Ultimate Parents: </span>{client.subsidiary.ultimate_parents?.join(', ') || '-'}</p>
+                        </div>
                         )}
                     </div>
+
+
+                    <div className='py-5'>
+                        <p className='font-bold text-xl mb-3'>Locations</p>
+
+                        <table className='border-collapse'>
+                            <thead>
+                                <tr>
+                                    <th className='border px-4 py-2'>Address</th>
+                                    <th className='border px-4 py-2'>City</th>
+                                    <th className='border px-4 py-2'>Province</th>
+                                    <th className='border px-4 py-2'>Postal Code</th>
+                                    <th className='border px-4 py-2'>Country</th>
+                                    <th className='border px-4 py-2'>Geo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {client.locations && client.locations.map(location => (
+                                    <tr key={location.ID}>
+                                        <td className='border px-4 py-2'>{location.address || '-'}</td>
+                                        <td className='border px-4 py-2'>{location.city.city_name || '-'}</td>
+                                        <td className='border px-4 py-2'>{location.province.province_name || '-'}</td>
+                                        <td className='border px-4 py-2'>{location.postal_code || '-'}</td>
+                                        <td className='border px-4 py-2'>{location.country || '-'}</td>
+                                        <td className='border px-4 py-2'>{location.geo || '-'}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
             </div>
    
