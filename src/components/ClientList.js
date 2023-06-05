@@ -52,7 +52,13 @@ const ClientList = () => {
 
     return (
         <div className='py-10 px-20'>
-            <h1 className='text-4xl leading-8 font-bold py-5'>Client List</h1>
+
+            <div className='flex items-center justify-between'>
+                <h1 className='text-4xl leading-8 font-bold py-5'>Client List</h1>
+                <a href='/client/create' class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 border border-blue-700 rounded">
+                    Add Client
+                </a>
+            </div>
 
             <table className='text-center'>
                 <thead>
