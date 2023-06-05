@@ -127,7 +127,7 @@ function DashboardView() {
             </div>
             <div className='flex items-center gap-4 relative'>
                 
-                <div onClick={() => setIsOpen((prev) => !prev)} className='   cursor-pointer flex items-center justify-center relative'>
+                <div onClick={() => setIsOpen((prev) => !prev)} className='  cursor-pointer flex items-center justify-center relative'>
                     <p>James Bond</p>
                     {
                         !isOpen ? (
@@ -141,12 +141,12 @@ function DashboardView() {
                 {
                     isOpen && <div className=' bg-slate-100 absolute top-20 flex flex-col items-start rounded-lg p-2 w-full'>
                         <div className='w-full justify-between cursor-pointer rounded-r-lg border-l-transparent'>
-                        <div className='hover:bg-blue-300'>
-                            <a href=''>Profile</a>
-                        </div>
-                        <div className='hover:bg-blue-300'>
-                            <a href='/login'>Log out</a>
-                        </div>
+                          <div className='hover:bg-blue-300'>
+                              <a href=''>Profile</a>
+                          </div>
+                          <div className='hover:bg-blue-300'>
+                              <a href='/login'>Log out</a>
+                          </div>
                         </div>
                     </div>
                 }

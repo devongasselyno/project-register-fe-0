@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Chart, registerables } from 'chart.js/auto';
+import { Widgets } from '@material-ui/icons';
 
 Chart.register(...registerables);
 
@@ -84,13 +85,13 @@ const LineChart = () => {
         chartInstance.destroy();
       }
     };
-  }, []);
+  }, [])
 
   return (
-    <div style={{ height: '60px' }}>
-      <canvas ref={chartRef}></canvas>
+    <div style={{ height: '60px' , width: '240px'}}>
+      <canvas className='' ref={chartRef}></canvas>
     </div>
-  );
-};
+  )
+}
 
 export default LineChart;

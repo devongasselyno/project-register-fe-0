@@ -81,7 +81,7 @@ const FilledLineChart = () => {
   }, []);
 
   return (
-    <div style={{ height: '60px' }}>
+    <div style={{ height: '60px' , width: '240px'}}>
       <canvas ref={chartRef}></canvas>
     </div>
   );

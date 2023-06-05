@@ -99,12 +99,12 @@ const Main = () => {
 
         <div className='bg-[#3399FF] rounded-md p-5 text-white'>
         <div className='pb-3'>
-            <h1 >Total Revenue</h1>
-            <div className='flex items-baseline gap-2'>
-              <h3 className='text-2xl'>300$ </h3>
-              <span className='text-md'>(-12.4 %)</span>
+          <h1 >Total Revenue</h1>
+            <div className ='flex items-baseline gap-2'>
+              <h3 className ='text-2xl'>300$ </h3>
+              <span className ='text-md'>(-12.4 %)</span>
             </div>
-          </div>
+        </div>
           <LineChart />
         </div>
         <div className='bg-[#F9B115] rounded-md p-5 text-white'>
@@ -117,8 +117,9 @@ const Main = () => {
           </div>
           <FilledLineChart />
         </div>
+
         <div className='bg-[#E55353] rounded-md p-5 text-white'>
-        <div className='pb-3'>
+          <div className='pb-3'>
             <h1 >Total Revenue</h1>
             <div className='flex items-baseline gap-2'>
               <h3 className='text-2xl'>300$ </h3>
@@ -141,8 +142,8 @@ const Main = () => {
         />
       </div>
     
-      
-        <table className='border-collapse text-center'>
+      <div className='overflow-x-auto'>
+      <table className='border-collapse text-center'>
           <thead>
             <tr>
               <th className='border px-4 py-2'>ID</th>
@@ -183,6 +184,8 @@ const Main = () => {
             )}
           </tbody>
         </table>
+      </div>
+        
         
         
         <nav aria-label="Page navigation example" className='pagination py-7'>
@@ -212,9 +215,10 @@ const Main = () => {
             </li>
           </ul>
         </nav>
+
       </div>
     </div>
-  );  
+  )  
 }
 
 export default Main
