@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import App from '../App'
 import Main from '../components/Main'
-import SigninPage from '../components/forms/SingIn' 
+import SigninPage from '../components/forms/SingIn'
 import CreateProspect from '../components/forms/CreateProspect'
 import ProspectDetail from '../components/forms/ProspectDetail'
 import CreateType from '../components/forms/CreateType'
@@ -15,6 +15,7 @@ import ContactList from '../components/ContactList'
 import ClientDetail from '../components/ClientDetail'
 import ContactDetail from '../components/ContactDetail'
 import CreateClient from '../components/forms/CreateClient'
+import DataTable from '../components/TableTest'
 
 const Router = () => {
     return (
@@ -48,32 +49,36 @@ const Router = () => {
                         <Route index element={<ContactDetail />} />
                     </Route>
 
-                    <Route path='/prospect/create' element={<App/>}>
+                    <Route path='/prospect/create' element={<App />}>
                         <Route index element={<CreateProspect />} />
                     </Route>
 
-                    <Route path='/clientcontact/create' element={<App/>}>
+                    <Route path='/clientcontact/create' element={<App />}>
                         <Route index element={<CreateClientContact />} />
                     </Route>
 
-                    <Route path='/contact/create' element={<App/>}>
+                    <Route path='/contact/create' element={<App />}>
                         <Route index element={<CreateContact />} />
                     </Route>
 
-                    <Route path='/client' element={<App/>}>
+                    <Route path='/client' element={<App />}>
                         <Route index element={<ClientList />} />
                     </Route>
 
-                    <Route path='/contact' element={<App/>}>
+                    <Route path='/contact' element={<App />}>
                         <Route index element={<ContactList />} />
                     </Route>
 
-                    <Route path='/client/create' element={<App/>}>
+                    <Route path='/client/create' element={<App />}>
                         <Route index element={<CreateClient />} />
                     </Route>
                     {/* <Route path='/clientcontact' element={<App/>}>
                         <Route index element={<ClientContactList />} />
                     </Route> */}
+
+                    <Route path='/table' element={<App />}>
+                        <Route index element={<DataTable />} />
+                    </Route>
                 </Routes>
             </BrowserRouter>
         </div>
