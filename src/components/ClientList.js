@@ -71,7 +71,7 @@ const ClientList = () => {
                 </a>
             </div>
 
-            <div className='overflow-x-auto text-center w-1/2'>
+            <div className='overflow-x-auto text-center w-3/5'>
                 {/* <table className='text-center'>
                     <thead>
                         <tr>
