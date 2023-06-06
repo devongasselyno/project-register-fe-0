@@ -4,11 +4,18 @@ import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
 import { FaPlus, FaTimes, FaTimesCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 const CreateContact = () => {
 
     const [currentStep, setCurrentStep] = useState(1)
     const [showConfirmation, setShowConfirmation] = useState(false)
+    const [snackbarErrors, setSnackBarErrors] = useState('')
+
+    const handleSnackbarClose = () => {
+        setSnackBarErrors('');
+    };
 
     const handlePrevStep = () => {
         setCurrentStep((prevStep) => prevStep - 1);
@@ -82,10 +89,6 @@ const CreateContact = () => {
         const errors = {}
         const message = "This field is required"
 
-        if (!locations.address.trim()) {
-            errors.location = message;
-        }
-
         if (locations.province_id === 0) {
             errors.province_id = message;
         }
@@ -111,7 +114,17 @@ const CreateContact = () => {
     }
 
     const handleNextStep = async () => {
-        setCurrentStep((prevStep) => prevStep + 1);
+        if (currentStep === 1) {
+            const isValid = validateForm()
+
+            if (isValid) {
+                setCurrentStep((prevStep) => prevStep + 1);
+            } else {
+                setSnackBarErrors('Please fill all required fields')
+            }
+        } else {
+            setCurrentStep((prevStep) => prevStep + 1);
+        }
     };
 
     const [locations, setLocations] = useState({
@@ -138,18 +151,6 @@ const CreateContact = () => {
             errors.alias = message;
         }
 
-        if (!contact.gender.trim()) {
-            errors.gender = message;
-        }
-
-        if (contact.gender !== "P" || contact.gender !== "L") {
-            errors.gendertype = "Gender must be P or L";
-        }
-
-        if (!contact.birth_date.trim()) {
-            errors.birth = message;
-        }
-
         setErrors(errors);
         return Object.keys(errors).length === 0;
     }
@@ -173,12 +174,12 @@ const CreateContact = () => {
         if (!isFieldsEmpty) {
             try {
                 await api.post('/locations/create', locations);
-                navigate('/dashboard');
+                const id = locations.contact_id
+                console.log(id)
+                navigate(`/contact/read/${id}`);
             } catch (error) {
                 console.error('Failed to create location', error);
             }
-        } else {
-            navigate('/dashboard');
         }
     }
 
@@ -317,11 +318,12 @@ const CreateContact = () => {
 
     const handleConfirmationSubmit = async (event) => {
         event.preventDefault()
+
         try {
             const response = await api.post('/contact/create', contact);
-            console.log('Data sent successfully:', response.contact);
+            // console.log('Data sent successfully:', response.contact);
             fetchLatestContact()
-            console.log(locations)
+            // console.log(locations)
             handleNextStep()
         } catch (error) {
             console.error('Failed to send data:', error);
@@ -605,7 +607,7 @@ const CreateContact = () => {
                             value={contact.notes}
                             onChange={(event) => handleChange('notes', event.target.value)} />
                         <button type="button" onClick={handleNextStep} className="mt-4 bg-red-800 font-light text-white text-base text-bold w-full py-2 px-4 rounded-md hover:bg-amber-700 focus:outline-none">Next</button>
-                        <button type="button" onClick={printContact} className="mt-4 bg-red-800 font-light text-white text-base text-bold w-full py-2 px-4 rounded-md hover:bg-amber-700 focus:outline-none">Print</button>
+                        {/* <button type="button" onClick={printContact} className="mt-4 bg-red-800 font-light text-white text-base text-bold w-full py-2 px-4 rounded-md hover:bg-amber-700 focus:outline-none">Print</button> */}
                     </>
                 )
             case 2:
@@ -900,6 +902,14 @@ const CreateContact = () => {
                 <div className="px-6 py-4 justify-center items-center content-center flex">
                     <form onSubmit={handleSubmitLocation} className="w-full items-center content-center">
                         {renderFormStep()}
+                        <Snackbar open={!!snackbarErrors} autoHideDuration={2500} onClose={handleSnackbarClose} anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}>
+                            <Alert onClose={handleSnackbarClose} severity="error">
+                                {snackbarErrors}
+                            </Alert>
+                        </Snackbar>
                     </form>
                 </div>
             </div>
