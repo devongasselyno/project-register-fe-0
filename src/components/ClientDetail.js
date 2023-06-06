@@ -38,13 +38,17 @@ const ClientDetail = () => {
         }
 
         setContactError(error)
-        return Object.keys(error).length === 0;
+        return Object.keys(error).length === 0
     }
 
     const handleSnackbarClose = () => {
-        setContactSnackbar('');
+        setContactSnackbar('')
         setSuccessSnackbar('')
-    };
+    }
+
+    const handleContactClose = (event) => {
+        setShowAddContact(false)
+    }
 
     const handleContactSubmit = async (event) => {
         event.preventDefault()
@@ -55,16 +59,16 @@ const ClientDetail = () => {
                 const response = await api.post('/contact/create', contactData)
                 setSuccessSnackbar('Contact Created')
                 handleContactClose()
+                setContactData({
+                    contact_name: "",
+                    contact_alias: ""
+                })
             } catch (error) {
                 console.error('Failed to send data: ', error)
             }
         } else {
             setContactSnackbar('Please fill all required fields')
         }
-    }
-
-    const handleContactClose = (event) => {
-        setShowAddContact(false)
     }
 
     const fetchClient = async () => {
@@ -162,7 +166,7 @@ const ClientDetail = () => {
                         <div>
                             <FaTimes className='ml-auto hover:cursor-pointer' onClick={handleContactClose} />
                         </div>
-                        <h1 className="text-lg mb-4">
+                        <h1 className="text-lg mb-2">
                             Add Contact
                         </h1>
                         <div>
@@ -182,7 +186,7 @@ const ClientDetail = () => {
                         </div>
                         <div className="items-center justify-center flex gap-6 mt-4">
                             <button type="button" onClick={handleContactClose} className="bg-red-700 font-light text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-red-800 focus:outline-none">Cancel</button>
-                            <button type="button" onClick={handleContactSubmit} className="bg-emerald-700 font-light text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-emerald-800 focus:outline-none">Continue</button>
+                            <button type="button" onClick={handleContactSubmit} className="bg-emerald-700 font-light text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-emerald-800 focus:outline-none">Submit</button>
                         </div>
                     </div>
                     <Snackbar open={!!contactSnackBar} autoHideDuration={2500} onClose={handleSnackbarClose} anchorOrigin={{
