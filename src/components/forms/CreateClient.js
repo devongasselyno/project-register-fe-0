@@ -201,6 +201,8 @@ const CreateClient = () => {
         return Object.keys(errors).length === 0;
     }
 
+    const navigate = useNavigate()
+
     const handleSubmitLocation = async (event) => {
         event.preventDefault();
         const { client_id, ...fieldsWithoutClienttId } = locations;
@@ -218,12 +220,12 @@ const CreateClient = () => {
         if (!isFieldsEmpty) {
             try {
                 await api.post('/locations/create', locations);
-                // navigate('/dashboard');
+                const id = locations.client_id
+                console.log(id)
+                navigate(`/contact/read/${id}`);
             } catch (error) {
                 console.error('Failed to create location', error);
             }
-        } else {
-            // navigate('/dashboard');
         }
     }
 

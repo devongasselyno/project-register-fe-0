@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import api from '../../api/posts';
 import 'react-datepicker/dist/react-datepicker.css';
-import moment from 'moment';
-import { FaPlus, FaTimes, FaTimesCircle } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
