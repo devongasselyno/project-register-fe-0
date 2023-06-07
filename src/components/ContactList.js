@@ -128,7 +128,6 @@ const ContactList = () => {
                     </li>
                 </ul>
             </nav>
-            
         </div>
     )
 }

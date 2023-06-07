@@ -12,11 +12,26 @@ const ContactDetail = () => {
     const { id } = useParams()
     const [contact, setContact] = useState({})
     const [showAddClient, setShowAddClient] = useState(false)
+    const [showEmploymentForm, setShowEmploymentForm] = useState(false)
+    const [employmentFormData, setEmploymentFormData] = useState({
+        job_title: '',
+        job_start: '',
+        job_end: '',
+        status: '',
+    })
+
+    const [clientContactData, setClientContactData] = useState({
+        contact_id: id,
+        client_id:  0,
+    })
+
+    const [clients, setClients] = useState([])
     const [clientData, setClientData] = useState({
         client_name: "",
         client_code: ""
     })
     const [clientError, setClientError] = useState('')
+    const [errors, setErrors] = useState({})
     const [clientSnackbar, setClientSnackbar] = useState('')
     const [successSnackbar, setSuccessSnackbar] = useState('')
 
@@ -24,9 +39,34 @@ const ContactDetail = () => {
         setClientData({ ...clientData, [field]: values })
     }
 
+    const handleClientChange = (event) => {
+        const { name, value } = event.target;
+        setClientContactData((prevState) => ({
+          ...prevState,
+          [name]: value
+        }));
+      };
+    
+    const handleEmploymentChange = (e) => {
+        setEmploymentFormData({ ...employmentFormData, [e.target.name]: e.target.value });
+    }
+
     const handleClientClick = (event) => {
         event.preventDefault()
         setShowAddClient(true)
+    }
+    
+    const handleClientClose = () => {
+        setShowAddClient(false)
+    }
+
+    const handleEmploymentClick = (e) => {
+        e.preventDefault()
+        setShowEmploymentForm(true)
+    }
+
+    const handleEmploymentClose = () => {
+        setShowEmploymentForm(false)
     }
 
     const validateClient = () => {
@@ -44,13 +84,60 @@ const ContactDetail = () => {
         return Object.keys(error).length === 0
     }
 
+
+    const handleEmploymentFormSubmit = async (e) => {
+        e.preventDefault()
+        
+        let errors = {}
+      
+        if (employmentFormData.client_id === 'select') {
+            errors.client_id = 'Please select a client'
+        }
+        if (!employmentFormData.job_title) {
+            errors.job_title = 'Please enter a job title'
+        }
+        if (!employmentFormData.job_start) {
+            errors.job_start = 'Please enter a job start date'
+        }
+        if (!employmentFormData.job_end) {
+            errors.job_end = 'Please enter a job end date'
+        }
+        if (!employmentFormData.status || employmentFormData.status === 'select') {
+            errors.status = 'Please select a status'
+        }
+      
+        setErrors(errors);
+        
+        if (Object.keys(errors).length === 0) {
+            try {
+                const contactData = {
+                    contact_id: parseInt(clientContactData.contact_id),
+                    client_id: parseInt(clientContactData.client_id)
+                }
+            
+                const res = await axios.post('http://localhost:8080/api/clientcontact/create', contactData)
+
+                console.log("RES", res.data.data.D)
+                const client_contact_id = res.data.data.ID
+
+                const employmentData = {
+                    ...employmentFormData,
+                    client_contact_id
+                }
+
+                console.log("testtt", employmentData)
+
+                await axios.post('http://localhost:8080/api/employments/create', employmentData)
+                setShowEmploymentForm(false)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
+
     const handleSnackbarClose = () => {
         setClientSnackbar('')
         setSuccessSnackbar('')
-    }
-
-    const handleClientClose = () => {
-        setShowAddClient(false)
     }
 
     const handleClientSubmit = async (event) => {
@@ -84,8 +171,19 @@ const ContactDetail = () => {
         }
     }
 
+    const fetchClients = async () => {
+        try {
+            const res = await axios.get("http://localhost:8080/api/client/read")
+            const clientData = res.data.data
+            setClients(clientData)
+        } catch (error) {
+            console.log("Error fetching data:",error)
+        }
+    }
+
     useEffect(() => {
         fetchContact()
+        fetchClients()
     }, [])
 
     return (
@@ -183,8 +281,61 @@ const ContactDetail = () => {
             </div>
 
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</button>
-            <button className="ml-8 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" > Delete </button>
+            <button className="ml-8 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"> Delete </button>
             <button type="button" onClick={handleClientClick} className="ml-8 bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"> Add Client </button>
+            <button className="ml-8 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={handleEmploymentClick}>Add Employment</button>
+            
+            {showEmploymentForm && (
+                <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm'>
+                    <div className='bg-white rounded-lg py-6 px-10 w-1/3 absolute'>
+                        <div>
+                            <FaTimes className='ml-auto hover:cursor-pointer' onClick={handleEmploymentClose}/>
+                        </div>
+                        <h1 className='text-center py-5'>Add Employment</h1>
+
+                        <form onSubmit={handleEmploymentFormSubmit}>
+                            <div className='pb-2'>
+                                <label htmlFor="client_id" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Clients</label>
+                                <select onChange={handleClientChange} id='client_id' name='client_id' className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'>
+                                    <option selected disabled value="select">Select...</option>
+                                    {clients.map((client) => (
+                                        <option key={client.ID} value={client.ID}>
+                                            {client.client_name}
+                                        </option>
+                                    ))}
+                                </select>
+                                {errors.client_id && <p className="text-red-500">{errors.client_id}</p>}
+                            </div>
+                            <div className='pb-2'>
+                                <label htmlFor="job_title" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Job Title</label>
+                                <input onChange={handleEmploymentChange} id='job_title' name='job_title' type="text" placeholder='Job title' className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
+                                {errors.job_title && <p className="text-red-500">{errors.job_title}</p>}
+                            </div>
+                            <div className='pb-2'>
+                                <label htmlFor="job_start" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Job Start</label>
+                                <input onChange={handleEmploymentChange} type="date" name="job_start" id="job_start" className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5' />
+                                {errors.job_start && <p className="text-red-500">{errors.job_start}</p>}
+                            </div>
+                            <div className='pb-2'>
+                                <label htmlFor="job_end" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Job End</label>
+                                <input onChange={handleEmploymentChange} type="date" name="job_end" id="job_end" className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
+                                {errors.job_end && <p className="text-red-500">{errors.job_end}</p>}
+                            </div>
+                            <div className='pb-2'>
+                                <label htmlFor="status" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Status</label>
+                                <select onChange={handleEmploymentChange} name='status' id='status' className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'>
+                                    <option selected disabled value="select">Select...</option>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                                {errors.status && <p className="text-red-500">{errors.status}</p>}
+                            </div>
+                            <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-5 rounded float-right'>Submit</button>
+                        </form>
+
+                    </div>
+                </div>
+            )}
 
             {showAddClient && (
                 <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm'>

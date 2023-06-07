@@ -70,25 +70,25 @@ const CreateClientContact = () => {
       
         let errors = {};
       
-        const formData = new FormData(e.target);
+        const formData = new FormData(e.target)
       
-        const jobTitle = formData.get('job_title');
-        const jobStart = formData.get('job_start');
-        const jobEnd = formData.get('job_end');
-        const status = formData.get('status');
+        const jobTitle = formData.get('job_title')
+        const jobStart = formData.get('job_start')
+        const jobEnd = formData.get('job_end')
+        const status = formData.get('status')
         
         console.log("jobtitle:", jobTitle)
         if (!jobTitle) {
-            errors.job_title = 'Please enter a job title';
+            errors.job_title = 'Please enter a job title'
         }
         if (!jobStart) {
-            errors.job_start = 'Please enter a job start date';
+            errors.job_start = 'Please enter a job start date'
         }
         if (!jobEnd) {
-            errors.job_end = 'Please enter a job end date';
+            errors.job_end = 'Please enter a job end date'
         }
         if (!status || status === 'select') {
-            errors.status = 'Please select a status';
+            errors.status = 'Please select a status'
         }
       
         setErrors(errors);
@@ -99,7 +99,7 @@ const CreateClientContact = () => {
                 jobStart,
                 jobEnd,
                 status,
-            };
+            }
         
             setEmploymentFormData((prevFormData) => [...prevFormData, newEmployment])
             setShowEmploymentForm(false)
@@ -107,7 +107,6 @@ const CreateClientContact = () => {
     }
 
     const createEmployments = (clientContactId) => {
-        
         employmentFormData.forEach((employment) => {
             const data = {
                 client_contact_id: clientContactId,

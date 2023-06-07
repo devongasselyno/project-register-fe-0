@@ -11,10 +11,10 @@ function App() {
       <div className='w-[12%] fixed'>
         <Sidebar />
       </div>
-      <div className='w-[88%] border ml-[12%]'>
+
+      <div className='w-[88%] ml-auto'>
         <DashboardView />
         <Outlet></Outlet>
-
       </div>
     </div>
   );
