@@ -6,11 +6,14 @@ import { FaTimes } from 'react-icons/fa';
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
+import { DataGrid } from '@mui/x-data-grid'
 
 const ContactDetail = () => {
 
     const { id } = useParams()
+    const [clientContactID, setClientContactID] = useState()
     const [contact, setContact] = useState({})
+    const [ employments, setEmployments ] = useState([])
     const [showAddClient, setShowAddClient] = useState(false)
     const [showEmploymentForm, setShowEmploymentForm] = useState(false)
     const [employmentFormData, setEmploymentFormData] = useState({
@@ -118,11 +121,11 @@ const ContactDetail = () => {
                 const res = await axios.post('http://localhost:8080/api/clientcontact/create', contactData)
 
                 console.log("RES", res.data.data.D)
-                const client_contact_id = res.data.data.ID
+                setClientContactID(res.data.data.ID)
 
                 const employmentData = {
                     ...employmentFormData,
-                    client_contact_id
+                    clientContactID
                 }
 
                 console.log("testtt", employmentData)
@@ -181,10 +184,32 @@ const ContactDetail = () => {
         }
     }
 
+    const fetchEmployments = async () => {
+        try {
+            const res = await axios.get(`http://localhost:8080/api/employments/read/${id}`)
+            const data = res.data
+            setEmployments(data)
+        } catch (error) {
+            console.log("Error fetching data:",error)
+        }
+    }
+
     useEffect(() => {
         fetchContact()
         fetchClients()
+        fetchEmployments()
     }, [])
+
+    const columns = [
+        { field: 'ID', headerName: 'ID' },
+        { field: 'job_title', headerName: 'Job Title' },
+        { field: 'client_name', headerName: 'Job Start' },
+        { field: 'alias', headerName: 'Job End' },
+        { field: 'status', headerName: 'Status' },
+        { field: 'client_contact_id', headerName: 'Client Contact ID' },
+    ]
+
+    const getRowId = (row) => row.ID
 
     return (
         <div className='py-10 px-20 grid-flow-row'>
@@ -278,6 +303,21 @@ const ContactDetail = () => {
                         </table>
                     </div>
                 </div>
+            </div>
+
+            <div>
+                <p className='font-bold text-xl mb-3'>Employments</p>
+                <DataGrid
+                    rows={employments}
+                    getRowId={getRowId}
+                    columns={columns}
+                    initialState={{
+                        pagination: {
+                            paginationModel: { page: 0, pageSize: 5 },
+                        },
+                    }}
+                    pageSizeOptions={[5, 10]}
+                />
             </div>
 
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</button>

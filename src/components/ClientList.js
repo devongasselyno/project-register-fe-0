@@ -41,7 +41,7 @@ const ClientList = () => {
         { field: 'client_name', headerName: 'Client Name' },
         { field: 'alias', headerName: 'Alias' },
         { field: 'website', headerName: 'Website' },
-    ];
+    ]
 
     const getRowId = (row) => row.ID
 

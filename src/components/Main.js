@@ -54,8 +54,8 @@ const Main = () => {
           backgroundColor: ['#FF6384', '#36A2EB'],
         },
       ],
-    };
-  };
+    }
+  }
 
   function prevPage() {
     if(currentPage !== 1) {
