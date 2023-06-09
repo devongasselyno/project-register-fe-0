@@ -1,6 +1,6 @@
 import { useEffect, useState, React } from 'react'
 import axios from 'axios'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import api from '../api/posts'
 import { FaTimes } from 'react-icons/fa';
 import Snackbar from '@material-ui/core/Snackbar'
@@ -11,10 +11,12 @@ import { DataGrid } from '@mui/x-data-grid'
 const ContactDetail = () => {
 
     const { id } = useParams()
+    const navigate = useNavigate()
     const [clientContactID, setClientContactID] = useState()
     const [contact, setContact] = useState({})
     const [ employments, setEmployments ] = useState([])
     const [showAddClient, setShowAddClient] = useState(false)
+    const [ confirmation, setConfirmation ] = useState(false)
     const [showEmploymentForm, setShowEmploymentForm] = useState(false)
     const [employmentFormData, setEmploymentFormData] = useState({
         job_title: '',
@@ -160,6 +162,20 @@ const ContactDetail = () => {
             }
         } else {
             setClientSnackbar('Please fill all required fields')
+        }
+    }
+
+    const handleContactDelete = async (contactID) => {
+        try {
+            await axios.delete(`http://localhost:8080/api/contact/delete/soft/${id}`, contactID)
+            console.log('Contact deleted successfully')
+        
+            setTimeout(() => {
+                navigate('/contact')
+            }, 500);
+    
+        } catch (err) {
+            console.error('Error deleting prospect:', err);
         }
     }
 
@@ -321,9 +337,24 @@ const ContactDetail = () => {
             </div>
 
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</button>
-            <button className="ml-8 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"> Delete </button>
+            <button onClick={() => setConfirmation(true)} className="ml-8 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"> Delete </button>
             <button type="button" onClick={handleClientClick} className="ml-8 bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"> Add Client </button>
             <button className="ml-8 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={handleEmploymentClick}>Add Employment</button>
+
+            {confirmation && (
+                <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm'>
+                    <div className='bg-white rounded-lg py-6 px-10 w-1/3 absolute'>
+                        <div className='text-center'>
+                            <p className='text-xl font-bold mb-2'>Confirmation</p>
+                            <p className='mb-5'>Are you sure you want to delete?</p>
+                            <div className="items-center justify-center flex gap-6 mt-4">
+                                <button type="button" onClick={() => setConfirmation(false)} className="bg-red-700 font-bold text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-red-800 focus:outline-none">Cancel</button>
+                                <button type="button" onClick={() => handleContactDelete(id)} className="bg-emerald-700 font-bold text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-emerald-800 focus:outline-none">Delete</button>
+                            </div>
+                        </div>   
+                    </div>
+                </div>
+            )}
             
             {showEmploymentForm && (
                 <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm'>
