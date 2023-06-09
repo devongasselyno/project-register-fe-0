@@ -13,7 +13,8 @@ const ContactDetail = () => {
     const { id } = useParams()
     const [clientContactID, setClientContactID] = useState()
     const [contact, setContact] = useState({})
-    const [ employments, setEmployments ] = useState([])
+    const [employments, setEmployments] = useState([])
+    const [locationsList, setLocationsList] = useState([])
     const [showAddClient, setShowAddClient] = useState(false)
     const [showEmploymentForm, setShowEmploymentForm] = useState(false)
     const [employmentFormData, setEmploymentFormData] = useState({
@@ -27,7 +28,7 @@ const ContactDetail = () => {
 
     const [clientContactData, setClientContactData] = useState({
         contact_id: id,
-        client_id:  0,
+        client_id: 0,
     })
 
     const [clients, setClients] = useState([])
@@ -47,11 +48,11 @@ const ContactDetail = () => {
     const handleClientChange = (event) => {
         const { name, value } = event.target;
         setClientContactData((prevState) => ({
-          ...prevState,
-          [name]: value
+            ...prevState,
+            [name]: value
         }));
-      };
-    
+    };
+
     const handleEmploymentChange = (e) => {
         setEmploymentFormData({ ...employmentFormData, [e.target.name]: e.target.value });
     }
@@ -60,7 +61,7 @@ const ContactDetail = () => {
         event.preventDefault()
         setShowAddClient(true)
     }
-    
+
     const handleClientClose = () => {
         setShowAddClient(false)
     }
@@ -92,9 +93,9 @@ const ContactDetail = () => {
 
     const handleEmploymentFormSubmit = async (e) => {
         e.preventDefault()
-        
+
         let errors = {}
-      
+
         if (employmentFormData.client_id === 'select') {
             errors.client_id = 'Please select a client'
         }
@@ -110,16 +111,16 @@ const ContactDetail = () => {
         if (!employmentFormData.status || employmentFormData.status === 'select') {
             errors.status = 'Please select a status'
         }
-      
+
         setErrors(errors);
-        
+
         if (Object.keys(errors).length === 0) {
             try {
                 const contactData = {
                     contact_id: parseInt(clientContactData.contact_id),
                     client_id: parseInt(clientContactData.client_id)
                 }
-            
+
                 const res = await axios.post('http://localhost:8080/api/clientcontact/create', contactData)
                 setClientContactID(res.data.data.ID)
 
@@ -179,7 +180,7 @@ const ContactDetail = () => {
             const clientData = res.data.data
             setClients(clientData)
         } catch (error) {
-            console.log("Error fetching data:",error)
+            console.log("Error fetching data:", error)
         }
     }
 
@@ -189,23 +190,59 @@ const ContactDetail = () => {
             const data = res.data
             setEmployments(data)
         } catch (error) {
-            console.log("Error fetching data:",error)
+            console.log("Error fetching data:", error)
         }
     }
+
+    // const fetchLocations = async () => {
+    //     try {
+    //         const res = await api.get(`locations/read/${id}`)
+    //         const data = res.data
+    //         setLocationsList(data)
+    //     } catch (error) {
+    //         console.error("Failed to fetch locations")
+    //     }
+    // }
 
     useEffect(() => {
         fetchContact()
         fetchClients()
         fetchEmployments()
+        // fetchLocations()
     }, [])
+
+    useEffect(() => {
+        if (contact.locations) {
+            const updatedLocationsList = contact.locations.map((location) => ({
+                ID: location.ID,
+                address: location.address,
+                city: location.city.city_name,
+                province: location.province.province_name,
+                postal_code: location.postal_code,
+                country: location.country,
+                geo: location.geo,
+            }));
+            setLocationsList(updatedLocationsList);
+        }
+    }, [contact]);
 
     const columns = [
         { field: 'ID', headerName: 'ID' },
-        { field: 'job_title', headerName: 'Job Title', width: 140},
-        { field: 'job_start', headerName: 'Job Start', width:110},
-        { field: 'job_end', headerName: 'Job End' , width:110},
+        { field: 'job_title', headerName: 'Job Title', width: 140 },
+        { field: 'job_start', headerName: 'Job Start', width: 110 },
+        { field: 'job_end', headerName: 'Job End', width: 110 },
         { field: 'status', headerName: 'Status' },
-        { field: 'client_contact_id', headerName: 'Client Contact ID', width:125},
+        { field: 'client_contact_id', headerName: 'Client Contact ID', width: 125 },
+    ]
+
+    const locationColumns = [
+        { field: 'ID', headerName: 'ID' },
+        { field: 'address', headerName: 'Address', width: 200},
+        { field: 'city', headerName: 'City', width: 150},
+        { field: 'province', headerName: 'Province', width: 150},
+        { field: 'postal_code', headerName: 'Postal Code', width: 120},
+        { field: 'country', headerName: 'Country', width: 150},
+        { field: 'geo', headerName: 'Geo', width: 150},
     ]
 
     const getRowId = (row) => row.ID
@@ -305,6 +342,22 @@ const ContactDetail = () => {
             </div>
 
             <div className='mb-10 w-fit'>
+                <p className='font-bold text-xl mb-3'>Locations</p>
+                <DataGrid
+                    rows={locationsList}
+                    getRowId={getRowId}
+                    columns={locationColumns}
+                    sty
+                    initialState={{
+                        pagination: {
+                            paginationModel: { page: 0, pageSize: 5 },
+                        },
+                    }}
+                    pageSizeOptions={[5, 10]}
+                />
+            </div>
+
+            <div className='mb-10 w-fit'>
                 <p className='font-bold text-xl mb-3'>Employments</p>
                 <DataGrid
                     rows={employments}
@@ -324,12 +377,12 @@ const ContactDetail = () => {
             <button className="ml-8 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"> Delete </button>
             <button type="button" onClick={handleClientClick} className="ml-8 bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"> Add Client </button>
             <button className="ml-8 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={handleEmploymentClick}>Add Employment</button>
-            
+
             {showEmploymentForm && (
                 <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm'>
                     <div className='bg-white rounded-lg py-6 px-10 w-1/3 absolute'>
                         <div>
-                            <FaTimes className='ml-auto hover:cursor-pointer' onClick={handleEmploymentClose}/>
+                            <FaTimes className='ml-auto hover:cursor-pointer' onClick={handleEmploymentClose} />
                         </div>
                         <h1 className='text-center py-5'>Add Employment</h1>
 
@@ -348,7 +401,7 @@ const ContactDetail = () => {
                             </div>
                             <div className='pb-2'>
                                 <label htmlFor="job_title" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Job Title</label>
-                                <input onChange={handleEmploymentChange} id='job_title' name='job_title' type="text" placeholder='Job title' className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
+                                <input onChange={handleEmploymentChange} id='job_title' name='job_title' type="text" placeholder='Job title' className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5' />
                                 {errors.job_title && <p className="text-red-500">{errors.job_title}</p>}
                             </div>
                             <div className='pb-2'>
@@ -358,7 +411,7 @@ const ContactDetail = () => {
                             </div>
                             <div className='pb-2'>
                                 <label htmlFor="job_end" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Job End</label>
-                                <input onChange={handleEmploymentChange} type="date" name="job_end" id="job_end" className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
+                                <input onChange={handleEmploymentChange} type="date" name="job_end" id="job_end" className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5' />
                                 {errors.job_end && <p className="text-red-500">{errors.job_end}</p>}
                             </div>
                             <div className='pb-2'>
