@@ -17,7 +17,7 @@ const ContactDetail = () => {
     const [employments, setEmployments] = useState([])
     const [locationsList, setLocationsList] = useState([])
     const [showAddClient, setShowAddClient] = useState(false)
-    const [ confirmation, setConfirmation ] = useState(false)
+    const [confirmation, setConfirmation] = useState(false)
     const [showEmploymentForm, setShowEmploymentForm] = useState(false)
     const [employmentFormData, setEmploymentFormData] = useState({
         job_title: '',
@@ -27,6 +27,9 @@ const ContactDetail = () => {
     })
     const [showField, setShowField] = useState(false)
     const [showSelectField, setShowSelectField] = useState(true)
+    const [buttonType, setButtonType] = useState(true)
+    const [fetchedClient, setFetchedClient] = useState(0)
+    const [clientList, setClientList] = useState([])
 
     const [clientContactData, setClientContactData] = useState({
         contact_id: id,
@@ -42,6 +45,18 @@ const ContactDetail = () => {
     const [errors, setErrors] = useState({})
     const [clientSnackbar, setClientSnackbar] = useState('')
     const [successSnackbar, setSuccessSnackbar] = useState('')
+
+    const handleShowInputField = () => {
+        setShowField(true)
+        setShowSelectField(false)
+        setButtonType(false)
+    }
+
+    const handleShowSelectField = () => {
+        setShowField(false)
+        setShowSelectField(true)
+        setButtonType(true)
+    }
 
     const handleChange = (field, values) => {
         setClientData({ ...clientData, [field]: values })
@@ -66,6 +81,8 @@ const ContactDetail = () => {
 
     const handleClientClose = () => {
         setShowAddClient(false)
+        setShowField(false)
+        setShowSelectField(true)
     }
 
     const handleEmploymentClick = (e) => {
@@ -170,11 +187,11 @@ const ContactDetail = () => {
         try {
             await axios.delete(`http://localhost:8080/api/contact/delete/soft/${id}`, contactID)
             console.log('Contact deleted successfully')
-        
+
             setTimeout(() => {
                 navigate('/contact')
             }, 500);
-    
+
         } catch (err) {
             console.error('Error deleting prospect:', err);
         }
@@ -194,7 +211,9 @@ const ContactDetail = () => {
         try {
             const res = await axios.get("http://localhost:8080/api/client/read")
             const clientData = res.data.data
+            const clientList = res.data
             setClients(clientData)
+            setClientList(clientList)
         } catch (error) {
             console.log("Error fetching data:", error)
         }
@@ -254,12 +273,12 @@ const ContactDetail = () => {
 
     const locationColumns = [
         { field: 'ID', headerName: 'ID' },
-        { field: 'address', headerName: 'Address', width: 200},
-        { field: 'city', headerName: 'City', width: 150},
-        { field: 'province', headerName: 'Province', width: 150},
-        { field: 'postal_code', headerName: 'Postal Code', width: 120},
-        { field: 'country', headerName: 'Country', width: 150},
-        { field: 'geo', headerName: 'Geo', width: 150},
+        { field: 'address', headerName: 'Address', width: 200 },
+        { field: 'city', headerName: 'City', width: 150 },
+        { field: 'province', headerName: 'Province', width: 150 },
+        { field: 'postal_code', headerName: 'Postal Code', width: 120 },
+        { field: 'country', headerName: 'Country', width: 150 },
+        { field: 'geo', headerName: 'Geo', width: 150 },
     ]
 
     const getRowId = (row) => row.ID
@@ -405,7 +424,7 @@ const ContactDetail = () => {
                                 <button type="button" onClick={() => setConfirmation(false)} className="bg-red-700 font-bold text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-red-800 focus:outline-none">Cancel</button>
                                 <button type="button" onClick={() => handleContactDelete(id)} className="bg-emerald-700 font-bold text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-emerald-800 focus:outline-none">Delete</button>
                             </div>
-                        </div>   
+                        </div>
                     </div>
                 </div>
             )}
@@ -471,37 +490,70 @@ const ContactDetail = () => {
                         <h1 className="text-lg mb-2">
                             Add Client
                         </h1>
-                        <div>
-                            <label htmlFor="name"
-                                className="text-left block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">
-                                Client Name
-                            </label>
-                            <input
-                                type="text"
-                                autoComplete='off'
-                                className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-full block pb-2 p-2.5"
-                                id="name"
-                                value={clientData.client_name}
-                                onChange={(event) => handleChange('client_name', event.target.value)}
-                                placeholder='Insert Client Name' />
-                            {clientError.name && <p className="text-red-500 text-sm text-left pt-1 pl-1">{clientError.name}</p>}
-                            <label htmlFor="name"
-                                className="text-left block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">
-                                Client Name
-                            </label>
-                            <input
-                                type="text"
-                                autoComplete='off'
-                                className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-full block pb-2 p-2.5"
-                                id="name"
-                                value={clientData.client_code}
-                                onChange={(event) => handleChange('client_code', event.target.value)}
-                                placeholder='Insert Client Code' />
-                            {clientError.code && <p className="text-red-500 text-sm text-left pt-1 pl-1">{clientError.code}</p>}
-                        </div>
-                        <div className="items-center justify-center flex gap-6 mt-4">
-                            <button type="button" onClick={handleClientClose} className="bg-red-700 font-light text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-red-800 focus:outline-none">Cancel</button>
-                            <button type="button" onClick={handleClientSubmit} className="bg-emerald-700 font-light text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-emerald-800 focus:outline-none">Submit</button>
+                        {showSelectField &&
+                            <div>
+                                <label htmlFor="client"
+                                    className="text-left block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">
+                                    Select Client
+                                </label>
+                                <select id="clients" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full pb-2 p-2.5" value={fetchedClient} onChange={(e) => {
+                                    // const value = e.target.value
+                                    // if (value === "addContact") {
+                                    //     handleShowField()
+                                    // }
+                                    const selectedClientId = parseInt(e.target.value, 10);
+                                    setFetchedClient(selectedClientId);
+                                }}>
+                                    <option value="">Select Client</option>
+                                    {Array.isArray(clientList.data) &&
+                                        clientList.data.map((client) => (
+                                            <option key={client.ID} value={client.ID}>
+                                                {client.client_name}
+                                            </option>
+                                        ))}
+                                </select>
+                            </div>
+                        }
+
+                        {showField &&
+                            <div>
+                                <label htmlFor="name"
+                                    className="text-left block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">
+                                    Client Name
+                                </label>
+                                <input
+                                    type="text"
+                                    autoComplete='off'
+                                    className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-full block pb-2 p-2.5"
+                                    id="name"
+                                    value={clientData.client_name}
+                                    onChange={(event) => handleChange('client_name', event.target.value)}
+                                    placeholder='Insert Client Name' />
+                                {clientError.name && <p className="text-red-500 text-sm text-left pt-1 pl-1">{clientError.name}</p>}
+                                <label htmlFor="name"
+                                    className="text-left block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">
+                                    Client Name
+                                </label>
+                                <input
+                                    type="text"
+                                    autoComplete='off'
+                                    className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-full block pb-2 p-2.5"
+                                    id="name"
+                                    value={clientData.client_code}
+                                    onChange={(event) => handleChange('client_code', event.target.value)}
+                                    placeholder='Insert Client Code' />
+                                {clientError.code && <p className="text-red-500 text-sm text-left pt-1 pl-1">{clientError.code}</p>}
+                            </div>
+                        }
+                        <div className="items-center justify-center flex gap-6 mt-6">
+                            <button type="button" onClick={handleClientClose} className="bg-red-700 font-bold text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-red-800 focus:outline-none">Cancel</button>
+                            {buttonType &&
+                                <button type="button" onClick={handleShowInputField} className="bg-slate-700 font-bold text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-slate-800 focus:outline-none">Add</button>
+                            }
+                            {!buttonType &&
+                                <button type="button" onClick={handleShowSelectField} className="bg-slate-700 font-bold text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-slate-800 focus:outline-none">Select</button>
+                            }
+                            <button type="button" onClick={handleClientSubmit} className="bg-emerald-700 font-bold text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-emerald-800 focus:outline-none">Submit</button>
                         </div>
                     </div>
                     <Snackbar open={!!clientSnackbar} autoHideDuration={2500} onClose={handleSnackbarClose} anchorOrigin={{

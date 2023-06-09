@@ -26,6 +26,7 @@ const ClientDetail = () => {
     const [showSelectField, setShowSelectField] = useState(true)
     const navigate = useNavigate()
     const [ confirmation, setConfirmation ] = useState(false)
+    const [buttonType, setButtonType] = useState(true)
 
     const handleChange = (field, values) => {
         setContactData({ ...contactData, [field]: values })
@@ -106,9 +107,16 @@ const ClientDetail = () => {
         fetchContacts()
     }, [])
 
-    const handleShowField = () => {
+    const handleShowInputField = () => {
         setShowField(true)
         setShowSelectField(false)
+        setButtonType(false)
+    }
+
+    const handleShowSelectField = () => {
+        setShowField(false)
+        setShowSelectField(true)
+        setButtonType(true)
     }
 
     const handleClientDelete = async (clientID) => {
@@ -235,7 +243,7 @@ const ClientDetail = () => {
                                         className="text-left block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">
                                         Select Contact
                                     </label>
-                                    <select id="contacts" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5" value={fetchedContact} onChange={(e) => {
+                                    <select id="contacts" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full pb-2 p-2.5" value={fetchedContact} onChange={(e) => {
                                         // const value = e.target.value
                                         // if (value === "addContact") {
                                         //     handleShowField()
@@ -272,9 +280,14 @@ const ClientDetail = () => {
                                 </div>
                             }
                         </div>
-                        <div className="items-center justify-center flex gap-6 mt-4">
+                        <div className="items-center justify-center flex gap-6 mt-6">
                             <button type="button" onClick={handleContactClose} className="bg-red-700 font-bold text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-red-800 focus:outline-none">Cancel</button>
-                            <button type="button" onClick={handleShowField} className="bg-slate-700 font-bold text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-slate-800 focus:outline-none">Add</button>
+                            {buttonType && 
+                                <button type="button" onClick={handleShowInputField} className="bg-slate-700 font-bold text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-slate-800 focus:outline-none">Add</button>
+                            }
+                            {!buttonType && 
+                                <button type="button" onClick={handleShowSelectField} className="bg-slate-700 font-bold text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-slate-800 focus:outline-none">Select</button>
+                            }
                             <button type="button" onClick={handleContactSubmit} className="bg-emerald-700 font-bold text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-emerald-800 focus:outline-none">Submit</button>
                         </div>
                     </div>
