@@ -22,6 +22,8 @@ const ContactDetail = () => {
         job_end: '',
         status: '',
     })
+    const [showField, setShowField] = useState(false)
+    const [showSelectField, setShowSelectField] = useState(true)
 
     const [clientContactData, setClientContactData] = useState({
         contact_id: id,
