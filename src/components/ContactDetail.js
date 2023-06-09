@@ -210,26 +210,27 @@ const ContactDetail = () => {
         }
     }
 
-    // const fetchLocations = async () => {
-    //     try {
-    //         const res = await api.get(`locations/read/${id}`)
-    //         const data = res.data
-    //         setLocationsList(data)
-    //     } catch (error) {
-    //         console.error("Failed to fetch locations")
-    //     }
-    // }
+    const fetchLocations = async () => {
+        try {
+            const res = await api.get(`/contact/locations/${id}`)
+            const data = res.data.data
+            console.log(data)
+            setLocationsList(data)
+        } catch (error) {
+            console.error("Failed to fetch locations")
+        }
+    }
 
     useEffect(() => {
         fetchContact()
         fetchClients()
         fetchEmployments()
-        // fetchLocations()
+        fetchLocations()
     }, [])
 
     useEffect(() => {
-        if (contact.locations) {
-            const updatedLocationsList = contact.locations.map((location) => ({
+        if (locationsList) {
+            const updatedLocationsList = locationsList.map((location) => ({
                 ID: location.ID,
                 address: location.address,
                 city: location.city.city_name,
