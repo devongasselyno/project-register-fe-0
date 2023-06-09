@@ -200,15 +200,15 @@ const ClientDetail = () => {
                                         Select Contact
                                     </label>
                                     <select id="contacts" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5" value={fetchedContact} onChange={(e) => {
-                                        const value = e.target.value
-                                        if (value === "addContact") {
-                                            handleShowField()
-                                        }
+                                        // const value = e.target.value
+                                        // if (value === "addContact") {
+                                        //     handleShowField()
+                                        // }
                                         const selectedContactId = parseInt(e.target.value, 10);
                                         setFetchedContact(selectedContactId);
                                     }}>
                                         <option value="">Select Contact</option>
-                                        <option value="addContact">Add New Contact...</option>
+                                        {/* <option value="addContact">Add New Contact...</option> */}
                                         {Array.isArray(contacts.data) &&
                                             contacts.data.map((contact) => (
                                                 <option key={contact.ID} value={contact.ID}>
@@ -238,6 +238,7 @@ const ClientDetail = () => {
                         </div>
                         <div className="items-center justify-center flex gap-6 mt-4">
                             <button type="button" onClick={handleContactClose} className="bg-red-700 font-bold text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-red-800 focus:outline-none">Cancel</button>
+                            <button type="button" onClick={handleShowField} className="bg-slate-700 font-bold text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-slate-800 focus:outline-none">Add</button>
                             <button type="button" onClick={handleContactSubmit} className="bg-emerald-700 font-bold text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-emerald-800 focus:outline-none">Submit</button>
                         </div>
                     </div>
