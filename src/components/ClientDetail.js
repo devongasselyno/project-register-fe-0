@@ -115,7 +115,6 @@ const ClientDetail = () => {
         try {
              await axios.delete(`http://localhost:8080/api/client/${id}`, clientID)
             console.log('Prospect deleted successfully');
-            deleteNotify()
         
             setTimeout(() => {
                 navigate('/client')
@@ -124,19 +123,6 @@ const ClientDetail = () => {
         } catch (err) {
             console.error('Error deleting prospect:', err);
         }
-    }
-
-    const deleteNotify = () => {
-        toast.success('Client Deleted!', {
-            position: "top-right",
-            autoClose: 1200,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-        })
     }
 
     const handleEdit = () => {
