@@ -1,12 +1,13 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import api from '../api/posts'
 import { FaTimes } from 'react-icons/fa';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { toast } from 'react-toastify'
 
 const ClientDetail = () => {
     const { id } = useParams()
@@ -23,6 +24,8 @@ const ClientDetail = () => {
     const [successSnackbar, setSuccessSnackbar] = useState('')
     const [showField, setShowField] = useState(false)
     const [showSelectField, setShowSelectField] = useState(true)
+    const navigate = useNavigate()
+    const [ confirmation, setConfirmation ] = useState(false)
 
     const handleChange = (field, values) => {
         setContactData({ ...contactData, [field]: values })
@@ -108,6 +111,38 @@ const ClientDetail = () => {
         setShowSelectField(false)
     }
 
+    const handleClientDelete = async (clientID) => {
+        try {
+             await axios.delete(`http://localhost:8080/api/client/${id}`, clientID)
+            console.log('Prospect deleted successfully');
+            deleteNotify()
+        
+            setTimeout(() => {
+                navigate('/client')
+            }, 2000);
+    
+        } catch (err) {
+            console.error('Error deleting prospect:', err);
+        }
+    }
+
+    const deleteNotify = () => {
+        toast.success('Client Deleted!', {
+            position: "top-right",
+            autoClose: 1200,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+        })
+    }
+
+    const handleEdit = () => {
+        navigate(`/client/update/${id}`)
+    }
+
     return (
         <div className='py-10 px-20 grid-flow-row'>
             <p className='text-4xl leading-8 font-bold py-5'>Client Detail</p>
@@ -179,9 +214,24 @@ const ClientDetail = () => {
                 </div>
             </div>
 
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</button>
-            <button className="ml-8 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" > Delete </button>
+            <button onClick={handleEdit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</button>
+            <button onClick={() => setConfirmation(true)} className="ml-8 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" > Delete </button>
             <button type="button" onClick={handleContactClick} className="ml-8 bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"> Add Contact </button>
+
+            {confirmation && (
+                <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm'>
+                    <div className='bg-white rounded-lg py-6 px-10 w-1/3 absolute'>
+                        <div className='text-center'>
+                            <p className='text-xl font-bold mb-2'>Confirmation</p>
+                            <p className='mb-5'>Are you sure you want to delete?</p>
+                            <div className="items-center justify-center flex gap-6 mt-4">
+                                <button type="button" onClick={() => setConfirmation(false)} className="bg-red-700 font-bold text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-red-800 focus:outline-none">Cancel</button>
+                                <button type="button" onClick={() => handleClientDelete(id)} className="bg-emerald-700 font-bold text-white text-base text-bold py-2 px-4 w-1/2 max-w-full rounded-md hover:bg-emerald-800 focus:outline-none">Delete</button>
+                            </div>
+                        </div>   
+                    </div>
+                </div>
+            )}
 
             {showAddContact && (
                 <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm'>
@@ -256,7 +306,7 @@ const ClientDetail = () => {
                 horizontal: 'center',
             }}>
                 <Alert onClose={handleSnackbarClose} icon={<CheckCircleIcon />}
-                    style={{ backgroundColor: 'green', color: 'white' }} severity="succcess">
+                    style={{ backgroundColor: 'green', color: 'white' }} severity="success">
                     {successSnackbar}
                 </Alert>
             </Snackbar>

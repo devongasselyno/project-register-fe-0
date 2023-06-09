@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react"
 import api from '../../api/posts'
 import axios from "axios"
-import { Router, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { Navigate } from "react-router-dom"
-import { type } from "@testing-library/user-event/dist/type"
+// import { Navigate } from "react-router-dom"
+// import { type } from "@testing-library/user-event/dist/type"
 import Popup from "reactjs-popup"
 
 const ProspectDetail = () => {

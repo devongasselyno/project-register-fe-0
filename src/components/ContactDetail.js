@@ -119,19 +119,16 @@ const ContactDetail = () => {
                 }
             
                 const res = await axios.post('http://localhost:8080/api/clientcontact/create', contactData)
-
-                console.log("RES", res.data.data.D)
                 setClientContactID(res.data.data.ID)
 
                 const employmentData = {
                     ...employmentFormData,
-                    clientContactID
+                    client_contact_id: clientContactID
                 }
-
-                console.log("testtt", employmentData)
 
                 await axios.post('http://localhost:8080/api/employments/create', employmentData)
                 setShowEmploymentForm(false)
+                window.location.reload(false)
             } catch (error) {
                 console.log(error)
             }
@@ -202,11 +199,11 @@ const ContactDetail = () => {
 
     const columns = [
         { field: 'ID', headerName: 'ID' },
-        { field: 'job_title', headerName: 'Job Title' },
-        { field: 'client_name', headerName: 'Job Start' },
-        { field: 'alias', headerName: 'Job End' },
+        { field: 'job_title', headerName: 'Job Title', width: 140},
+        { field: 'job_start', headerName: 'Job Start', width:110},
+        { field: 'job_end', headerName: 'Job End' , width:110},
         { field: 'status', headerName: 'Status' },
-        { field: 'client_contact_id', headerName: 'Client Contact ID' },
+        { field: 'client_contact_id', headerName: 'Client Contact ID', width:125},
     ]
 
     const getRowId = (row) => row.ID
@@ -305,12 +302,13 @@ const ContactDetail = () => {
                 </div>
             </div>
 
-            <div>
+            <div className='mb-10 w-fit'>
                 <p className='font-bold text-xl mb-3'>Employments</p>
                 <DataGrid
                     rows={employments}
                     getRowId={getRowId}
                     columns={columns}
+                    sty
                     initialState={{
                         pagination: {
                             paginationModel: { page: 0, pageSize: 5 },

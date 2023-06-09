@@ -16,72 +16,62 @@ import ClientDetail from '../components/ClientDetail'
 import ContactDetail from '../components/ContactDetail'
 import CreateClient from '../components/forms/CreateClient'
 import DataTable from '../components/TableTest'
+import UpdateClient from '../components/forms/UpdateClient'
 
 const Router = () => {
     return (
-        <div>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/login" element={<SigninPage />} />
+        <BrowserRouter>
+            <Routes>
+                <Route path="/login" element={<SigninPage />} />
 
-                    <Route path='/dashboard' element={<App />}>
-                        <Route index element={<Main />} />
-                    </Route>
+                <Route path='/dashboard' element={<App />}>
+                    <Route index element={<Main />} />
+                </Route>
 
-                    <Route path='/prospect' element={<App />}>
-                        <Route index element={<ProspectList />} />
-                    </Route>
+                <Route path='/prospect' element={<App />}>
+                    <Route index element={<ProspectList />} />
+                </Route>
 
+                <Route path='/project' element={<App />}>
+                    <Route index element={<ProjectList />} />
+                </Route>
 
-                    <Route path='/project' element={<App />}>
-                        <Route index element={<ProjectList />} />
-                    </Route>
+                <Route path="/prospect/read/:id" element={<App />}>
+                    <Route index element={<ProspectDetail />} />
+                </Route>
 
-                    <Route path="/prospect/read/:id" element={<App />}>
-                        <Route index element={<ProspectDetail />} />
-                    </Route>
+                <Route path="/client" element={<App />}>
+                    <Route index element={<ClientList />} />
+                    <Route path="create" element={<CreateClient />} />
+                    <Route path="read/:id" element={<ClientDetail />} />
+                    <Route path="update/:id" element={<UpdateClient />} />
+                </Route>
 
-                    <Route path="/client/read/:id" element={<App />}>
-                        <Route index element={<ClientDetail />} />
-                    </Route>
+                <Route path="/contact/read/:id" element={<App />}>
+                    <Route index element={<ContactDetail />} />
+                </Route>
 
-                    <Route path="/contact/read/:id" element={<App />}>
-                        <Route index element={<ContactDetail />} />
-                    </Route>
+                <Route path='/prospect/create' element={<App />}>
+                    <Route index element={<CreateProspect />} />
+                </Route>
 
-                    <Route path='/prospect/create' element={<App />}>
-                        <Route index element={<CreateProspect />} />
-                    </Route>
+                <Route path='/clientcontact/create' element={<App />}>
+                    <Route index element={<CreateClientContact />} />
+                </Route>
 
-                    <Route path='/clientcontact/create' element={<App />}>
-                        <Route index element={<CreateClientContact />} />
-                    </Route>
+                <Route path='/contact/create' element={<App />}>
+                    <Route index element={<CreateContact />} />
+                </Route>
 
-                    <Route path='/contact/create' element={<App />}>
-                        <Route index element={<CreateContact />} />
-                    </Route>
+                <Route path='/contact' element={<App />}>
+                    <Route index element={<ContactList />} />
+                </Route>
 
-                    <Route path='/client' element={<App />}>
-                        <Route index element={<ClientList />} />
-                    </Route>
-
-                    <Route path='/contact' element={<App />}>
-                        <Route index element={<ContactList />} />
-                    </Route>
-
-                    <Route path='/client/create' element={<App />}>
-                        <Route index element={<CreateClient />} />
-                    </Route>
-                    {/* <Route path='/clientcontact' element={<App/>}>
-                        <Route index element={<ClientContactList />} />
-                    </Route> */}
-
-                    <Route path='/table' element={<App />}>
-                        <Route index element={<DataTable />} />
-                    </Route>
-                </Routes>
-            </BrowserRouter>
-        </div>
+                <Route path='/table' element={<App />}>
+                    <Route index element={<DataTable />} />
+                </Route>
+            </Routes>
+        </BrowserRouter>
     )
 }
 
