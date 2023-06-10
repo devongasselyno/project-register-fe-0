@@ -2,11 +2,11 @@ import { useEffect, useState, React } from 'react'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
 import api from '../api/posts'
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaEdit, FaTrash } from 'react-icons/fa';
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
-import { DataGrid } from '@mui/x-data-grid'
+import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 
 const ContactDetail = () => {
 
@@ -247,20 +247,20 @@ const ContactDetail = () => {
         fetchLocations()
     }, [])
 
-    useEffect(() => {
-        if (locationsList) {
-            const updatedLocationsList = locationsList.map((location) => ({
-                ID: location.ID,
-                address: location.address,
-                city: location.city.city_name,
-                province: location.province.province_name,
-                postal_code: location.postal_code,
-                country: location.country,
-                geo: location.geo,
-            }));
-            setLocationsList(updatedLocationsList);
-        }
-    }, [contact]);
+    // useEffect(() => {
+    //     if (locationsList) {
+    //         const updatedLocationsList = locationsList.map((location) => ({
+    //             ID: location.ID,
+    //             address: location.address,
+    //             // city_name: location.city.city_name,
+    //             province_name: location.province.province_name,
+    //             postal_code: location.postal_code,
+    //             country: location.country,
+    //             geo: location.geo,
+    //         }));
+    //         setLocationsList(updatedLocationsList);
+    //     }
+    // }, [contact]);
 
     const columns = [
         { field: 'ID', headerName: 'ID' },
@@ -274,11 +274,27 @@ const ContactDetail = () => {
     const locationColumns = [
         { field: 'ID', headerName: 'ID' },
         { field: 'address', headerName: 'Address', width: 200 },
-        { field: 'city', headerName: 'City', width: 150 },
-        { field: 'province', headerName: 'Province', width: 150 },
+        { field: 'city_name', headerName: 'City', width: 150, valueGetter: (params) => params.row.city.city_name  },
+        { field: 'province_name', headerName: 'Province', width: 150, valueGetter: (params) => params.row.province.province_name  },
         { field: 'postal_code', headerName: 'Postal Code', width: 120 },
         { field: 'country', headerName: 'Country', width: 150 },
         { field: 'geo', headerName: 'Geo', width: 150 },
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            renderCell: (params) => (
+                <div className="flex gap-3">
+                    <button className="text-lg">
+                        <FaTrash />
+                    </button>
+                    <button
+                        className="text-lg"
+                    >
+                        <FaEdit />
+                    </button>
+                </div>
+            ),
+        },
     ]
 
     const getRowId = (row) => row.ID
@@ -378,7 +394,11 @@ const ContactDetail = () => {
             </div>
 
             <div className='mb-10 w-fit'>
-                <p className='font-bold text-xl mb-3'>Locations</p>
+                <div>
+                    <p className='font-bold text-xl mb-3'>Locations</p>
+
+                </div>
+
                 <DataGrid
                     rows={locationsList}
                     getRowId={getRowId}
@@ -389,8 +409,16 @@ const ContactDetail = () => {
                             paginationModel: { page: 0, pageSize: 5 },
                         },
                     }}
+                    pageSize={5}
                     pageSizeOptions={[5, 10]}
                 />
+                <button
+                    variant="contained"
+                    color="primary"
+                    className="bg-red-700 font-bold my-2 text-white text-base text-bold py-2 px-4 rounded-md hover:bg-red-800 focus:outline-none"
+                >
+                    Add Location
+                </button>
             </div>
 
             <div className='mb-10 w-fit'>
