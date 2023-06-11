@@ -371,7 +371,7 @@ const ContactDetail = () => {
                     </div>
 
 
-                    <div className='py-5'>
+                    {/* <div className='py-5'>
                         <p className='font-bold text-xl mb-3'>Locations</p>
                         <table className='border-collapse'>
                             <thead>
@@ -397,7 +397,7 @@ const ContactDetail = () => {
                                 ))}
                             </tbody>
                         </table>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
