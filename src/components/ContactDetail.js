@@ -284,7 +284,7 @@ const ContactDetail = () => {
             headerName: 'Actions',
             renderCell: (params) => (
                 <div className="flex gap-3">
-                    <button className="text-lg">
+                    <button className="text-lg" onClick={() => deleteLocation(params.row.id)}>
                         <FaTrash />
                     </button>
                     <button
@@ -298,6 +298,14 @@ const ContactDetail = () => {
     ]
 
     const getRowId = (row) => row.ID
+
+    const deleteLocation = async (rowId) => {
+        try {
+            api.delete(`/locations/${rowId}`)
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     return (
         <div className='py-10 px-20 grid-flow-row'>
