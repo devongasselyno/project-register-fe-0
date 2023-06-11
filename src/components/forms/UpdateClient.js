@@ -245,19 +245,85 @@ const UpdateClient = () => {
                 <h1 className='text-xl font-bold py-5'>Subsidiary</h1>
                 <div className='pb-2'>
                     <label htmlFor="subsidiaries" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Subsidiaries</label>
-                    <input id='subsidiaries' name='subsidiary.subsidiaries' type="text" value={formData.subsidiary.subsidiaries} onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5' />
+                    <div className="mt-1">
+                        {formData.subsidiary.subsidiaries.map((tag) => (
+                            <span key={tag} className="inline-block bg-gray-200 rounded-md px-3 py-1 text-sm font-normal text-gray-700 mr-2 mb-2">
+                                {tag}
+                                <button
+                                    className="ml-2 text-slate-900 hover:text-red-600"
+                                    onClick={handleRemoveTag('subsidiaries', tag)}
+                                >
+                                    &times;
+                                </button>
+                            </span>
+                        ))}
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full pb-2 p-2.5"
+                            value={inputValues.subsidiaries}
+                            onChange={(event) => handleTagInputChange(event, 'subsidiaries')}
+                            placeholder='Insert other'
+                            onKeyDown={(event) => handleKeyPress(event, 'subsidiaries')}
+                        />
+                    </div>
                     {errors.subsidiaries && <p className="text-red-500">{errors.subsidiaries}</p>}
                 </div>
 
                 <div className='pb-2'>
                     <label htmlFor="immidiate_parents" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Immediate Parents</label>
-                    <input id='immidiate_parents' name='subsidiary.immidiate_parents' type="text" value={formData.subsidiary.immidiate_parents} onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5' />
+                    <div className="mt-1">
+                        {formData.subsidiary.immidiate_parents.map((tag) => (
+                            <span key={tag} className="inline-block bg-gray-200 rounded-md px-3 py-1 text-sm font-normal text-gray-700 mr-2 mb-2">
+                                {tag}
+                                <button
+                                    className="ml-2 text-slate-900 hover:text-red-600"
+                                    onClick={handleRemoveTag('immediate_parents', tag)}
+                                >
+                                    &times;
+                                </button>
+                            </span>
+                        ))}
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full pb-2 p-2.5"
+                            value={inputValues.immidiate_parents}
+                            onChange={(event) => handleTagInputChange(event, 'immediate_parents')}
+                            placeholder='Insert other'
+                            onKeyDown={(event) => handleKeyPress(event, 'immediate_parents')}
+                        />
+                    </div>
                     {errors.immidiate_parents && <p className="text-red-500">{errors.immidiate_parents}</p>}
                 </div>
 
                 <div className='pb-2'>
                     <label htmlFor="ultimate_parents" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Ultimate Parents</label>
-                    <input id='ultimate_parents' name='subsidiary.ultimate_parents' type="text" value={formData.subsidiary.ultimate_parents} onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5' />
+                    <div className="mt-1">
+                        {formData.subsidiary.ultimate_parents.map((tag) => (
+                            <span key={tag} className="inline-block bg-gray-200 rounded-md px-3 py-1 text-sm font-normal text-gray-700 mr-2 mb-2">
+                                {tag}
+                                <button
+                                    className="ml-2 text-slate-900 hover:text-red-600"
+                                    onClick={handleRemoveTag('ultimate_parents', tag)}
+                                >
+                                    &times;
+                                </button>
+                            </span>
+                        ))}
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full pb-2 p-2.5"
+                            value={inputValues.ultimate_parents}
+                            onChange={(event) => handleTagInputChange(event, 'ultimate_parents')}
+                            placeholder='Insert other'
+                            onKeyDown={(event) => handleKeyPress(event, 'ultimate_parents')}
+                        />
+                    </div>
                     {errors.ultimate_parents && <p className="text-red-500">{errors.ultimate_parents}</p>}
                 </div>
 
