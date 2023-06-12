@@ -284,7 +284,7 @@ const ContactDetail = () => {
             headerName: 'Actions',
             renderCell: (params) => (
                 <div className="flex gap-3">
-                    <button className="text-lg">
+                    <button className="text-lg" onClick={() => deleteLocation(params.row.id)}>
                         <FaTrash />
                     </button>
                     <button
@@ -298,6 +298,14 @@ const ContactDetail = () => {
     ]
 
     const getRowId = (row) => row.ID
+
+    const deleteLocation = async (rowId) => {
+        try {
+            api.delete(`/locations/${rowId}`)
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     return (
         <div className='py-10 px-20 grid-flow-row'>
@@ -363,7 +371,7 @@ const ContactDetail = () => {
                     </div>
 
 
-                    <div className='py-5'>
+                    {/* <div className='py-5'>
                         <p className='font-bold text-xl mb-3'>Locations</p>
                         <table className='border-collapse'>
                             <thead>
@@ -389,7 +397,7 @@ const ContactDetail = () => {
                                 ))}
                             </tbody>
                         </table>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
