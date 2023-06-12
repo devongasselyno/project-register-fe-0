@@ -48,7 +48,7 @@ const UpdateClient = () => {
                         ...prevFormData,
                         client_social_presence: {
                             ...prevFormData.client_social_presence,
-                            other: [...prevFormData.client_social_presence.other, inputValues[fielad].trim()],
+                            other: [...prevFormData.client_social_presence.other, inputValues[field].trim()],
                         }
                     }
                 } else if (["subsidiaries", "immidiate_parents", "ultimate_parents"].includes(field)) {
