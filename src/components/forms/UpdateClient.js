@@ -49,7 +49,7 @@ const UpdateClient = () => {
                         ...prevFormData,
                         client_social_presence: {
                             ...prevFormData.client_social_presence,
-                            other: [...prevFormData.client_social_presence.other, inputValues[fielad].trim()],
+                            other: [...prevFormData.client_social_presence.other, inputValues[field].trim()],
                         }
                     }
                 } else if (["subsidiaries", "immidiate_parents", "ultimate_parents"].includes(field)) {
@@ -57,10 +57,11 @@ const UpdateClient = () => {
                         ...prevFormData,
                         subsidiary: {
                             ...prevFormData.subsidiary,
-                            [field]: [...prevFormData.subsidiary[field], inputValues.trim()],
+                            [field]: [...prevFormData.subsidiary[field], inputValues[field].trim()],
                         }
                     }
                 }
+                
             })
             setInputValues((prevInputValues) => ({
                 ...prevInputValues,
@@ -92,6 +93,7 @@ const UpdateClient = () => {
     }
 
     const handleChange = (e) => {
+        e.preventDefault()
         const { name, value } = e.target;
         const updatedFormData = { ...formData }
 
@@ -114,7 +116,7 @@ const UpdateClient = () => {
         console.log("formData:", formData)
         try {
             await axios.patch(`http://localhost:8080/api/client/${id}`, formData);
-            navigate(`/client/read/${id}`);
+            // navigate(`/client/read/${id}`);
         } catch (error) {
             console.error('Failed to update client: ', error)
         }
@@ -215,14 +217,13 @@ const UpdateClient = () => {
 
                 <div className='pb-2'>
                     <label htmlFor="other" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Other Social Media</label>
-                    <input id='other' name='client_social_presence.other' type="text" value={formData.client_social_presence.other} onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5' />
                     <div className="mt-1">
                         {formData.client_social_presence.other.map((tag) => (
                             <span key={tag} className="inline-block bg-gray-200 rounded-md px-3 py-1 text-sm font-normal text-gray-700 mr-2 mb-2">
                                 {tag}
                                 <button
                                     className="ml-2 text-slate-900 hover:text-red-600"
-                                    onClick={handleRemoveTag('other', tag)}
+                                    onClick={() => handleRemoveTag('other', tag)}
                                 >
                                     &times;
                                 </button>
@@ -251,7 +252,7 @@ const UpdateClient = () => {
                                 {tag}
                                 <button
                                     className="ml-2 text-slate-900 hover:text-red-600"
-                                    onClick={handleRemoveTag('subsidiaries', tag)}
+                                    onClick={() => handleRemoveTag('subsidiaries', tag)}
                                 >
                                     &times;
                                 </button>
@@ -279,7 +280,7 @@ const UpdateClient = () => {
                                 {tag}
                                 <button
                                     className="ml-2 text-slate-900 hover:text-red-600"
-                                    onClick={handleRemoveTag('immediate_parents', tag)}
+                                    onClick={() => handleRemoveTag('immidiate_parents', tag)}
                                 >
                                     &times;
                                 </button>
@@ -291,9 +292,9 @@ const UpdateClient = () => {
                             type="text"
                             className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full pb-2 p-2.5"
                             value={inputValues.immidiate_parents}
-                            onChange={(event) => handleTagInputChange(event, 'immediate_parents')}
+                            onChange={(event) => handleTagInputChange(event, 'immidiate_parents')}
                             placeholder='Insert other'
-                            onKeyDown={(event) => handleKeyPress(event, 'immediate_parents')}
+                            onKeyDown={(event) => handleKeyPress(event, 'immidiate_parents')}
                         />
                     </div>
                     {errors.immidiate_parents && <p className="text-red-500">{errors.immidiate_parents}</p>}
@@ -307,7 +308,7 @@ const UpdateClient = () => {
                                 {tag}
                                 <button
                                     className="ml-2 text-slate-900 hover:text-red-600"
-                                    onClick={handleRemoveTag('ultimate_parents', tag)}
+                                    onClick={() => handleRemoveTag('ultimate_parents', tag)}
                                 >
                                     &times;
                                 </button>

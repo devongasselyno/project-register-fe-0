@@ -299,9 +299,9 @@ const ContactDetail = () => {
 
     const getRowId = (row) => row.ID
 
-    const deleteLocation = async (rowId) => {
+    const deleteLocation = async (event) => {
         try {
-            api.delete(`/locations/${rowId}`)
+            api.delete(`/locations/${event}`)
         } catch (error) {
             console.error(error)
         }
