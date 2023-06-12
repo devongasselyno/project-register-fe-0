@@ -17,6 +17,7 @@ import ContactDetail from '../components/ContactDetail'
 import CreateClient from '../components/forms/CreateClient'
 import DataTable from '../components/TableTest'
 import UpdateClient from '../components/forms/UpdateClient'
+import UpdateContact from '../components/forms/UpdateContact'
 
 const Router = () => {
     return (
@@ -47,8 +48,11 @@ const Router = () => {
                     <Route path="update/:id" element={<UpdateClient />} />
                 </Route>
 
-                <Route path="/contact/read/:id" element={<App />}>
-                    <Route index element={<ContactDetail />} />
+                <Route path="/contact" element={<App />}>
+                    <Route index element={<ContactList />} />
+                    <Route path='read/:id' element={<ContactDetail />} />
+                    <Route path='create' element={<CreateContact />} />
+                    <Route path='update/:id' element={<UpdateContact />} />
                 </Route>
 
                 <Route path='/prospect/create' element={<App />}>
@@ -57,14 +61,6 @@ const Router = () => {
 
                 <Route path='/clientcontact/create' element={<App />}>
                     <Route index element={<CreateClientContact />} />
-                </Route>
-
-                <Route path='/contact/create' element={<App />}>
-                    <Route index element={<CreateContact />} />
-                </Route>
-
-                <Route path='/contact' element={<App />}>
-                    <Route index element={<ContactList />} />
                 </Route>
 
                 <Route path='/table' element={<App />}>

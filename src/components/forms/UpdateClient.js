@@ -5,7 +5,6 @@ import axios from 'axios'
 const UpdateClient = () => {
     const navigate = useNavigate()
     const { id } = useParams()
-    const [client, setClient] = useState({})
     const [errors, setErrors] = useState({})
     const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState({
@@ -127,8 +126,7 @@ const UpdateClient = () => {
             try {
                 const response = await axios.get(`http://localhost:8080/api/client/read/${id}`);
                 const clientData = response.data.data;
-                setClient(clientData);
-
+        
                 setFormData((prevData) => ({
                     ...prevData,
                     client_code: clientData.client_code || '',
@@ -189,7 +187,7 @@ const UpdateClient = () => {
                 </div>
 
 
-                <h1 className='text-xl font-bold py-5'>Client Social Presence</h1>
+                <h1 className='text-xl font-bold mt-5'>Client Social Presence</h1>
                 <div className='pb-2'>
                     <label htmlFor="linkedin" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Linkedin</label>
                     <input id='linkedin' name='client_social_presence.linkedin' type="text" value={formData.client_social_presence.linkedin} onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5' />
@@ -243,7 +241,7 @@ const UpdateClient = () => {
                     {errors.other && <p className="text-red-500">{errors.other}</p>}
                 </div>
 
-                <h1 className='text-xl font-bold py-5'>Subsidiary</h1>
+                <h1 className='text-xl font-bold mt-5'>Subsidiary</h1>
                 <div className='pb-2'>
                     <label htmlFor="subsidiaries" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Subsidiaries</label>
                     <div className="mt-1">
