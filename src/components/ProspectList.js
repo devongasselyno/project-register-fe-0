@@ -31,9 +31,9 @@ const ProspectList = () => {
     fetchPosts();
   }, [])
 
-  if (loading && posts.length === 0){
-    return <h2>Loading...</h2>
-  }
+  // if (loading && posts.length === 0){
+  //   return <h2>Loading...</h2>
+  // }
 
   return (
     <div className='py-10 px-20'>

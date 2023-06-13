@@ -25,6 +25,7 @@ const UpdateClient = () => {
             ultimate_parents: []
         }
     })
+    
     const [inputValues, setInputValues] = useState({
         other: '',
         subsidiaries: '',
@@ -36,8 +37,8 @@ const UpdateClient = () => {
         setInputValues((prevInputValues) => ({
             ...prevInputValues,
             [field]: event.target.value,
-        }));
-    };
+        }))
+    }
 
     const handleKeyPress = (event, field) => {
         if (event.key === 'Enter' && inputValues[field].trim() !== '') {
@@ -120,6 +121,8 @@ const UpdateClient = () => {
             console.error('Failed to update client: ', error)
         }
     }
+
+    
 
     useEffect(() => {
         const fetchClient = async () => {

@@ -8,25 +8,34 @@ const UpdateContact = () => {
     const [errors, setErrors] = useState({})
     const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState({
-            contact_name: '',
-            contact_alias: '',
-            gender: '',
-            birth_date: '',
-            religion: '',
-            contact_emails: [],
-            contact_phones: [],
-            interests: [],
-            skills: [],
-            educations: [],
-            notes: '',
-            contact_social_presence: {
-                linkedin: '',
-                facebook: '',
-                twitter: '',
-                github: '',
-                other: []
-            },
-      })
+        contact_name: '',
+        contact_alias: '',
+        gender: '',
+        birth_date: '',
+        religion: '',
+        contact_emails: [],
+        contact_phones: [],
+        interests: [],
+        skills: [],
+        educations: [],
+        notes: '',
+        contact_social_presence: {
+            linkedin: '',
+            facebook: '',
+            twitter: '',
+            github: '',
+            other: []
+        },
+    })
+
+    const [inputValues, setInputValues] = useState({
+        other: '',
+        contact_emails: '',
+        contact_phones: '',
+        interests: '',
+        skills: '',
+        educations: '',
+    })
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -43,6 +52,47 @@ const UpdateContact = () => {
     
         setFormData(updatedFormData)
     }
+
+
+    const handleTagInputChange = (event, field) => {
+        setInputValues((prevInputValues) => ({
+            ...prevInputValues,
+            [field]: event.target.value,
+        }))
+    }
+
+    const handleKeyPress = (event, field) => {
+        if (event.key === 'Enter' && inputValues[field].trim() !== '') {
+          event.preventDefault();
+          setFormData((prevFormData) => {
+            if (Array.isArray(prevFormData[field])) {
+              return {
+                ...prevFormData,
+                [field]: [...prevFormData[field], inputValues[field].trim()],
+              };
+            } else {
+              return prevFormData;
+            }
+          });
+          setInputValues((prevInputValues) => ({
+            ...prevInputValues,
+            [field]: '',
+          }));
+        }
+      };
+      
+      const handleRemoveTag = (field, tag) => {
+        setFormData((prevFormData) => {
+          if (Array.isArray(prevFormData[field])) {
+            return {
+              ...prevFormData,
+              [field]: prevFormData[field].filter((t) => t !== tag),
+            };
+          } else {
+            return prevFormData;
+          }
+        })
+      }
         
 
     const handleSubmit = async (e) => {
@@ -107,7 +157,7 @@ const UpdateContact = () => {
                 </div>
 
                 <div className='pb-2'>
-                    <label htmlFor="contact_alias" className='block text-sm font-medium leading-6 text-gray-900 py-1'>contact_alias</label>
+                    <label htmlFor="contact_alias" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Contact Alias</label>
                     <input id='contact_alias' name='contact_alias' type="text" value={formData.contact_alias}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
                     {errors.contact_alias && <p className="text-red-500">{errors.contact_alias}</p>}
                 </div>
@@ -132,38 +182,142 @@ const UpdateContact = () => {
 
                 <div className='pb-2'>
                     <label htmlFor="contact_emails" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Contact Emails</label>
-                    <input id='contact_emails' name='contact_emails' type="text" value={formData.contact_emails}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
-                    {errors.contact_emails && <p className="text-red-500">{errors.contact_emails}</p>}
+                    <div className="mt-1">
+                        {formData.contact_emails.map((tag) => (
+                            <span key={tag} className="inline-block bg-gray-200 rounded-md px-3 py-1 text-sm font-normal text-gray-700 mr-2 mb-2">
+                                {tag}
+                                <button
+                                    className="ml-2 text-slate-900 hover:text-red-600"
+                                    onClick={() => handleRemoveTag('contact_emails', tag)}
+                                >
+                                    &times;
+                                </button>
+                            </span>
+                        ))}
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full pb-2 p-2.5"
+                            value={inputValues.contact_emails}
+                            onChange={(event) => handleTagInputChange(event, 'contact_emails')}
+                            placeholder='Insert contact emails'
+                            onKeyDown={(event) => handleKeyPress(event, 'contact_emails')}
+                        />
+                    </div>
+                    {errors.contact_phones && <p className="text-red-500">{errors.contact_emails}</p>}
                 </div>
-
+                
                 <div className='pb-2'>
                     <label htmlFor="contact_phones" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Contact Phones</label>
-                    <input id='contact_phones' name='contact_phones' type="text" value={formData.contact_phones}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
+                    <div className="mt-1">
+                        {formData.contact_phones.map((tag) => (
+                            <span key={tag} className="inline-block bg-gray-200 rounded-md px-3 py-1 text-sm font-normal text-gray-700 mr-2 mb-2">
+                                {tag}
+                                <button
+                                    className="ml-2 text-slate-900 hover:text-red-600"
+                                    onClick={() => handleRemoveTag('contact_phones', tag)}
+                                >
+                                    &times;
+                                </button>
+                            </span>
+                        ))}
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full pb-2 p-2.5"
+                            value={inputValues.contact_phones}
+                            onChange={(event) => handleTagInputChange(event, 'contact_phones')}
+                            placeholder='Insert contact phones'
+                            onKeyDown={(event) => handleKeyPress(event, 'contact_phones')}
+                        />
+                    </div>
                     {errors.contact_phones && <p className="text-red-500">{errors.contact_phones}</p>}
                 </div>
 
                 <div className='pb-2'>
-                    <label htmlFor="skills" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Skills</label>
-                    <input id='skills' name='skills' type="text" value={formData.skills}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
-                    {errors.skills && <p className="text-red-500">{errors.skills}</p>}
-                </div>
-
-                <div className='pb-2'>
                     <label htmlFor="interests" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Interests</label>
-                    <input id='interests' name='interests' type="text" value={formData.interests}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
+                    <div className="mt-1">
+                        {formData.interests.map((tag) => (
+                            <span key={tag} className="inline-block bg-gray-200 rounded-md px-3 py-1 text-sm font-normal text-gray-700 mr-2 mb-2">
+                                {tag}
+                                <button
+                                    className="ml-2 text-slate-900 hover:text-red-600"
+                                    onClick={() => handleRemoveTag('interests', tag)}
+                                >
+                                    &times;
+                                </button>
+                            </span>
+                        ))}
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full pb-2 p-2.5"
+                            value={inputValues.interests}
+                            onChange={(event) => handleTagInputChange(event, 'interests')}
+                            placeholder='Insert interests'
+                            onKeyDown={(event) => handleKeyPress(event, 'interests')}
+                        />
+                    </div>
                     {errors.interests && <p className="text-red-500">{errors.interests}</p>}
                 </div>
 
                 <div className='pb-2'>
                     <label htmlFor="skills" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Skills</label>
-                    <input id='skills' name='skills' type="text" value={formData.skills}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
+                    <div className="mt-1">
+                        {formData.skills.map((tag) => (
+                            <span key={tag} className="inline-block bg-gray-200 rounded-md px-3 py-1 text-sm font-normal text-gray-700 mr-2 mb-2">
+                                {tag}
+                                <button
+                                    className="ml-2 text-slate-900 hover:text-red-600"
+                                    onClick={() => handleRemoveTag('skills', tag)}
+                                >
+                                    &times;
+                                </button>
+                            </span>
+                        ))}
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full pb-2 p-2.5"
+                            value={inputValues.skills}
+                            onChange={(event) => handleTagInputChange(event, 'skills')}
+                            placeholder='Insert skills'
+                            onKeyDown={(event) => handleKeyPress(event, 'skills')}
+                        />
+                    </div>
                     {errors.skills && <p className="text-red-500">{errors.skills}</p>}
                 </div>
 
                 
                 <div className='pb-2'>
                     <label htmlFor="educations" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Educations</label>
-                    <input id='educations' name='educations' type="text" value={formData.educations}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
+                    <div className="mt-1">
+                        {formData.educations.map((tag) => (
+                            <span key={tag} className="inline-block bg-gray-200 rounded-md px-3 py-1 text-sm font-normal text-gray-700 mr-2 mb-2">
+                                {tag}
+                                <button
+                                    className="ml-2 text-slate-900 hover:text-red-600"
+                                    onClick={() => handleRemoveTag('educations', tag)}
+                                >
+                                    &times;
+                                </button>
+                            </span>
+                        ))}
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full pb-2 p-2.5"
+                            value={inputValues.educations}
+                            onChange={(event) => handleTagInputChange(event, 'educations')}
+                            placeholder='Insert educations'
+                            onKeyDown={(event) => handleKeyPress(event, 'educations')}
+                        />
+                    </div>
                     {errors.educations && <p className="text-red-500">{errors.educations}</p>}
                 </div>
 
@@ -201,7 +355,29 @@ const UpdateContact = () => {
 
                 <div className='pb-2'>
                     <label htmlFor="other" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Other Social Media</label>
-                    <input id='other' name='contact_social_presence.other' type="text" value={formData.contact_social_presence.other}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
+                    <div className="mt-1">
+                        {formData.contact_social_presence.other.map((tag) => (
+                            <span key={tag} className="inline-block bg-gray-200 rounded-md px-3 py-1 text-sm font-normal text-gray-700 mr-2 mb-2">
+                                {tag}
+                                <button
+                                    className="ml-2 text-slate-900 hover:text-red-600"
+                                    onClick={() => handleRemoveTag('other', tag)}
+                                >
+                                    &times;
+                                </button>
+                            </span>
+                        ))}
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full pb-2 p-2.5"
+                            value={inputValues.other}
+                            onChange={(event) => handleTagInputChange(event, 'other')}
+                            placeholder='Insert other'
+                            onKeyDown={(event) => handleKeyPress(event, 'other')}
+                        />
+                    </div>
                     {errors.other && <p className="text-red-500">{errors.other}</p>}
                 </div>
 
