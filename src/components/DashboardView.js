@@ -33,8 +33,8 @@ function DashboardView() {
     const navigate = useNavigate();
 
     const handleProspectClick = (id) => {
-      window.location.href(`/prospect/read/${id}`);
-    };
+      navigate(`/prospect/read/${id}`)
+    }
 
     const [prospects, setProspects] = useState([])
     useEffect(() => {
@@ -55,7 +55,7 @@ function DashboardView() {
     
 
       const handleOnSearch = (string, results) => {
-          console.log(string, results)
+         console.log(string, results)
       }
     
       const handleOnHover = (result) => {
@@ -64,6 +64,7 @@ function DashboardView() {
     
       const handleOnSelect = (prospects) => {
         console.log(prospects)
+        handleProspectClick(prospects.ID)
       }
     
       const handleOnFocus = () => {
@@ -115,7 +116,6 @@ function DashboardView() {
         <div className='w-96 ml-16'>
             <ReactSearchAutocomplete
                 items={prospects}
-                // items={items}
                 fuseOptions={{ keys: ["name"] }}
                 onSearch={handleOnSearch}
                 onHover={handleOnHover}
@@ -132,9 +132,6 @@ function DashboardView() {
                 <h1>{date}</h1>
                 <Clock className='float-right' format={'HH:mm A'} ticking={true}  />
             </div>
-
-            
-
 
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -163,7 +160,7 @@ function DashboardView() {
                   <Menu.Item>
                     {({ active }) => (
                       <a
-                        href="signin"
+                        href="#"
                         className={classNames(
                           active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                           'block px-4 py-2 text-sm'
@@ -176,15 +173,15 @@ function DashboardView() {
                   <form method="POST" action="#">
                     <Menu.Item>
                       {({ active }) => (
-                        <button
-                          type="submit"
-                          className={classNames(
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                            'block w-full px-4 py-2 text-left text-sm'
-                          )}
+                        <a
+                        href='login'
+                        className={classNames(
+                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                          'block px-4 py-2 text-sm'
+                        )}
                         >
                           Sign out
-                        </button>
+                        </a>
                       )}
                     </Menu.Item>
                   </form>
@@ -192,35 +189,6 @@ function DashboardView() {
               </Menu.Items>
             </Transition>
           </Menu>
-        
-      
-
-            {/* <div className='flex items-center gap-4 relative'>
-                
-                <div onClick={() => setIsOpen((prev) => !prev)} className='  cursor-pointer flex items-center justify-center relative'>
-                    <p>James Bond</p>
-                    {
-                        !isOpen ? (
-                            <FaCaretDown className='h-5'/>
-                        ) : (
-                            <FaCaretUp className='h-5' />
-                        )
-                    }
-                </div>
-
-                {
-                    isOpen && <div className=' bg-slate-100 absolute top-20 flex flex-col items-start rounded-lg p-2 w-full'>
-                        <div className='w-full justify-between cursor-pointer rounded-r-lg border-l-transparent'>
-                          <div className='hover:bg-blue-300'>
-                              <a href=''>Profile</a>
-                          </div>
-                          <div className='hover:bg-blue-300'>
-                              <a href='/login'>Log out</a>
-                          </div>
-                        </div>
-                    </div>
-                }
-            </div> */}
             
         </div>
     </div>

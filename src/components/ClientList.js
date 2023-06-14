@@ -110,7 +110,7 @@ const ClientList = () => {
                 />
             </div>
 
-            <nav aria-label="Page navigation example" className='pagination py-7'>
+            {/* <nav aria-label="Page navigation example" className='pagination py-7'>
                 <ul class="inline-flex items-center -space-x-px">
                     <li>
                         <a onClick={prevPage} href="#" className="flex items-center justify-center h-8 w-8 rounded border border-gray-300 bg-white text-gray-900 rtl:rotate-180 hover:bg-[#4E73DF] hover:text-white">
@@ -136,7 +136,7 @@ const ClientList = () => {
                         </a>
                     </li>
                 </ul>
-            </nav>
+            </nav> */}
 
         </div>
     )

@@ -312,21 +312,31 @@ const CreateProspect = () => {
                             </select>
                             {errors.company && <p className="text-red-500 text-sm pt-1 pl-1">{errors.company}</p>}
 
+
                             <label htmlFor="client" className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">Client</label>
-                            <select id="client" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5" value={client} onChange={(e) => {
-                                const selectedClientId = parseInt(e.target.value, 10);
-                                console.log('Client:', selectedClientId);
-                                setClient(selectedClientId);
-                            }}>
+                            <select
+                                id="client"
+                                className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5"
+                                value={client}
+                                onChange={(e) => {
+                                    const selectedClientId = parseInt(e.target.value, 10);
+                                    console.log('Client:', selectedClientId);
+                                    setClient(selectedClientId);
+                                }}
+                                >
                                 <option value="">Select Client</option>
-                                {Array.isArray(clients.data) &&
-                                    clients.data.map((client) => (
+                                {Array.isArray(clients.data)
+                                    ? clients.data
+                                        .sort((a, b) => a.client_name.localeCompare(b.client_name)) // Sort the array by client_name
+                                        .map((client) => (
                                         <option key={client.ID} value={client.ID}>
                                             {client.client_name}
                                         </option>
-                                    ))}
-                            </select>
+                                        ))
+                                    : null}
+                                </select>
                             {errors.client && <p className="text-red-500 text-sm pt-1 pl-1">{errors.client}</p>}
+
 
                             <div className="flex flex-wrap gap-4 mx-auto my-3 px-1 py-1 justify-between">
                                 <div className="flex items-center">
