@@ -179,6 +179,9 @@ const CreateContact = () => {
             } catch (error) {
                 console.error('Failed to create location', error);
             }
+        } else {
+            const id = locations.contact_id
+            navigate(`/contact/read/${id}`);
         }
     }
 
@@ -262,13 +265,23 @@ const CreateContact = () => {
         } else {
             setContact({ ...contact, [field]: values });
         }
-
     }
 
-    const handleLocationChange = (field, values) => {
+    const handleLocationChange = async (field, values) => {
         if (field === 'city_id' || field === 'province_id') {
             const id = parseInt(values, 10)
-            setLocations({ ...locations, [field]: id })
+            if (field === 'province_id') {
+                setLocations({ ...locations, [field]: id })
+                try {
+                    const response = await api.get(`/city/filter/${id}`)
+                    setCities(response.data)
+                } catch (error) {
+                    console.log(error)
+                }
+            } else {
+                setLocations({ ...locations, [field]: id})
+            }
+            console.log([field], values)
         } else {
             setLocations({ ...locations, [field]: values })
         }
@@ -825,7 +838,7 @@ const CreateContact = () => {
                                             id="city"
                                             value={locations.city_id}
                                             onChange={(event) => handleLocationChange('city_id', event.target.value)}>
-                                            <option value="">Select City</option>
+                                                <option value="">Select City</option>
                                             {Array.isArray(cities.data) &&
                                                 cities.data.map((city) => (
                                                     <option key={city.ID} value={city.ID}>
@@ -879,7 +892,7 @@ const CreateContact = () => {
                                 <div className="flex gap-5 w-full">
                                     <button type="button" onClick={handleAddLocation} className="mt-4 font-light bg-slate-600 text-white text-base text-bold w-full py-2 px-4 max-w-full rounded-md hover:bg-slate-700 focus:outline-none">Add Location</button>
                                     <button type="button" onClick={handleClearForm} className="mt-4 font-light bg-red-800 text-white text-base text-bold w-full py-2 px-4 max-w-full rounded-md hover:bg-amber-700 focus:outline-none">Clear</button>
-                                    <button type="submit" onClick={handleSubmitLocation} className="mt-4 font-light bg-emerald-700 text-white text-base text-bold w-full py-2 px-4 max-w-full rounded-md hover:bg-emerald-700 focus:outline-none">Submit & Exit</button>
+                                    <button type="submit" onClick={handleSubmitLocation} className="mt-4 font-light bg-emerald-600 text-white text-base text-bold w-full py-2 px-4 max-w-full rounded-md hover:bg-emerald-700 focus:outline-none">Submit & Exit</button>
                                 </div>
                             </div>
                         </div>
