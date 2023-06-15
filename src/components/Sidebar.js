@@ -45,7 +45,6 @@ const Sidebar = () => {
           <div className='pl-8 mt-3 gap-y-3 overflow-hidden transition-all duration-500 ease-in-out grid'>
             <a href='/client' className="text-sm leading-5 font-bold text-white transition-opacity delay-150">Clients</a>
             <a href='/contact' className="text-sm leading-5 font-bold text-white transition-opacity delay-300">Contacts</a>
-            <a href='/clientcontact' className="text-sm leading-5 font-bold text-white transition-opacity delay-450">Client Contacts</a>
           </div>
         )}
       </div>
