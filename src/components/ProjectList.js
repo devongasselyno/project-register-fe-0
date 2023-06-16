@@ -58,7 +58,6 @@ const ProjectList = () => {
                 rows={posts}
                 getRowId={getRowId}
                 columns={columns}
-                sty
                 initialState={{
                     pagination: {
                         paginationModel: { page: 0, pageSize: 5 },

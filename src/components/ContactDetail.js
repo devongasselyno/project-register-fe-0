@@ -318,7 +318,7 @@ const ContactDetail = () => {
                         <p><span className='font-bold'>ID:</span>{contact.ID}</p>
                         <p><span className='font-bold'>Contact Name:</span>{contact.contact_name || '-'}</p>
                         <p><span className='font-bold'>Alias:</span> {contact.contact_alias || '-'}</p>
-                        <p><span className='font-bold'>Gender:</span> {contact.gender === "1" ? "Male" : contact.gender === "0" ? "Female" : "-"}</p>
+                        <p><span className='font-bold'>Gender:</span> {contact.gender || '-'}</p>
                         <p><span className='font-bold'>Birth Date:</span> {contact.birth_date || '-'}</p>
                         <p><span className='font-bold'>Religion:</span> {contact.religion || '-'}</p>
                     </div>
