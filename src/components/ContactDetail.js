@@ -284,7 +284,7 @@ const ContactDetail = () => {
             headerName: 'Actions',
             renderCell: (params) => (
                 <div className="flex gap-3">
-                    <button className="text-lg" onClick={() => deleteLocation(params.row.id)}>
+                    <button className="text-lg" onClick={() => deleteLocation(params.row.ID)}>
                         <FaTrash />
                     </button>
                     <button
@@ -299,12 +299,13 @@ const ContactDetail = () => {
 
     const getRowId = (row) => row.ID
 
-    const deleteLocation = async (event) => {
+    const deleteLocation = async (id) => {
         try {
-            api.delete(`/locations/${event}`)
+            api.delete(`/locations/${id}`)
         } catch (error) {
             console.error(error)
         }
+        fetchLocations()
     }
 
     return (
