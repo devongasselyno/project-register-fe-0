@@ -25,32 +25,39 @@ const Updateproject = () => {
 
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, type, checked } = e.target;
+        const newValue = type === 'checkbox' ? checked : value;
+        
         setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: value,
-        }));
+          ...prevFormData,
+          [name]: newValue,
+        }))
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        const selectedClient = clients.find((client) => client.id === formData.client_id);
-        const selectedCompany = companies.find((company) => company.id === formData.company_id);
+        // const selectedClient = clients.find((client) => client.id === formData.client_id);
+        // const selectedCompany = companies.find((company) => company.id === formData.company_id);
       
-        const updatedFormData = {
-            ...formData,
-            client_name: selectedClient ? selectedClient.name : '',
-            company_name: selectedCompany ? selectedCompany.name : '',
-        }
+        // const updatedFormData = {
+        //     ...formData,
+        //     client_name: selectedClient ? selectedClient.name : '',
+        //     company_name: selectedCompany ? selectedCompany.name : '',
+        // }
 
-        console.log("formData:", updatedFormData)
+        formData.client_id = parseInt(formData.client_id)
+        formData.company_id = parseInt(formData.company_id)
+
+        console.log("formData:", formData)
         try {
-            await axios.patch(`http://localhost:8080/api/projects/update/${id}`, formData);
+            await axios.patch(`http://localhost:8080/api/prospect/update/${id}`, formData);
             navigate(`/project/read/${id}`);
         } catch (error) {
             console.error('Failed to update project: ', error)
         }
+
+        navigate(`/prospect/read/${id}`)
     }
 
     useEffect(() => {
@@ -181,14 +188,14 @@ const Updateproject = () => {
                     </div>
 
                     <div className='pb-2 flex items-center gap-2'>
+                        <input id='pcs' name='pcs' type="checkbox" checked={formData.pcs} onChange={handleChange} onClick={() => console.log("valueeee", formData.pcs)} className='w-4 h-4 bg-gray-100 border border-zinc-400 text-orange-600 text-sm rounded focus:ring-orange-700 focus:border-orange-700'/>
                         <label htmlFor="pcs" className='block text-sm font-medium leading-6 text-gray-900 py-1'>PCS</label>
-                        <input id='pcs' name='pcs' type="checkbox" checked={formData.pcs} onChange={handleChange} className='w-4 h-4 bg-gray-100 border border-zinc-400 text-orange-600 text-sm rounded focus:ring-orange-700 focus:border-orange-700'/>
                         {errors.pcs && <p className="text-red-500">{errors.pcs}</p>}
                     </div>
 
                     <div className='pb-2 flex items-center gap-2'>
-                        <label htmlFor="pms" className='block text-sm font-medium leading-6 text-gray-900 py-1'>PMS</label>
                         <input id='pms' name='pms' type="checkbox" checked={formData.pms} onChange={handleChange} className='w-4 h-4 bg-gray-100 border border-zinc-400 text-orange-600 text-sm rounded focus:ring-orange-700 focus:border-orange-700'/>
+                        <label htmlFor="pms" className='block text-sm font-medium leading-6 text-gray-900 py-1'>PMS</label>
                         {errors.pms && <p className="text-red-500">{errors.pms}</p>}
                     </div>
                 </div>
