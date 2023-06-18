@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 
-const UpdateProject = () => {
+const UpdateProspect = () => {
     const navigate = useNavigate()
     const { id } = useParams()
     const [errors, setErrors] = useState({})
     const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState({
-        project_id: '',
-        project_name: '',
+        prospect_id: '',
+        prospect_name: '',
         manager: '',
         status: '',
         amount: 0,
@@ -42,25 +42,25 @@ const UpdateProject = () => {
 
         console.log("formData:", formData)
         try {
-            await axios.patch(`http://localhost:8080/api/projects/update/${id}`, formData);
+            await axios.patch(`http://localhost:8080/api/prospect/update/${id}`, formData);
             navigate(`/project/read/${id}`);
         } catch (error) {
             console.error('Failed to update project: ', error)
         }
 
-        navigate(`/project/read/${id}`)
+        navigate(`/prospect/read/${id}`)
     }
 
     useEffect(() => {
         const fetchproject = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/projects/read/${id}`)
+                const response = await axios.get(`http://localhost:8080/api/prospect/read/${id}`)
                 const projectData = response.data.data
         
-                console.log("project data", projectData)
+                console.log("prospect data", projectData)
                 setFormData({
-                    project_id: projectData.ID|| '',
-                    project_name: projectData.project_name || '',
+                    prospect_id: projectData.ID|| '',
+                    prospect_name: projectData.prospect_name || '',
                     manager: projectData.manager || '',
                     status: projectData.status || '',
                     amount: projectData.amount || 0,
@@ -104,9 +104,9 @@ const UpdateProject = () => {
 
             <form onSubmit={handleSubmit}>
                 <div className='pb-2'>
-                    <label htmlFor="project_name" className='block text-sm font-medium leading-6 text-gray-900 py-1'>project Name</label>
-                    <input id='project_name' name='project_name' type="text" value={formData.project_name}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
-                    {errors.project_name && <p className="text-red-500">{errors.project_name}</p>}
+                    <label htmlFor="prospect_name" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Prospect Name</label>
+                    <input id='prospect_name' name='prospect_name' type="text" value={formData.prospect_name}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
+                    {errors.prospect_name && <p className="text-red-500">{errors.prospect_name}</p>}
                 </div>
 
                 <div className='pb-2'>
@@ -197,4 +197,4 @@ const UpdateProject = () => {
     )
 }
 
-export default UpdateProject
+export default UpdateProspect

@@ -12,7 +12,7 @@ const ProjectList = () => {
     const navigate = useNavigate()
   
     const handleProjectClick = (id) => {
-        navigate(`/prospect/read/${id}`)
+        navigate(`/project/read/${id}`)
     }
     
     useEffect(() => {
