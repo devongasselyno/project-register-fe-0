@@ -135,7 +135,7 @@ const UpdateContact = () => {
                 },
                 }))
         
-                setLoading(false);
+                setLoading(false)
             } catch (error) {
                 console.error('Failed to fetch contact: ', error)
             }
