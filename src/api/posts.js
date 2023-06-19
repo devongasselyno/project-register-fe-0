@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-    baseURL: 'http://prj-reg.10.18.5.3.nip.io/api',
+    baseURL: 'http://127.0.0.1:8080/api',
 });
 
 export default axiosInstance;
