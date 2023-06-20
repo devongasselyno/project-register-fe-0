@@ -9,7 +9,7 @@ const UpdateProspect = () => {
     const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState({
         prospect_id: '',
-        prospect_name: '',
+        project_name: '',
         manager: '',
         status: '',
         amount: 0,
@@ -23,26 +23,37 @@ const UpdateProspect = () => {
     const [clients, setClients] = useState([]);
     const [companies, setCompanies] = useState([]);
 
-
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         const newValue = type === 'checkbox' ? checked : value;
         
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          [name]: newValue,
-        }))
+        if (name === 'amount') {
+            const formattedValue = newValue.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+            setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: formattedValue,
+            }));
+        } else {
+            setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: newValue,
+            }))
+        }
     }
+      
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+
+        const amountWithoutDots = formData.amount.replace(/\./g, '');
+        formData.amount = parseInt(amountWithoutDots);
 
         formData.client_id = parseInt(formData.client_id)
         formData.company_id = parseInt(formData.company_id)
 
         console.log("formData:", formData)
         try {
-            await axios.patch(`http://localhost:8080/api/prospect/update/${id}`, formData);
+            await axios.patch(`http://localhost:8080/api/project/update/${id}`, formData);
             navigate(`/project/read/${id}`);
         } catch (error) {
             console.error('Failed to update project: ', error)
@@ -54,13 +65,13 @@ const UpdateProspect = () => {
     useEffect(() => {
         const fetchproject = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/prospect/read/${id}`)
+                const response = await axios.get(`http://localhost:8080/api/project/read/${id}`)
                 const projectData = response.data.data
         
                 console.log("prospect data", projectData)
                 setFormData({
                     prospect_id: projectData.ID|| '',
-                    prospect_name: projectData.prospect_name || '',
+                    project_name: projectData.project_name || '',
                     manager: projectData.manager || '',
                     status: projectData.status || '',
                     amount: projectData.amount || 0,
@@ -100,13 +111,13 @@ const UpdateProspect = () => {
       
     return (
         <div className='mt-10 mb-20 mx-auto max-w-xl flex-col items-center'>
-            <h1 className='text-3xl leading-8 font-bold py-5'>Update project</h1>
+            <h1 className='text-3xl leading-8 font-bold py-5'>Update Prospect</h1>
 
             <form onSubmit={handleSubmit}>
                 <div className='pb-2'>
-                    <label htmlFor="prospect_name" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Prospect Name</label>
-                    <input id='prospect_name' name='prospect_name' type="text" value={formData.prospect_name}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
-                    {errors.prospect_name && <p className="text-red-500">{errors.prospect_name}</p>}
+                    <label htmlFor="project_name" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Prospect Name</label>
+                    <input id='project_name' name='project_name' type="text" value={formData.project_name}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
+                    {errors.project_name && <p className="text-red-500">{errors.project_name}</p>}
                 </div>
 
                 <div className='pb-2'>
@@ -123,7 +134,10 @@ const UpdateProspect = () => {
 
                 <div className='pb-2'>
                     <label htmlFor="amount" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Amount</label>
-                    <input id='amount' name='amount' type="number" value={formData.amount}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
+                    <div className='flex items-center gap-2'>
+                        <span>Rp.</span>
+                        <input id='amount' name='amount' type="text" value={formData.amount.toLocaleString('en-US', { useGrouping: true, minimumFractionDigits: 0 }).replace(/,/g, '.')}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>   
+                    </div>
                     {errors.amount && <p className="text-red-500">{errors.amount}</p>}
                 </div>
 

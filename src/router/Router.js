@@ -8,7 +8,6 @@ import ProspectDetail from '../components/forms/ProspectDetail'
 import CreateType from '../components/forms/CreateType'
 import ProjectList from '../components/ProjectList'
 import ProspectList from '../components/ProspectList'
-import CreateClientContact from '../components/forms/CreateClientContact'
 import CreateContact from '../components/forms/CreateContact'
 import ClientList from '../components/ClientList'
 import ContactList from '../components/ContactList'
@@ -18,7 +17,7 @@ import CreateClient from '../components/forms/CreateClient'
 import DataTable from '../components/TableTest'
 import UpdateClient from '../components/forms/UpdateClient'
 import UpdateContact from '../components/forms/UpdateContact'
-import UpdateProject from '../components/forms/UpdateProspect'
+import UpdateProject from '../components/forms/UpdateProject'
 import UpdateProspect from '../components/forms/UpdateProspect'
 import ProjectDetail from '../components/forms/ProjectDetail'
 
@@ -39,6 +38,13 @@ const Router = () => {
                     <Route path='update/:id' element={<UpdateProject/>} />
                 </Route>
 
+                <Route path='/prospect' element={<App />}>
+                    <Route index element={<ProspectList />} />
+                    <Route path='create' element={<CreateProspect />} />
+                    <Route path='read/:id' element={<ProspectDetail />} />
+                    <Route path='update/:id' element={<UpdateProspect/>} />
+                </Route>
+
                 <Route path="/client" element={<App />}>
                     <Route index element={<ClientList />} />
                     <Route path="create" element={<CreateClient />} />
@@ -51,13 +57,6 @@ const Router = () => {
                     <Route path='read/:id' element={<ContactDetail />} />
                     <Route path='create' element={<CreateContact />} />
                     <Route path='update/:id' element={<UpdateContact />} />
-                </Route>
-
-                <Route path='/prospect' element={<App />}>
-                    <Route index element={<ProspectList />} />
-                    <Route path='create' element={<CreateProspect />} />
-                    <Route path='read/:id' element={<ProspectDetail />} />
-                    <Route path='update/:id' element={<UpdateProspect/>} />
                 </Route>
 
                 <Route path='/table' element={<App />}>

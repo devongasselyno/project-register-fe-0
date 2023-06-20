@@ -18,8 +18,9 @@ const ProjectList = () => {
     useEffect(() => {
     const fetchPosts = async () => {
         setLoading(true)
-        const res = await axios.get('http://localhost:8080/api/projects/read')
-        setPosts(res?.data?.data)
+        const res = await axios.get('http://localhost:8080/api/project/read')
+        const filteredPosts = res?.data?.data.filter((project) => project.project_type.project_type_code !== 'PRP');
+        setPosts(filteredPosts)
         setLoading(false)
     }
     fetchPosts();
@@ -32,25 +33,20 @@ const ProjectList = () => {
         { field: 'company.name', headerName: 'Company', valueGetter: (params) => params.row.company.company_name, width: 150, headerAlign: 'center', align: 'center' , headerClassName: 'bg-[#EE3E23] text-white'},
         { field: 'client.name', headerName: 'Client', valueGetter: (params) => params.row.client.client_name, width: 150, headerAlign: 'center', align: 'center' , headerClassName: 'bg-[#EE3E23] text-white'},
         { field: 'year', headerName: 'Year', headerAlign: 'center', align: 'center' , headerClassName: 'bg-[#EE3E23] text-white'},
-        { field: 'prospect_id', headerName: 'Prospect ID', headerAlign: 'center', align: 'center' , headerClassName: 'bg-[#EE3E23] text-white'},
+        { field: 'project_id', headerName: 'project ID', headerAlign: 'center', align: 'center' , headerClassName: 'bg-[#EE3E23] text-white'},
         { field: 'manager', headerName: 'Manager', headerAlign: 'center', align: 'center' , headerClassName: 'bg-[#EE3E23] text-white'},
         { field: 'status', headerName: 'Status', headerAlign: 'center', align: 'center' , headerClassName: 'bg-[#EE3E23] text-white'},
-        { field: 'project_name', headerName: 'Prospect Name', width: 175, headerAlign: 'center', align: 'center' , headerClassName: 'bg-[#EE3E23] text-white'},
+        { field: 'project_name', headerName: 'project Name', width: 175, headerAlign: 'center', align: 'center' , headerClassName: 'bg-[#EE3E23] text-white'},
         { field: 'title', headerName: 'Title', width: 400, headerAlign: 'center', align: 'center' , headerClassName: 'bg-[#EE3E23] text-white'},
         { field: 'amount', headerName: 'Amount', headerAlign: 'center', align: 'center' , headerClassName: 'bg-[#EE3E23] text-white'},
     ]
-      
-    // { field: 'jira', headerName: 'Jira' },
-    // { field: 'clockify', headerName: 'Clockify' },
-    // { field: 'pcs', headerName: 'PCS' },
-    // { field: 'pms', headerName: 'PMS' },
     
     return (
         <div className='pt-10 px-20'>
             <div className='flex items-center justify-between mb-5'>
                 <h1 className='text-4xl leading-8 font-bold py-5'>Projects</h1>
-                <a href='/prospect/create' class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 border border-blue-700 rounded">
-                Add Prospect
+                <a href='/project/create' class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 border border-blue-700 rounded">
+                Add project
                 </a>
             </div>
 

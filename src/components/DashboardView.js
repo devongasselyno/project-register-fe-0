@@ -41,7 +41,7 @@ function DashboardView() {
 
     const fetchData = async () => {
         try {
-        const res = await axios.get('http://127.0.0.1:8080/api/prospect/read');
+        const res = await axios.get('http://127.0.0.1:8080/api/project/read');
         const modifiedProspects = res?.data?.data.map((prospect) => {
             const { prospect_name, ...rest } = prospect
             return { name: prospect_name, ...rest }
@@ -54,7 +54,7 @@ function DashboardView() {
 
     const fetchProjects = async () => {
         try {
-            const res = await axios.get('http://127.0.0.1:8080/api/projects/read');
+            const res = await axios.get('http://127.0.0.1:8080/api/project/read');
             const modifiedProjects = res?.data?.data.map((project) => {
                 const { project_name, ...rest } = project;
                 return { name: project_name, ...rest };

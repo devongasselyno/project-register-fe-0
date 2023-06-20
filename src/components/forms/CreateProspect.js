@@ -98,7 +98,7 @@ const CreateProspect = () => {
 
         setErrors(errors);
         return Object.keys(errors).length === 0;
-    };
+    }
 
     useEffect(() => {
         const fetchCompanies = async () => {
@@ -160,7 +160,7 @@ const CreateProspect = () => {
             };
 
             try {
-                const response = await api.post('/prospect/create', data);
+                const response = await api.post('/project/create', data);
                 console.log('Data sent successfully:', response.data);
                 notify();
                 setName('');

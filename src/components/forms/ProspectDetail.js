@@ -11,12 +11,8 @@ import Popup from "reactjs-popup"
 const ProspectDetail = () => {
   const { id } = useParams()
   const [prospect, setProspect] = useState('')
-  const [editMode, setEditMode] = useState(false)
 
   const [types, setTypes] = useState([])
-  const [companies, setCompanies] = useState([])
-  const [clients, setClients] = useState([])
-
   const [formData, setFormData] = useState({
     type_id: 0,
     prospect_id: '',
@@ -33,7 +29,6 @@ const ProspectDetail = () => {
     pms: false
   })
 
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
     let fieldValue
@@ -49,16 +44,11 @@ const ProspectDetail = () => {
     }
 
     console.log(fieldValue)
-
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: fieldValue,
-    }))
   }
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(`http://127.0.0.1:8080/api/prospect/read/${id}`)
+      const res = await axios.get(`http://127.0.0.1:8080/api/project/read/${id}`)
       const prospectData = res?.data?.data
       setProspect(prospectData)
     } catch (err) {
@@ -68,32 +58,9 @@ const ProspectDetail = () => {
 
   useEffect(() => {
     fetchData()
-    fetchCompanies()
-    fetchClients()
     fetchTypes()
   }, [])
 
-  const fetchCompanies = async () => {
-    try {
-      const response = await api.get('/company/read')
-      setCompanies(response.data)
-    } catch (error) {
-      console.error('Failed to fetch companies:', error)
-    }
-  }
-
-  const fetchClients = async () => {
-    try {
-      const response = await api.get('/client/read', {
-        params: {
-          limit: 100,
-        },
-      })
-      setClients(response.data)
-    } catch (error) {
-      console.error('Failed to fetch clients:', error)
-    }
-  }
 
   const fetchTypes = async () => {
     try {
@@ -104,67 +71,10 @@ const ProspectDetail = () => {
     }
   }
 
-
-
-  const handleUpdateProspect = async () => {
-    try {
-      let updatedFormData = { ...formData }
-
-      updatedFormData.prospect_id = prospect.prospect_id
-
-      if (formData.prospect_name === '') {
-        updatedFormData.prospect_name = prospect.prospect_name
-      }
-      if (formData.year === 0) {
-        updatedFormData.year = prospect.year
-      }
-      if (formData.manager === '') {
-        updatedFormData.manager = prospect.manager
-      }
-      if (formData.status === '') {
-        updatedFormData.status = prospect.status
-      }
-      if (formData.amount === 0) {
-        updatedFormData.amount = prospect.amount
-      }
-      if (formData.company_id === 0) {
-        updatedFormData.company_id = prospect.company_id
-      }
-      if (formData.client_id === 0) {
-        updatedFormData.client_id = prospect.client_id
-      }
-      if (formData.type_id === 0) {
-        updatedFormData.type_id = prospect.type_id
-      }
-      updatedFormData.clockify = formData.clockify
-      updatedFormData.jira = formData.jira
-      updatedFormData.pcs = formData.pcs
-      updatedFormData.pms = formData.pms
-
-      const response = await axios.patch(`http://localhost:8080/api/prospect/update`, updatedFormData)
-      console.log(response.data)
-      setEditMode(false)
-      notify()
-
-      setTimeout(() => {
-        fetchData()
-      }, 2000);
-
-
-
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
-  const handleEditClick = () => {
-    setEditMode(true)
-  }
-
   const navigate = useNavigate()
   const handleDelete = async (prospectId) => {
     try {
-      await axios.delete('http://localhost:8080/api/prospect/delete', {
+      await axios.delete('http://localhost:8080/api/project/delete', {
         data: {
           prospect_id: prospectId,
         },
@@ -185,7 +95,7 @@ const ProspectDetail = () => {
   const handleConvertProspect = async (selectedType) => {
 
     const responseData = {
-      prospect_id: prospect.prospect_id,
+      prospect_id: prospect.project_id,
       type_id: selectedType
     }
 
@@ -195,9 +105,9 @@ const ProspectDetail = () => {
         setErrors(msg)
         return
       }
-      await api.post('/prospect/convert', responseData)
+      await api.post('/project/convert', responseData)
       try {
-        await axios.delete('http://localhost:8080/api/prospect/delete', {
+        await axios.delete('http://localhost:8080/api/project/delete', {
           data: {
             prospect_id: prospect.prospect_id,
           },
@@ -301,191 +211,56 @@ const ProspectDetail = () => {
                 <div className="mb-4">
                   <label className="font-bold w-32 inline-block">Prospect ID</label>
                   <span className="mr-2">:</span>
-                  {editMode ? (
-                    <input
-                      type="text"
-                      name="ID"
-                      value={formData.prospect_id}
-                      className="rounded-lg"
-                      placeholder={prospect.prospect_id}
-                      readOnly={!editMode}
-                      onChange={handleChange}
-                    />
-                  ) : (
-                    <span>{prospect.prospect_id}</span>
-                  )}
+                  <span>{prospect.project_id}</span>
+                  
                 </div>
 
                 <div className="mb-4">
                   <label className="font-bold w-32 inline-block">Prospect Name</label>
                   <span className="mr-2">:</span>
-                  {editMode ? (
-                    <input
-                      type="text"
-                      name="prospect_name"
-                      value={formData.prospect_name}
-                      className="rounded-lg"
-                      placeholder={prospect.prospect_name}
-                      readOnly={!editMode}
-                      onChange={handleChange}
-                    />
-                  ) : (
-                    <span>{prospect.prospect_name}</span>
-                  )}
+                  <span>{prospect.project_name}</span>
                 </div>
 
                 <div className="mb-4">
                   <label className="font-bold inline-block w-32">Type Name</label>
                   <span className="mr-2">:</span>
-                  {editMode ? (
-                    <select
-                      type="number"
-                      className="rounded-lg"
-                      name="type_id"
-                      value={formData.type_id}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Type</option>
-                      {Array.isArray(types.data) &&
-                        types.data.map((type) => (
-                          <option key={type.ID} value={type.ID}>
-                            {type.project_name}
-                          </option>
-                        ))}
-                    </select>
-                  ) : (
-                    <span>{prospect.project_type.project_name}</span>
-                  )}
-
+                  <span>{prospect.project_type.project_name}</span>
                 </div>
 
                 <div className="mb-4">
                   <label className="font-bold w-32 inline-block">Year</label>
                   <span className="mr-2">:</span>
-                  {editMode ? (
-                    <input
-                      type="number"
-                      className="rounded-lg"
-                      name="year"
-                      value={formData.year}
-                      placeholder={prospect.year}
-                      readOnly={!editMode}
-                      onChange={handleChange}
-                    />
-                  ) : (
-                    <span>{prospect.year}</span>
-                  )}
+                  <span>{prospect.year}</span>
                 </div>
 
                 <div className="mb-4">
                   <label className="font-bold w-32 inline-block">Manager</label>
                   <span className="mr-2">:</span>
-                  {editMode ? (
-                    <input
-                      type="text"
-                      className="rounded-lg"
-                      name="manager"
-                      value={formData.manager}
-                      placeholder={prospect.manager}
-                      readOnly={!editMode}
-                      onChange={handleChange}
-                    />
-                  ) : (
-                    <span>{prospect.manager}</span>
-                  )}
+                  <span>{prospect.manager}</span>
                 </div>
 
                 <div className="mb-4">
                   <label className="font-bold w-32 inline-block">Status</label>
                   <span className="mr-2">:</span>
-                  {editMode ? (
-                    <input
-                      type="text"
-                      className="rounded-lg"
-                      name="status"
-                      value={formData.status}
-                      placeholder={prospect.status}
-                      readOnly={!editMode}
-                      onChange={handleChange}
-                    />
-                  ) : (
-                    <span>{prospect.status}</span>
-                  )}
+                  <span>{prospect.status}</span>
                 </div>
 
                 <div className="mb-4">
                   <label className="font-bold w-32 inline-block">Amount:</label>
                   <span className="mr-2">:</span>
-                  {editMode ? (
-                    <input
-                      type="number"
-                      className="rounded-lg"
-                      name="amount"
-                      value={formData.amount}
-                      placeholder={prospect.amount}
-                      readOnly={!editMode}
-                      onChange={handleChange}
-                    />
-                  ) : (
-                    <span>{prospect.amount}</span>
-                  )}
+                  <span>Rp. {prospect.amount.toLocaleString('en-US', { useGrouping: true, minimumFractionDigits: 0 }).replace(/,/g, '.')}</span>
                 </div>
 
                 <div className="mb-4">
                   <label className="font-bold w-32 inline-block">Company Name</label>
                   <span className="mr-2">:</span>
-                  {editMode ? (
-                    // <input
-                    //   type="number"
-                    //   className="rounded-lg"
-                    //   name="company_id"
-                    //   value={formData.company_id}
-                    //   placeholder={prospect.company_id}
-                    //   readOnly={!editMode}
-                    //   onChange={handleChange}
-                    // />
-                    <select
-                      type="number"
-                      className="rounded-lg"
-                      name="company_id"
-                      value={formData.company_id}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Company</option>
-                      {Array.isArray(companies.data) &&
-                        companies.data.map((company) => (
-                          <option key={company.ID} value={company.ID}>
-                            {company.company_name}
-                          </option>
-                        ))}
-                    </select>
-                  ) : (
-                    <span>{prospect.company.company_name}</span>
-                  )}
+                  <span>{prospect.company.company_name}</span>
                 </div>
 
                 <div className="mb-4">
                   <label className="font-bold w-32 inline-block">Client Name</label>
                   <span className="mr-2">:</span>
-                  {editMode ? (
-                    <select
-                      type="number"
-                      className="rounded-lg"
-                      name="client_id"
-                      value={formData.client_id}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Company</option>
-                      {Array.isArray(clients.data) &&
-                        clients.data.map((client) => (
-                          <option key={client.ID} value={client.ID}>
-                            {client.client_name}
-                          </option>
-                        ))}
-                    </select>
-                  ) : (
-                    <span>{prospect.client.client_name}</span>
-                  )}
+                  <span>{prospect.client.client_name}</span>
                 </div>
               </div>
 
@@ -494,93 +269,33 @@ const ProspectDetail = () => {
                 <div className="mb-4">
                   <label className="font-bold w-32 inline-block">Jira</label>
                   <span className="mr-2">:</span>
-                  {editMode ? (
-                    <input
-                      type="checkbox"
-                      name="jira"
-                      value={formData.jira}
-                      // checked={prospect.Jira}
-                      onChange={handleChange}
-                    />
-                  ) : (
-                    <input type="checkbox" checked={prospect.jira} disabled />
-                  )}
+                  <input type="checkbox" checked={prospect.jira} disabled />
                 </div>
 
                 <div className="mb-4">
                   <label className="font-bold w-32 inline-block">Clockify</label>
                   <span className="mr-2">:</span>
-                  {editMode ? (
-                    <input
-                      type="checkbox"
-                      name="clockify"
-                      value={formData.clockify}
-                      // checked={prospect.Clockify}
-                      onChange={handleChange}
-                    />
-                  ) : (
-                    <input type="checkbox" checked={prospect.clockify} disabled />
-                  )}
+                  <input type="checkbox" checked={prospect.clockify} disabled />
                 </div>
 
                 <div className="mb-4">
                   <label className="font-bold w-32 inline-block">Pcs</label>
                   <span className="mr-2">:</span>
-                  {editMode ? (
-                    <input
-                      type="checkbox"
-                      name="pcs"
-                      value={formData.pcs}
-                      // checked={prospect.Pcs}
-                      onChange={handleChange}
-                    />
-                  ) : (
-                    <input type="checkbox" checked={prospect.pcs} disabled />
-                  )}
+                  <input type="checkbox" checked={prospect.pcs} disabled />              
                 </div>
 
                 <div className="mb-4">
                   <label className="font-bold w-32 inline-block">Pms</label>
                   <span className="mr-2">:</span>
-                  {editMode ? (
-                    <input
-                      type="checkbox"
-                      name="pms"
-                      Value={formData.pms}
-                      // checked={prospect.Pms}
-                      onChange={handleChange}
-                    />
-                  ) : (
-                    <input type="checkbox" checked={prospect.pms} disabled />
-                  )}
+                  <input type="checkbox" checked={prospect.pms} disabled />
                 </div>
               </div>
 
             </div>
           )}
 
-          {editMode ? (
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={handleUpdateProspect}
-            >
-              Save
-            </button>
-          ) : (
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={handleEditClick}
-            >
-              Edit
-            </button>
-          )}
-
-          <button
-            className="ml-8 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => handleDelete(prospect.prospect_id)}
-          >
-            Delete
-          </button>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => navigate(`/prospect/update/${id}`)}>Edit</button>
+          <button className="ml-8 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleDelete(prospect.prospect_id)}>Delete</button>
 
           <Popup
             trigger={<button className="ml-8 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"> Convert Prospect </button>}
@@ -603,7 +318,7 @@ const ProspectDetail = () => {
                   <select
                     className="rounded-lg"
                     name="type_id"
-                    value={formData.type_id}
+                    value={prospect.type_id}
                     onChange={handleChange}
                   >
                     <option value="">Select Type</option>

@@ -25,7 +25,7 @@ const ProspectList = () => {
     useEffect(() => {
         const fetchPosts = async () => {
         setLoading(true)
-        const res = await axios.get('http://127.0.0.1:8080/api/prospect/read')
+        const res = await axios.get('http://127.0.0.1:8080/api/project/read')
         setPosts(res.data.data)
         setLoading(false)
         }

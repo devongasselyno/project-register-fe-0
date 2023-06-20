@@ -4,13 +4,11 @@ import axios from "axios"
 import { useNavigate, useParams } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-// import { Navigate } from "react-router-dom"
-// import { type } from "@testing-library/user-event/dist/type"
 import Popup from "reactjs-popup"
 
 const ProjectDetail = () => {
 const { id } = useParams()
-const [project, setProspect] = useState('')
+const [project, setproject] = useState('')
 
 const [types, setTypes] = useState([])
 
@@ -55,11 +53,11 @@ const handleChange = (e) => {
 
 const fetchData = async () => {
     try {
-    const res = await axios.get(`http://127.0.0.1:8080/api/projects/read/${id}`)
-    const projectData = res?.data?.data
-    setProspect(projectData)
+        const res = await axios.get(`http://127.0.0.1:8080/api/project/read/${id}`)
+        const projectData = res?.data?.data
+        setproject(projectData)
     } catch (err) {
-    console.error("Error fetching project data:", err)
+        console.error("Error fetching project data:", err)
     }
 }
 
@@ -84,12 +82,12 @@ useEffect(() => {
 const navigate = useNavigate()
 const handleDelete = async (projectId) => {
     try {
-    await axios.delete('http://localhost:8080/api/projects/delete', {
+    await axios.delete('http://localhost:8080/api/project/delete', {
         data: {
         project_id: projectId,
         },
     });
-    console.log('Prospect deleted successfully');
+    console.log('project deleted successfully');
     deleteNotify()
 
     setTimeout(() => {
@@ -97,16 +95,16 @@ const handleDelete = async (projectId) => {
     }, 2000);
 
     } catch (err) {
-    console.error('Error deleting project:', err)
+        console.error('Error deleting project:', err)
     }
 }
 const [errors, setErrors] = useState('')
 
-const handleConvertProspect = async (selectedType) => {
+const handleConvertproject = async (selectedType) => {
 
     const responseData = {
-    project_id: project.project_id,
-    type_id: selectedType
+        project_id: project.project_id,
+        type_id: selectedType
     }
 
     try {
@@ -136,7 +134,7 @@ const handleConvertProspect = async (selectedType) => {
 }
 
 const convertNotify = () => {
-    toast.success('Prospect Converted!', {
+    toast.success('project Converted!', {
     position: "top-right",
     autoClose: 1200,
     hideProgressBar: false,
@@ -149,7 +147,7 @@ const convertNotify = () => {
 }
 
 const deleteNotify = () => {
-    toast.success('Prospect Deleted!', {
+    toast.success('project Deleted!', {
     position: "top-right",
     autoClose: 1200,
     hideProgressBar: false,
@@ -196,7 +194,7 @@ return (
     // ------------------------------------------------------------------------
     <div className="py-6 px-20">
     <div className="py-6">
-        <h1 className="text-5xl leading-8 font-bold py-5">Prospect Detail</h1>
+        <h1 className="text-5xl leading-8 font-bold py-5">Project Detail</h1>
     </div>
 
 
@@ -206,14 +204,14 @@ return (
             <div className="flex">
             <div className="">
                 <div className="mb-4">
-                <label className="font-bold w-32 inline-block">Prospect ID</label>
+                <label className="font-bold w-32 inline-block">Project ID</label>
                 <span className="mr-2">:</span>
                 <span>{project.project_id}</span>
                 
                 </div>
 
                 <div className="mb-4">
-                <label className="font-bold w-32 inline-block">Prospect Name</label>
+                <label className="font-bold w-32 inline-block">Project Name</label>
                 <span className="mr-2">:</span>
                 <span>{project.project_name}</span>
                 </div>
@@ -245,7 +243,7 @@ return (
                 <div className="mb-4">
                 <label className="font-bold w-32 inline-block">Amount:</label>
                 <span className="mr-2">:</span>
-                <span>{project.amount}</span>
+                <span>Rp. {project.amount.toLocaleString('en-US', { useGrouping: true, minimumFractionDigits: 0 }).replace(/,/g, '.')}</span>
                 </div>
 
                 <div className="mb-4">
@@ -292,13 +290,11 @@ return (
         )}
 
 
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => navigate(`/project/update/${id}`)}>Edit</button>
-    
-
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => navigate(`/project/update/${id}`)}>Edit</button>
         <button className="ml-8 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"onClick={() => handleDelete(project.project_id)}>Delete</button>
 
         <Popup
-            trigger={<button className="ml-8 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"> Convert Prospect </button>}
+            trigger={<button className="ml-8 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"> Convert project </button>}
             modal
             nested
         >
@@ -306,7 +302,7 @@ return (
             <div className="modal bg-slate-100 p-6 rounded-xl backdrop-blur-sm">
                 <div class="flex items-center justify-between border-b rounded-t">
                 <h3 class="text-xl font-medium text-gray-900">
-                    Convert Prospect to Project
+                    Convert project to Project
                 </h3>
                 <button type="button" class="text-gray-400 text-2xl bg-transparent hover:bg-gray-200 hover:text-gray-900 outline-none rounded-lg p-1.5 ml-auto inline-flex items-center" data-modal-hide="medium-modal" onClick={close}>
                     &times;
@@ -349,10 +345,10 @@ return (
                     type="submit"
                     className="bg-green-500 mx-4 hover:bg-green-700 text-white font-bold py-2 px-4 m-4 rounded"
                     onClick={async () => {
-                    await handleConvertProspect(formData.type_id)
+                    await handleConvertproject(formData.type_id)
                     }}
                 >
-                    Convert Prospect
+                    Convert project
                 </button>
 
                 </div>

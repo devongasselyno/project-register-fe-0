@@ -23,16 +23,24 @@ const UpdateProject = () => {
     const [clients, setClients] = useState([]);
     const [companies, setCompanies] = useState([]);
 
-
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         const newValue = type === 'checkbox' ? checked : value;
         
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          [name]: newValue,
-        }))
+        if (name === 'amount') {
+            const formattedValue = newValue.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+            setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: formattedValue,
+            }));
+        } else {
+            setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: newValue,
+            }))
+        }
     }
+      
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -42,7 +50,7 @@ const UpdateProject = () => {
 
         console.log("formData:", formData)
         try {
-            await axios.patch(`http://localhost:8080/api/projects/update/${id}`, formData);
+            await axios.patch(`http://localhost:8080/api/project/update/${id}`, formData);
             navigate(`/project/read/${id}`);
         } catch (error) {
             console.error('Failed to update project: ', error)
@@ -54,7 +62,7 @@ const UpdateProject = () => {
     useEffect(() => {
         const fetchproject = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/projects/read/${id}`)
+                const response = await axios.get(`http://localhost:8080/api/project/read/${id}`)
                 const projectData = response.data.data
         
                 console.log("project data", projectData)
@@ -100,7 +108,7 @@ const UpdateProject = () => {
       
     return (
         <div className='mt-10 mb-20 mx-auto max-w-xl flex-col items-center'>
-            <h1 className='text-3xl leading-8 font-bold py-5'>Update project</h1>
+            <h1 className='text-3xl leading-8 font-bold py-5'>Update Project</h1>
 
             <form onSubmit={handleSubmit}>
                 <div className='pb-2'>
@@ -123,7 +131,10 @@ const UpdateProject = () => {
 
                 <div className='pb-2'>
                     <label htmlFor="amount" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Amount</label>
-                    <input id='amount' name='amount' type="number" value={formData.amount}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
+                    <div className='flex items-center gap-2'>
+                        <span>Rp.</span>
+                        <input id='amount' name='amount' type="text" value={formData.amount.toLocaleString('en-US', { useGrouping: true, minimumFractionDigits: 0 }).replace(/,/g, '.')}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>   
+                    </div>
                     {errors.amount && <p className="text-red-500">{errors.amount}</p>}
                 </div>
 
