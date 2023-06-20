@@ -19,7 +19,7 @@ const ProjectList = () => {
     const fetchPosts = async () => {
         setLoading(true)
         const res = await axios.get('http://localhost:8080/api/project/read')
-        const filteredPosts = res?.data?.data.filter((project) => project.project_type.project_type_code !== 'PRP');
+        const filteredPosts = res?.data?.data.filter((project) => project.project_type.project_type_code !== 'PRP')
         setPosts(filteredPosts)
         setLoading(false)
     }
