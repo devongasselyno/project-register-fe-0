@@ -1,12 +1,12 @@
-import axios from 'axios'
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { DataGrid } from '@mui/x-data-grid'
+import { getAllProjects } from '../api/services/Project'
 
 const ProjectList = () => {
 
-    const [posts, setPosts] = useState([])
+    const [projects, setProjects] = useState([])
     const [loading, setLoading]  = useState(false)
 
     const navigate = useNavigate()
@@ -15,15 +15,18 @@ const ProjectList = () => {
         navigate(`/project/read/${id}`)
     }
     
-    useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchProjects = async () => {
         setLoading(true)
-        const res = await axios.get('http://localhost:8080/api/project/read')
-        const filteredPosts = res?.data?.data.filter((project) => project.project_type.project_type_code !== 'PRP')
-        setPosts(filteredPosts)
-        setLoading(false)
+        try {
+            const projects = await getAllProjects()
+            setProjects(projects)
+        } catch (error) {
+            console.error('Error fetching projects:', error)
+        }
     }
-    fetchPosts();
+
+    useEffect(() => {
+        fetchProjects();
     }, [])
 
     const getRowId = (row) => row.ID
@@ -51,7 +54,7 @@ const ProjectList = () => {
             </div>
 
             <DataGrid
-                rows={posts}
+                rows={projects}
                 getRowId={getRowId}
                 columns={columns}
                 initialState={{

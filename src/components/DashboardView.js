@@ -22,12 +22,12 @@ function DashboardView() {
     
     function getDayName(date) {
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        return days[date.getUTCDay()];
+        return days[date.getUTCDay()]
     }
 
     function getMonthName(month) {
         const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        return months[month];
+        return months[month]
     }
 
     const navigate = useNavigate();

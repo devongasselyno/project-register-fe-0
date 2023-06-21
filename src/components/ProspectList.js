@@ -3,34 +3,32 @@ import { useNavigate } from 'react-router-dom';
 import ProspectDetail from './forms/ProspectDetail';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
+import { getAllProspects } from '../api/services/Prospect';
 
 const ProspectList = () => {
-    const [posts, setPosts] = useState([])
+    const [prospects, setProspects] = useState([])
     const [loading, setLoading]  = useState(false)
 
-    const [currentPage, setCurrentPage] = useState(1)
     const [recordsPerPage] = useState(5)
 
-    const lastIndex = currentPage * recordsPerPage;
-    const firstIndex = lastIndex - recordsPerPage;
-    const records = posts.slice(firstIndex, lastIndex)
-    const npage = Math.ceil(posts.length / recordsPerPage)
-    const numbers = [...Array(npage + 1).keys()].slice(1)
     const navigate = useNavigate()
 
     const handleProspectClick = (id) => {
         navigate(`/prospect/read/${id}`)
     }
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-            setLoading(true)
-            const res = await axios.get('http://127.0.0.1:8080/api/project/read')
-            const filteredPosts = res?.data?.data.filter((project) => project.project_type.project_type_code === 'PRP')
-            setPosts(filteredPosts)
-            setLoading(false)
+    const fetchProspects = async () => {
+        setLoading(true)
+        try {
+            const projects = await getAllProspects()
+            setProspects(projects)
+        } catch (error) {
+            console.error('Error fetching projects:', error)
         }
-        fetchPosts();
+    }
+
+    useEffect(() => {
+        fetchProspects();
     }, [])
 
     const getRowId = (row) => row.ID
@@ -62,7 +60,7 @@ const ProspectList = () => {
             </div>
 
             <DataGrid
-                rows={posts}
+                rows={prospects}
                 getRowId={getRowId}
                 columns={columns}
                 sty
