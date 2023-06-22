@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import axios from 'axios'
+import { getAllClients } from '../../api/services/Client'
+import { getAllCompanies } from '../../api/services/Company'
+import { getProject, updateProject } from '../../api/services/Project'
 
 const UpdateProject = () => {
     const navigate = useNavigate()
@@ -28,7 +30,7 @@ const UpdateProject = () => {
         const newValue = type === 'checkbox' ? checked : value;
         
         if (name === 'amount') {
-            const formattedValue = newValue.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+            const formattedValue = newValue.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
             setFormData((prevFormData) => ({
             ...prevFormData,
             [name]: formattedValue,
@@ -45,25 +47,26 @@ const UpdateProject = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+        const amountWithoutDots = String(formData.amount).replace(/\./g, '');
+        
+        formData.amount = parseInt(amountWithoutDots);
         formData.client_id = parseInt(formData.client_id)
         formData.company_id = parseInt(formData.company_id)
 
         console.log("formData:", formData)
         try {
-            await axios.patch(`http://localhost:8080/api/project/update/${id}`, formData);
+            await updateProject(id, formData)
             navigate(`/project/read/${id}`);
         } catch (error) {
             console.error('Failed to update project: ', error)
         }
-
-        navigate(`/project/read/${id}`)
     }
 
     useEffect(() => {
         const fetchproject = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/project/read/${id}`)
-                const projectData = response.data.data
+                const response = await getProject(id)
+                const projectData = response
         
                 console.log("project data", projectData)
                 setFormData({
@@ -91,14 +94,14 @@ const UpdateProject = () => {
 
     const fetchDropdownData = async () => {
         try {
-            const clientsResponse = await axios.get('http://localhost:8080/api/client/read');
-            const companiesResponse = await axios.get('http://localhost:8080/api/company/read');
+            const clientsResponse = await getAllClients()
+            const companiesResponse = await getAllCompanies()
         
-            setClients(clientsResponse.data.data);
-            setCompanies(companiesResponse.data.data);
+            setClients(clientsResponse)
+            setCompanies(companiesResponse)
             console.log("companies:", companies)
         } catch (error) {
-            console.error('Failed to fetch dropdown data:', error);
+            console.error('Failed to fetch dropdown data:', error)
         }
     }
 

@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Popup from "reactjs-popup"
+import { getProject } from "../../api/services/Project"
 
 const ProjectDetail = () => {
 const { id } = useParams()
@@ -53,9 +54,8 @@ const handleChange = (e) => {
 
 const fetchData = async () => {
     try {
-        const res = await axios.get(`http://127.0.0.1:8080/api/project/read/${id}`)
-        const projectData = res?.data?.data
-        setproject(projectData)
+        const res = await getProject(id)
+        setproject(res)  
     } catch (err) {
         console.error("Error fetching project data:", err)
     }

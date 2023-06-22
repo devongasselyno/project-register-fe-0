@@ -48,9 +48,9 @@ const ProjectList = () => {
         <div className='pt-10 px-20'>
             <div className='flex items-center justify-between mb-5'>
                 <h1 className='text-4xl leading-8 font-bold py-5'>Projects</h1>
-                <a href='/project/create' class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 border border-blue-700 rounded">
-                Add project
-                </a>
+                {/* <a href='/project/create' class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 border border-blue-700 rounded">
+                    Add project
+                </a> */}
             </div>
 
             <DataGrid

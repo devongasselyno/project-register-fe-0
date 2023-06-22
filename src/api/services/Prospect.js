@@ -21,7 +21,7 @@ export const createProspect = async (ProspectData) => {
     export const getProspect = async (ProspectId) => {
         try {
             const response = await api.get(`/prospect/read/${ProspectId}`);
-            return response.data;
+            return response.data.data
         } catch (error) {
             throw new Error(error.response.data.error);
         }
@@ -39,7 +39,7 @@ export const createProspect = async (ProspectData) => {
     export const deleteProspect = async (ProspectId) => {
         try {
             const response = await api.delete(`/prospect/delete/${ProspectId}`);
-            return response.data;
+            return response.data.data;
         } catch (error) {
             throw new Error(error.response.data.error);
         }

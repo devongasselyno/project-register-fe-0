@@ -1,27 +1,16 @@
 import { React, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ProspectDetail from './forms/ProspectDetail'
-import axios from 'axios'
 import { DataGrid } from '@mui/x-data-grid'
+import { getAllClients } from '../api/services/Client'
 
 const ClientList = () => {
     const [clients, setCLients] = useState([])
     const navigate = useNavigate()
 
-    const [currentPage, setCurrentPage] = useState(1)
-    const [recordsPerPage] = useState(5)
-
-    const lastIndex = currentPage * recordsPerPage;
-    const firstIndex = lastIndex - recordsPerPage;
-    const records = clients.slice(firstIndex, lastIndex)
-    const npage = Math.ceil(clients.length / recordsPerPage)
-    const numbers = [...Array(npage + 1).keys()].slice(1)
-
     const fetchClient = async () => {
         try {
-            const res = await axios.get('http://localhost:8080/api/client/read')
-            setCLients(res.data.data)
-            console.log(clients)
+            const response = await getAllClients()
+            setCLients(response)
         } catch (error) {
             console.log("Error fetching data")
         }

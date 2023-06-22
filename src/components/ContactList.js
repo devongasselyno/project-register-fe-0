@@ -59,7 +59,7 @@ const ContactList = () => {
                 }}
                 pageSizeOptions={[5, 10]}
                 onRowClick={(params) => handleContactClick(params.row.ID)}
-                className='w-fit'
+                className="w-fit"
             />
         </div>
     )
