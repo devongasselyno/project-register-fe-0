@@ -2,7 +2,7 @@ import api from '../api'
 
 export const createProject = async (projectData) => {
     try {
-        const response = await api.post('/project/create', projectData);
+        const response = await api.post('model/project/create', projectData);
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -11,7 +11,7 @@ export const createProject = async (projectData) => {
 
 export const getAllProjects = async () => {
     try {
-        const response = await api.get('/project/read');
+        const response = await api.get('model/project/read');
         return response.data.data;
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -20,7 +20,7 @@ export const getAllProjects = async () => {
 
 export const getProject = async (projectId) => {
     try {
-        const response = await api.get(`/project/read/${projectId}`);
+        const response = await api.get(`model/project/read/${projectId}`);
         return response.data.data;
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -29,7 +29,7 @@ export const getProject = async (projectId) => {
 
 export const updateProject = async (projectId, projectData) => {
     try {
-        const response = await api.patch(`/project/update/${projectId}`, projectData);
+        const response = await api.patch(`model/project/update/${projectId}`, projectData);
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -38,7 +38,7 @@ export const updateProject = async (projectId, projectData) => {
 
 export const deleteProject = async (projectId) => {
     try {
-        const response = await api.delete(`/project/delete/${projectId}`);
+        const response = await api.delete(`model/project/delete/${projectId}`);
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -47,7 +47,7 @@ export const deleteProject = async (projectId) => {
 
 export const hardDeleteProject = async (projectId) => {
     try {
-        const response = await api.delete(`/project/hard/${projectId}`);
+        const response = await api.delete(`model/project/hard/${projectId}`);
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -56,7 +56,7 @@ export const hardDeleteProject = async (projectId) => {
 
 export const convertToProject = async (projectId) => {
     try {
-        const response = await api.post(`/project/convert/${projectId}`);
+        const response = await api.post(`model/project/convert/${projectId}`);
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -65,7 +65,7 @@ export const convertToProject = async (projectId) => {
 
 export const recoverProject = async (projectId) => {
     try {
-        const response = await api.post(`/project/recover/${projectId}`);
+        const response = await api.post(`model/project/recover/${projectId}`);
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -74,7 +74,7 @@ export const recoverProject = async (projectId) => {
 
 export const searchProjects = async (searchParams) => {
     try {
-        const response = await api.get('/project/search', { params: searchParams });
+        const response = await api.get('model/project/search', { params: searchParams });
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -83,7 +83,7 @@ export const searchProjects = async (searchParams) => {
 
 export const filterAllProjects = async () => {
     try {
-        const response = await api.get('/project/filter');
+        const response = await api.get('model/project/filter');
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.error);

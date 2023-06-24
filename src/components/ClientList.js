@@ -7,17 +7,18 @@ const ClientList = () => {
     const [clients, setCLients] = useState([])
     const navigate = useNavigate()
 
-    const fetchClient = async () => {
+    const fetchClients = async () => {
         try {
             const response = await getAllClients()
             setCLients(response)
+            console.log(clients)
         } catch (error) {
             console.log("Error fetching data")
         }
     }
 
     useEffect(() => {
-        fetchClient()
+        fetchClients()
     }, [])
 
     const handleClientClick = (id) => {

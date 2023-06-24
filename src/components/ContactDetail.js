@@ -7,6 +7,10 @@ import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
+import { getContactById, softDeleteContact } from '../api/services/Contact';
+import { createClientContact } from '../api/services/ClientContact';
+import { createEmployment, getAllEmployments } from '../api/services/Employment';
+import { getAllClients } from '../api/services/Client';
 
 const ContactDetail = () => {
 
@@ -24,6 +28,7 @@ const ContactDetail = () => {
         job_start: '',
         job_end: '',
         status: '',
+        client_contact_id:'',
     })
     const [showField, setShowField] = useState(false)
     const [showSelectField, setShowSelectField] = useState(true)
@@ -140,15 +145,13 @@ const ContactDetail = () => {
                     client_id: parseInt(clientContactData.client_id)
                 }
 
-                const res = await axios.post('http://localhost:8080/api/clientcontact/create', contactData)
-                setClientContactID(res.data.data.ID)
+                const res = await createClientContact(contactData)
+                console.log("RES.ID", res.ID)
 
-                const employmentData = {
-                    ...employmentFormData,
-                    client_contact_id: clientContactID
-                }
-
-                await axios.post('http://localhost:8080/api/employments/create', employmentData)
+                employmentFormData.client_contact_id = res.ID
+                
+                console.log("employmentform", employmentFormData)
+                await createEmployment(employmentFormData)
                 setShowEmploymentForm(false)
                 window.location.reload(false)
             } catch (error) {
@@ -185,7 +188,7 @@ const ContactDetail = () => {
 
     const handleContactDelete = async (contactID) => {
         try {
-            await axios.delete(`http://localhost:8080/api/contact/delete/soft/${id}`, contactID)
+            await softDeleteContact(id, contactID)
             console.log('Contact deleted successfully')
 
             setTimeout(() => {
@@ -199,9 +202,8 @@ const ContactDetail = () => {
 
     const fetchContact = async () => {
         try {
-            const res = await axios.get(`http://localhost:8080/api/contact/read/${id}`)
-            setContact(res.data.data)
-            console.log(contact)
+            const res = await getContactById(id)
+            setContact(res)
         } catch (error) {
             console.log(error)
         }
@@ -209,11 +211,9 @@ const ContactDetail = () => {
 
     const fetchClients = async () => {
         try {
-            const res = await axios.get("http://localhost:8080/api/client/read")
-            const clientData = res.data.data
-            const clientList = res.data
-            setClients(clientData)
-            setClientList(clientList)
+
+            const res = await getAllClients()
+            setClients(res)
         } catch (error) {
             console.log("Error fetching data:", error)
         }
@@ -221,8 +221,8 @@ const ContactDetail = () => {
 
     const fetchEmployments = async () => {
         try {
-            const res = await axios.get(`http://localhost:8080/api/employments/read/${id}`)
-            const data = res.data
+            const res = await getAllEmployments()
+            const data = res
             setEmployments(data)
         } catch (error) {
             console.log("Error fetching data:", error)
@@ -233,7 +233,6 @@ const ContactDetail = () => {
         try {
             const res = await api.get(`/contact/locations/${id}`)
             const data = res.data.data
-            console.log(data)
             setLocationsList(data)
         } catch (error) {
             console.error("Failed to fetch locations")

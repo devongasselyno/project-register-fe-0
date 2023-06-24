@@ -102,9 +102,9 @@
         await api.post("/project/convert", responseData);
         try {
             await axios.delete("http://localhost:8080/api/project/delete", {
-            data: {
-                prospect_id: prospect.prospect_id,
-            },
+                data: {
+                    prospect_id: prospect.prospect_id,
+                },
             });
         } catch (error) {
             console.error(error);

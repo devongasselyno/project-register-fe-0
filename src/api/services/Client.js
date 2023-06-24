@@ -1,6 +1,5 @@
 import api from '../api'
 
-
 export const createClient = async (clientData) => {
     try {
         const response = await api.post('/client/create', clientData);
@@ -19,18 +18,28 @@ export const getAllClients = async () => {
     }
 };
 
-export const getLatestClient = async () => {
+export const getClientByID = async (id) => {
     try {
-        const response = await api.get('/client/latest');
-        return response.data;
+        const response = await api.get(`/client/read/${id}`);
+        return response.data.data
     } catch (error) {
         throw new Error(error.response.data.error);
     }
 };
 
-export const getClientByID = async (id) => {
+export const updateClient = async (id, updatedData) => {
     try {
-        const response = await api.get(`/client/read/${id}`);
+        const response = await api.patch(`/client/${id}`, updatedData);
+        console.log("response", response.data)
+        return response.data
+    } catch (error) {
+        throw new Error(error.response.data.error);
+    }
+};
+
+export const getLatestClient = async () => {
+    try {
+        const response = await api.get('/client/latest');
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -46,14 +55,6 @@ export const searchClient = async (query) => {
     }
 };
 
-export const updateClient = async (id, updatedData) => {
-    try {
-        const response = await api.patch(`/client/${id}`, updatedData);
-        return response.data;
-    } catch (error) {
-        throw new Error(error.response.data.error);
-    }
-};
 
 export const deleteClient = async (id) => {
     try {

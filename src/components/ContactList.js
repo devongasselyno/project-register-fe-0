@@ -1,9 +1,9 @@
 // import MaterialTable from "material-table"
 import { useNavigate } from "react-router-dom"
 import React from 'react'
-import axios from "axios"
 import { useState, useEffect } from "react"
 import { DataGrid } from "@mui/x-data-grid"
+import { getAllContacts } from "../api/services/Contact"
 
 const ContactList = () => {
 
@@ -12,9 +12,9 @@ const ContactList = () => {
 
     const fetchcontact = async () => {
         try {
-            const res = await axios.get('http://localhost:8080/api/contact/read')
-            setcontacts(res.data.data)
-            console.log(contacts)
+            const response = await getAllContacts()
+            setcontacts(response)
+            console.log(response)
         } catch (error) {
             console.log("Error fetching data")
         }

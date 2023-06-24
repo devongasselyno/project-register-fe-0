@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
+import { getClientByID, updateClient } from '../../api/services/Client'
 
 const UpdateClient = () => {
     const navigate = useNavigate()
@@ -106,7 +107,7 @@ const UpdateClient = () => {
         }
         currentProperty[propertyNames[propertyNames.length - 1]] = value
 
-        setFormData(updatedFormData);
+        setFormData(updatedFormData)
     }
 
 
@@ -115,21 +116,19 @@ const UpdateClient = () => {
 
         console.log("formData:", formData)
         try {
-            await axios.patch(`http://localhost:8080/api/client/${id}`, formData);
-            // navigate(`/client/read/${id}`);
+            await updateClient(id, formData)
+            navigate(`/client/read/${id}`)
         } catch (error) {
             console.error('Failed to update client: ', error)
         }
     }
 
-    
-
     useEffect(() => {
         const fetchClient = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/client/read/${id}`);
-                const clientData = response.data.data;
-        
+                const response = await getClientByID(id)
+                const clientData = response
+
                 setFormData((prevData) => ({
                     ...prevData,
                     client_code: clientData.client_code || '',

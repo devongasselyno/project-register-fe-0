@@ -1,13 +1,12 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
 import api from '../api/posts'
 import { FaTimes } from 'react-icons/fa';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import { toast } from 'react-toastify'
+import { deleteClient, getClientByID } from '../api/services/Client'
 
 const ClientDetail = () => {
     const { id } = useParams()
@@ -83,9 +82,8 @@ const ClientDetail = () => {
 
     const fetchClient = async () => {
         try {
-            const res = await axios.get(`http://localhost:8080/api/client/read/${id}`)
-            setClient(res.data.data)
-            console.log(contact)
+            const res = await getClientByID(id)
+            setClient(res)
         } catch (error) {
             console.log(error)
         }
@@ -96,7 +94,6 @@ const ClientDetail = () => {
             const response = await api.get('/contact/read')
             const data = response.data
             setContacts(data)
-            console.log(contacts)
         } catch (error) {
             console.error(error)
         }
@@ -119,15 +116,12 @@ const ClientDetail = () => {
         setButtonType(true)
     }
 
-    const handleClientDelete = async (clientID) => {
+    const handleClientDelete = async () => {
         try {
-             await axios.delete(`http://localhost:8080/api/client/${id}`, clientID)
+            await deleteClient(id)
             console.log('Prospect deleted successfully');
         
-            setTimeout(() => {
-                navigate('/client')
-            }, 2000);
-    
+            navigate('/client')
         } catch (err) {
             console.error('Error deleting prospect:', err);
         }
