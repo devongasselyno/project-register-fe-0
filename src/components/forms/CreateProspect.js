@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import api from '../../api'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import api from '../../api/api'
 
 const CreateProspect = () => {
     const [name, setName] = useState('');
