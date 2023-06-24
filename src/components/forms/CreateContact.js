@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import api from '../../api/posts';
+import api from '../../api'
 import 'react-datepicker/dist/react-datepicker.css';
 import { FaTimes } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';

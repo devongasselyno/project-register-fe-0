@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import notify from './CreateProspect'
 import { ToastContainer, toast } from 'react-toastify';
-import api from '../../api/posts'
+import api from '../../api'
 import 'react-toastify/dist/ReactToastify.css';
 
 const CreateCompany = () => {

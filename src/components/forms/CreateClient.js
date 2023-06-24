@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import api from '../../api/posts';
 import { useNavigate } from 'react-router-dom';
 import { FaPlus, FaTimes, FaTimesCircle } from 'react-icons/fa';
+import { getLatestClient, createClient } from '../../api/services/Client';
+import api from '../../api'
 
 const CreateClient = () => {
 
@@ -157,7 +158,7 @@ const CreateClient = () => {
 
     const fetchLatestClient = async () => {
         try {
-            const response = await api.get('client/latest')
+            const response = await getLatestClient()
             setLatestClient(response.data)
             setLocations((prevLocations) => ({
                 ...prevLocations,
@@ -245,13 +246,13 @@ const CreateClient = () => {
     const handleConfirmationSubmit = async (event) => {
         event.preventDefault()
         try {
-            const response = await api.post('/client/create', client);
-            console.log('Data sent successfully:', response.client);
+            const response = await createClient(client)
+            console.log('Data sent successfully:', response.client)
             fetchLatestClient()
             console.log(locations)
             handleNextStep()
         } catch (error) {
-            console.error('Failed to send data:', error);
+            console.error('Failed to send data:', error)
         }
     }
 
