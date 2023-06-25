@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
+import { getAllContacts, getContactById, updateContact } from '../../api/services/Contact'
 
 const UpdateContact = () => {
     const navigate = useNavigate()
@@ -100,7 +101,7 @@ const UpdateContact = () => {
 
         console.log("formData:", formData)
         try {
-            await axios.patch(`http://localhost:8080/api/contact/update/${id}`, formData);
+            await updateContact(id, formData)
             navigate(`/contact/read/${id}`);
         } catch (error) {
             console.error('Failed to update contact: ', error)
@@ -110,8 +111,8 @@ const UpdateContact = () => {
     useEffect(() => {
         const fetchcontact = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/contact/read/${id}`);
-                const contactData = response.data.data;
+                const response = await getContactById(id)
+                const contactData = response;
         
                 setFormData((prevData) => ({
                 ...prevData,
