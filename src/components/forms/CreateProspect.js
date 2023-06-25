@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import api from '../../api/api'
+import { createProspect } from '../../api/services/Prospect';
 
 const CreateProspect = () => {
     const [name, setName] = useState('');
@@ -160,7 +161,7 @@ const CreateProspect = () => {
             };
 
             try {
-                const response = await api.post('/project/create', data);
+                const response = await createProspect(data)
                 console.log('Data sent successfully:', response.data);
                 notify();
                 setName('');
