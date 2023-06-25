@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Popup from "reactjs-popup"
-import { getProject } from "../../api/services/Project"
+import { deleteProject, getProject } from "../../api/services/Project"
 
 const ProjectDetail = () => {
 const { id } = useParams()
@@ -80,20 +80,11 @@ useEffect(() => {
 }, [])
 
 const navigate = useNavigate()
-const handleDelete = async (projectId) => {
+const handleDelete = async () => {
     try {
-    await axios.delete('http://localhost:8080/api/project/delete', {
-        data: {
-        project_id: projectId,
-        },
-    });
-    console.log('project deleted successfully');
-    deleteNotify()
-
-    setTimeout(() => {
+        await deleteProject(id)
+        console.log('project deleted successfully');
         navigate('/dashboard')
-    }, 2000);
-
     } catch (err) {
         console.error('Error deleting project:', err)
     }
@@ -115,11 +106,7 @@ const handleConvertproject = async (selectedType) => {
     }
     await api.post('/project/convert', responseData)
     try {
-        await axios.delete('http://localhost:8080/api/project/delete', {
-        data: {
-            project_id: project.project_id,
-        },
-        });
+        await deleteProject(id)
     } catch (error) {
         console.error(error)
     }
@@ -129,7 +116,7 @@ const handleConvertproject = async (selectedType) => {
     }, 2000);
     convertNotify()
     } catch (error) {
-    console.error(error)
+        console.error(error)
     }
 }
 
