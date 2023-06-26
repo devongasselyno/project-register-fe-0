@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
 import api from '../../api/posts'
-import axios from "axios"
 import { useNavigate, useParams } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -9,7 +8,7 @@ import { deleteProject, getProject } from "../../api/services/Project"
 
 const ProjectDetail = () => {
 const { id } = useParams()
-const [project, setproject] = useState('')
+const [project, setProject] = useState('')
 
 const [types, setTypes] = useState([])
 
@@ -54,8 +53,10 @@ const handleChange = (e) => {
 
 const fetchData = async () => {
     try {
+        console.log("ID", id)
         const res = await getProject(id)
-        setproject(res)  
+        setProject(res)
+        console.log("res", res)
     } catch (err) {
         console.error("Error fetching project data:", err)
     }
@@ -73,9 +74,6 @@ const fetchTypes = async () => {
 
 useEffect(() => {
     fetchData()
-}, {})
-
-useEffect(() => {
     fetchTypes()
 }, [])
 

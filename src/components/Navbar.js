@@ -7,8 +7,8 @@ import { useNavigate } from 'react-router-dom'
 import "../index"
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-import { getProject } from '../api/services/Project'
-import { getProspect } from '../api/services/Prospect'
+import { getAllProjects } from '../api/services/Project'
+import { getAllProspects } from '../api/services/Prospect'
 
 
 function Navbar() {
@@ -31,10 +31,13 @@ function Navbar() {
         return months[month]
     }
 
-    const navigate = useNavigate();
-
-    const handleProspectClick = (id) => {
-    navigate(`/prospect/read/${id}`)
+    const navigate = useNavigate()
+    const handleProjectClick = (id, project_type) => {
+        if (project_type === "Prospect") {
+            navigate(`/prospect/read/${id}`)
+        } else {
+            navigate(`/project/read/${id}`)
+        }
     }
 
     const [prospects, setProspects] = useState([])
@@ -42,19 +45,28 @@ function Navbar() {
 
     const fetchProjects = async () => {
         try {
-            const res = await getProject()
-            setProjects(res);
+            const res = await getAllProjects();
+            const projects = res.map(project => ({
+                ...project,
+                name: project.project_name
+            }));
+            setProjects(projects);
         } catch (error) {
             console.error('Error fetching project data:', error);
         }
-    }
+    };
+    
 
     const fetchProspects = async () => {
         try {
-            const res = await getProspect()
-            setProspects(res);
+            const res = await getAllProspects()
+            const prospects = res.map(prospect => ({
+                ...prospect,
+                name: prospect.project_name
+            }));
+            setProspects(prospects)
         } catch (error) {
-            console.error('Error fetching project data:', error);
+            console.error('Error fetching project data:', error)
         }
     }
 
@@ -72,13 +84,12 @@ function Navbar() {
         console.log(result)
     }
     
-    const handleOnSelect = (prospects) => {
-        console.log(prospects)
-        handleProspectClick(prospects.ID)
+    const handleOnSelect = (result) => {
+        handleProjectClick(result.ID, result.project_type.project_name)
     }
-    
+      
     const handleOnFocus = () => {
-        console.log('Focused')
+        console.log("Focused")
     }
 
     const handleOnClear = () => {
@@ -89,7 +100,7 @@ function Navbar() {
         return (
             <>
                 <span style={{ display: 'block', textAlign: 'left', fontWeight: 'bold' }}>{result.project_type.project_name}</span>
-                <span onClick={() => handleProspectClick(result.ID)} style={{ display: 'block', textAlign: 'left' }}>{result.name}</span>
+                <span style={{ display: 'block', textAlign: 'left' }}>{result.project_name}</span>
             </>
         )
     }
@@ -100,7 +111,7 @@ return (
             <div className='w-96 ml-16 z-50'>
                 <ReactSearchAutocomplete
                     items={[...prospects, ...projects]}
-                    fuseOptions={{ keys: ["name"] }}
+                    fuseOptions={{ keys: ["project_name"] }}
                     onSearch={handleOnSearch}
                     onHover={handleOnHover}
                     onSelect={handleOnSelect}
