@@ -9,6 +9,7 @@
     import Popup from "reactjs-popup";
     import { deleteProspect, getProspect } from "../../api/services/Prospect";
     import { getAllProjectTypes } from "../../api/services/Type"
+import { convertToProspect } from "../../api/services/Prospect";
 
     const ProspectDetail = () => {
     const { id } = useParams()
@@ -18,8 +19,8 @@
     const [types, setTypes] = useState([]);
     const [formData, setFormData] = useState({
         type_id: 0,
-        prospect_id: "",
-        prospect_name: "",
+        project_id: "",
+        project_name: "",
         year: 0,
         manager: "",
         status: "",
@@ -89,7 +90,6 @@
     
     const handleConvertProspect = async (selectedType) => {
             const responseData = {
-                prospect_id: prospect.project_id,
                 type_id: selectedType,
             };
 
@@ -99,7 +99,7 @@
                 setErrors(msg);
                 return;
             }
-            await api.post("/project/convert", responseData);
+            await convertToProspect(id, responseData)
             try {
                 await deleteProspect(id)
             } catch (error) {
