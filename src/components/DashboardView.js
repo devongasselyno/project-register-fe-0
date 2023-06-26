@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom'
 import "../index"
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
+import { getProject } from '../api/services/Project'
+import { getProspect } from '../api/services/Prospect'
 
 
 function DashboardView() {
@@ -39,27 +41,19 @@ function DashboardView() {
     const [prospects, setProspects] = useState([])
     const [projects, setProjects] = useState([])
 
-    const fetchData = async () => {
+    const fetchProjects = async () => {
         try {
-        const res = await axios.get('http://127.0.0.1:8080/api/project/read')
-        const modifiedProspects = res?.data?.data.map((prospect) => {
-            const { prospect_name, ...rest } = prospect
-            return { name: prospect_name, ...rest }
-        })
-        setProspects(modifiedProspects)
-        } catch (err) {
-            console.error('Error fetching prospect data:', err)
+            const res = await getProject()
+            setProjects(res);
+        } catch (error) {
+            console.error('Error fetching project data:', error);
         }
     }
 
-    const fetchProjects = async () => {
+    const fetchProspects = async () => {
         try {
-            const res = await axios.get('http://127.0.0.1:8080/api/project/read')
-            const modifiedProjects = res?.data?.data.map((project) => {
-                const { project_name, ...rest } = project;
-                return { name: project_name, ...rest };
-            })
-            setProjects(modifiedProjects);
+            const res = await getProspect()
+            setProspects(res);
         } catch (error) {
             console.error('Error fetching project data:', error);
         }
@@ -67,7 +61,7 @@ function DashboardView() {
 
     useEffect(() => {
         fetchProjects()
-        fetchData()
+        fetchProspects()
     }, [])
     
 
