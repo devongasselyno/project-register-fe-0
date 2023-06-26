@@ -147,7 +147,7 @@ const CreateProspect = () => {
 
         if (isValid) {
             const data = {
-                prospect_name: name,
+                project_name: name,
                 year: year,
                 manager: manager,
                 status: status,
