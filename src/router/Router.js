@@ -14,7 +14,6 @@ import ContactList from '../components/ContactList'
 import ClientDetail from '../components/ClientDetail'
 import ContactDetail from '../components/ContactDetail'
 import CreateClient from '../components/forms/CreateClient'
-import DataTable from '../components/TableTest'
 import UpdateClient from '../components/forms/UpdateClient'
 import UpdateContact from '../components/forms/UpdateContact'
 import UpdateProject from '../components/forms/UpdateProject'
@@ -59,9 +58,6 @@ const Router = () => {
                     <Route path='update/:id' element={<UpdateContact />} />
                 </Route>
 
-                <Route path='/table' element={<App />}>
-                    <Route index element={<DataTable />} />
-                </Route>
             </Routes>
         </BrowserRouter>
     )

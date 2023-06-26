@@ -1,6 +1,6 @@
 import './App.css';
 import Sidebar from './components/Sidebar';
-import DashboardView from './components/DashboardView';
+import Navbar from './components/Navbar';
 import { Outlet } from 'react-router-dom';
 
 
@@ -13,7 +13,7 @@ function App() {
       </div>
 
       <div className='w-[88%] ml-auto'>
-        <DashboardView />
+        <Navbar />
         <Outlet></Outlet>
       </div>
     </div>

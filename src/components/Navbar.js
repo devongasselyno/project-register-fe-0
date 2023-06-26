@@ -3,7 +3,6 @@ import { useState , useEffect} from 'react'
 import { FaCaretDown, FaCaretUp } from 'react-icons/fa'
 import Clock from 'react-live-clock'
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import "../index"
 import { Fragment } from 'react'
@@ -12,7 +11,7 @@ import { getProject } from '../api/services/Project'
 import { getProspect } from '../api/services/Prospect'
 
 
-function DashboardView() {
+function Navbar() {
 
     const [isOpen, setIsOpen] = useState(false)
     const current = new Date();
@@ -180,4 +179,4 @@ return (
     )
 }
 
-export default DashboardView
+export default Navbar

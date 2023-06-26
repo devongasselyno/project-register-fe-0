@@ -16,7 +16,6 @@ const ContactDetail = () => {
 
     const { id } = useParams()
     const navigate = useNavigate()
-    const [clientContactID, setClientContactID] = useState()
     const [contact, setContact] = useState({})
     const [employments, setEmployments] = useState([])
     const [locationsList, setLocationsList] = useState([])
@@ -246,21 +245,6 @@ const ContactDetail = () => {
         fetchLocations()
     }, [])
 
-    // useEffect(() => {
-    //     if (locationsList) {
-    //         const updatedLocationsList = locationsList.map((location) => ({
-    //             ID: location.ID,
-    //             address: location.address,
-    //             // city_name: location.city.city_name,
-    //             province_name: location.province.province_name,
-    //             postal_code: location.postal_code,
-    //             country: location.country,
-    //             geo: location.geo,
-    //         }));
-    //         setLocationsList(updatedLocationsList);
-    //     }
-    // }, [contact]);
-
     const columns = [
         { field: 'ID', headerName: 'ID' },
         { field: 'job_title', headerName: 'Job Title', width: 140 },
@@ -369,35 +353,6 @@ const ContactDetail = () => {
                             </div>
                         )}
                     </div>
-
-
-                    {/* <div className='py-5'>
-                        <p className='font-bold text-xl mb-3'>Locations</p>
-                        <table className='border-collapse'>
-                            <thead>
-                                <tr>
-                                    <th className='border px-4 py-2'>Address</th>
-                                    <th className='border px-4 py-2'>City</th>
-                                    <th className='border px-4 py-2'>Province</th>
-                                    <th className='border px-4 py-2'>Postal Code</th>
-                                    <th className='border px-4 py-2'>Country</th>
-                                    <th className='border px-4 py-2'>Geo</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {contact.locations && contact.locations.map(location => (
-                                    <tr key={location.ID}>
-                                        <td className='border px-4 py-2'>{location.address || '-'}</td>
-                                        <td className='border px-4 py-2'>{location.city.city_name || '-'}</td>
-                                        <td className='border px-4 py-2'>{location.province.province_name || '-'}</td>
-                                        <td className='border px-4 py-2'>{location.postal_code || '-'}</td>
-                                        <td className='border px-4 py-2'>{location.country || '-'}</td>
-                                        <td className='border px-4 py-2'>{location.geo || '-'}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div> */}
                 </div>
             </div>
 
@@ -420,11 +375,7 @@ const ContactDetail = () => {
                     pageSize={5}
                     pageSizeOptions={[5, 10]}
                 />
-                <button
-                    variant="contained"
-                    color="primary"
-                    className="bg-red-700 font-bold my-2 text-white text-base text-bold py-2 px-4 rounded-md hover:bg-red-800 focus:outline-none"
-                >
+                <button variant="contained" color="primary" className="bg-red-700 font-bold my-2 text-white text-base text-bold py-2 px-4 rounded-md hover:bg-red-800 focus:outline-none">
                     Add Location
                 </button>
             </div>
@@ -505,8 +456,8 @@ const ContactDetail = () => {
                                 <label htmlFor="status" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Status</label>
                                 <select onChange={handleEmploymentChange} name='status' id='status' className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'>
                                     <option selected disabled value="select">Select...</option>
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
                                 </select>
                                 {errors.status && <p className="text-red-500">{errors.status}</p>}
                             </div>
