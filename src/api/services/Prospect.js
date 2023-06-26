@@ -54,9 +54,9 @@ export const createProspect = async (ProspectData) => {
         }
     };
 
-    export const convertToProspect = async (ProspectId) => {
+    export const convertToProspect = async (ProspectId, requestData) => {
         try {
-            const response = await api.post(`model/prospect/convert/${ProspectId}`);
+            const response = await api.post(`model/prospect/convert/${ProspectId}`, requestData);
             return response.data;
         } catch (error) {
             throw new Error(error.response.data.error);

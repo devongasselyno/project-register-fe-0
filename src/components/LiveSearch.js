@@ -13,7 +13,7 @@ const LiveSearch = () => {
   useEffect(() => {
       const fetchData = async () => {
         try {
-          const res = await axios.get(base`http://127.0.0.1:8080/api/project/read`)
+          const res = await axios.get(base`http://prj-reg.10.18.5.3.nip.io/api/project/read`)
           console.log("Response data:", res.data)
           setProspects(res.data.data)
         } catch (err) {
