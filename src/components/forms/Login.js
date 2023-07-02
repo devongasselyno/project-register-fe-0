@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import api from '../../api/api'
 import sha512 from 'js-sha512';
 import { encode } from 'base64-arraybuffer';
@@ -7,7 +7,7 @@ import Alert from '@material-ui/lab/Alert';
 import Typical from 'react-typical';
 import { useNavigate } from 'react-router-dom';
 
-const SigninPage = () => {
+const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -47,8 +47,13 @@ const SigninPage = () => {
                 password: encodedHash
             });
 
+            const token  = response?.data?.token
+            
+            console.log(token)
+
             if (response.status === 200) {
                 console.log('Authentication successful');
+                sessionStorage.setItem('token', token)
                 navigate('/dashboard');
             } else if (response.status === 401) {
                 setError('Invalid email or password');
@@ -114,4 +119,4 @@ const SigninPage = () => {
     );
 };
 
-export default SigninPage;
+export default Login

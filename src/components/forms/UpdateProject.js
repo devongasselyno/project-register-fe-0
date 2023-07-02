@@ -15,6 +15,8 @@ const UpdateProject = () => {
         manager: '',
         status: '',
         amount: 0,
+        kurs: 0,
+        total_amount: 0,
         company_id: 0,
         client_id: 0,
         jira: false,
@@ -29,16 +31,17 @@ const UpdateProject = () => {
         const { name, value, type, checked } = e.target;
         const newValue = type === 'checkbox' ? checked : value;
         
-        if (name === 'amount') {
+        if (name === 'amount' || name === 'kurs' || name === 'total_amount') {
             const formattedValue = newValue.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
             setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: formattedValue,
+                ...prevFormData,
+                [name]: formattedValue,
             }));
+            calculateTotalAmount()
         } else {
             setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: newValue,
+                ...prevFormData,
+                [name]: newValue,
             }))
         }
     }
@@ -108,6 +111,39 @@ const UpdateProject = () => {
     useEffect(() => {
         fetchDropdownData()
     }, [])
+
+    const currencyOptions = [
+        { code: 'USD', symbol: '$' },
+        { code: 'IDR', symbol: 'Rp.' },
+        { code: 'CNY', symbol: '¥' },
+    ];
+
+    const handleCurrencyChange = (e) => {
+        const selectedCurrency = e.target.value;
+        setSelectedCurrency(selectedCurrency);
+      
+        if (selectedCurrency === 'IDR') {
+          setFormData((prevData) => ({
+            ...prevData,
+            kurs: '',
+            total_amount: '',
+          }));
+        }
+    };
+      
+
+    const calculateTotalAmount = () => {
+        const { amount, kurs } = formData;
+        if (amount && kurs) {
+            const kursWithoutDots = parseInt(kurs.replace(/\./g, ''));
+            const totalAmount = parseInt(amount) * kursWithoutDots
+            setFormData((prevData) => ({ ...prevData, total_amount: totalAmount }));
+        } else {
+            setFormData((prevData) => ({ ...prevData, total_amount: '' }));
+        }
+    };
+
+    const [selectedCurrency, setSelectedCurrency] = useState('')
       
     return (
         <div className='mt-10 mb-20 mx-auto max-w-xl flex-col items-center'>
@@ -115,7 +151,7 @@ const UpdateProject = () => {
 
             <form onSubmit={handleSubmit}>
                 <div className='pb-2'>
-                    <label htmlFor="project_name" className='block text-sm font-medium leading-6 text-gray-900 py-1'>project Name</label>
+                    <label htmlFor="project_name" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Project Name</label>
                     <input id='project_name' name='project_name' type="text" value={formData.project_name}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>
                     {errors.project_name && <p className="text-red-500">{errors.project_name}</p>}
                 </div>
@@ -132,13 +168,57 @@ const UpdateProject = () => {
                     {errors.status && <p className="text-red-500">{errors.status}</p>}
                 </div>
 
-                <div className='pb-2'>
-                    <label htmlFor="amount" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Amount</label>
-                    <div className='flex items-center gap-2'>
-                        <span>Rp.</span>
-                        <input id='amount' name='amount' type="text" value={formData.amount.toLocaleString('en-US', { useGrouping: true, minimumFractionDigits: 0 }).replace(/,/g, '.')}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>   
+                <div className='pb-2 flex gap-3'>
+                    <div>
+                        <label htmlFor="Currency" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Currency</label>
+                            <div className='flex items-center gap-2'>
+                            <select
+                                id="currency"
+                                name="currency"
+                                value={selectedCurrency}
+                                onChange={handleCurrencyChange}
+                                className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700'
+                            >
+                                <option value="">Select a currency</option>
+                                {currencyOptions.map((currency) => (
+                                    <option key={currency.code} value={currency.code}>
+                                       {currency.code}
+                                    </option>
+                                ))}
+                                </select>
+                            </div>
+                        {errors.amount && <p className="text-red-500">{errors.amount}</p>}
                     </div>
-                    {errors.amount && <p className="text-red-500">{errors.amount}</p>}
+                    <div>
+                        <label htmlFor="amount" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Amount</label>
+                            <div className='flex items-center gap-2'>
+                            <span>{currencyOptions.find((currency) => currency.code === selectedCurrency)?.symbol}</span>
+                                <input id='amount' name='amount' type="text" value={formData.amount.toLocaleString('en-US', { useGrouping: true, minimumFractionDigits: 0 }).replace(/,/g, '.')}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>   
+                            </div>
+                        {errors.amount && <p className="text-red-500">{errors.amount}</p>}
+                    </div>
+                    {selectedCurrency !== 'IDR' && selectedCurrency !== '' && (
+                    <div>
+                        <label htmlFor="kurs" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Kurs</label>
+                        <div className='flex items-center gap-2'>
+                            <input id='kurs' name='kurs' type="text" value={formData.kurs} onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>   
+                        </div>
+                        {errors.amount && <p className="text-red-500">{errors.amount}</p>}
+                    </div>
+                    )}
+
+                    {selectedCurrency !== 'IDR' && selectedCurrency !== '' && (
+                    <div>
+                        <label htmlFor="total_amount" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Total Amount (IDR)</label>
+                        <div className='flex items-center gap-2'>
+                            <span>Rp. </span>
+                            <input id='total_amount' name='total_amount' type="text" value={(formData.total_amount || 0).toLocaleString('en-US', {useGrouping: true,minimumFractionDigits: 0,}).replace(/,/g, '.')} onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>   
+                        </div>
+                        {errors.amount && <p className="text-red-500">{errors.amount}</p>}
+                    </div>
+                    )}
+
+
                 </div>
 
                 <div className='pb-2'>

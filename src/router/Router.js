@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import App from '../App'
 import Main from '../components/Main'
-import SigninPage from '../components/forms/SingIn'
+import Login from '../components/forms/Login'
 import CreateProspect from '../components/forms/CreateProspect'
 import ProspectDetail from '../components/forms/ProspectDetail'
 import CreateType from '../components/forms/CreateType'
@@ -25,7 +25,7 @@ const Router = () => {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Navigate to="/login" />} />
-                <Route path="/login" element={<SigninPage />} />
+                <Route path="/login" element={<Login />} />
 
                 <Route path='/dashboard' element={<App />}>
                     <Route index element={<Main />} />
