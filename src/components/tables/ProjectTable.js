@@ -18,8 +18,8 @@ const ProjectTable = () => {
     const fetchProjects = async () => {
         setLoading(true)
         try {
-            const projects = await getAllProjects()
-            setProjects(projects)
+            const response = await getAllProjects()
+            setProjects(response.data.data)
         } catch (error) {
             console.error('Error fetching projects:', error)
         }

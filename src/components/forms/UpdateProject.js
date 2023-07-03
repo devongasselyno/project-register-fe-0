@@ -32,12 +32,11 @@ const UpdateProject = () => {
         const newValue = type === 'checkbox' ? checked : value;
         
         if (name === 'amount' || name === 'kurs' || name === 'total_amount') {
-            const formattedValue = newValue.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            const formattedValue = newValue.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.')
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 [name]: formattedValue,
             }));
-            calculateTotalAmount()
         } else {
             setFormData((prevFormData) => ({
                 ...prevFormData,
@@ -102,7 +101,6 @@ const UpdateProject = () => {
         
             setClients(clientsResponse)
             setCompanies(companiesResponse)
-            console.log("companies:", companies)
         } catch (error) {
             console.error('Failed to fetch dropdown data:', error)
         }
@@ -130,13 +128,19 @@ const UpdateProject = () => {
           }));
         }
     };
-      
 
+    useEffect(() => {
+        calculateTotalAmount();
+    }, [formData.kurs, formData.amount]);
+      
     const calculateTotalAmount = () => {
         const { amount, kurs } = formData;
         if (amount && kurs) {
-            const kursWithoutDots = parseInt(kurs.replace(/\./g, ''));
+            const kursWithoutDots = parseInt(kurs.replace(/\./g, '').replace(/,/g, '.'));
+
+            console.log("kurs", kursWithoutDots)
             const totalAmount = parseInt(amount) * kursWithoutDots
+            
             setFormData((prevData) => ({ ...prevData, total_amount: totalAmount }));
         } else {
             setFormData((prevData) => ({ ...prevData, total_amount: '' }));

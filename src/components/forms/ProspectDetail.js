@@ -9,7 +9,7 @@
     import Popup from "reactjs-popup";
     import { deleteProspect, getProspect } from "../../api/services/Prospect";
     import { getAllProjectTypes } from "../../api/services/Type"
-import { convertToProspect } from "../../api/services/Prospect";
+    import { convertToProject } from "../../api/services/Prospect";
 
     const ProspectDetail = () => {
     const { id } = useParams()
@@ -53,8 +53,7 @@ import { convertToProspect } from "../../api/services/Prospect";
     const fetchData = async () => {
         try {
             const response = await getProspect(id)
-            setProspect(response)
-            console.log(prospect)
+            setProspect(response.data.data)
         } catch (err) {
             console.error("Error fetching project data:", err)
         }
@@ -99,7 +98,7 @@ import { convertToProspect } from "../../api/services/Prospect";
                 setErrors(msg);
                 return;
             }
-            await convertToProspect(id, responseData)
+            await convertToProject(id, responseData)
             try {
                 await deleteProspect(id)
             } catch (error) {

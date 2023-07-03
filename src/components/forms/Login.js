@@ -15,14 +15,14 @@ const Login = () => {
     const [passwordError, setPasswordError] = useState('');
 
     const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-    };
+        setEmail(e.target.value)
+    }
 
     const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
-    };
+        setPassword(e.target.value)
+    }
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const handleLogin = async (event) => {
         event.preventDefault()
@@ -53,7 +53,10 @@ const Login = () => {
 
             if (response.status === 200) {
                 console.log('Authentication successful');
-                sessionStorage.setItem('token', token)
+                sessionStorage.setItem('token', token);
+                // api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+                navigate('/dashboard');
+            } else if (response.status === 401) {
                 navigate('/dashboard');
             } else if (response.status === 401) {
                 setError('Invalid email or password');

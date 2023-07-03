@@ -46,17 +46,15 @@ const handleChange = (e) => {
     console.log(fieldValue)
 
     setFormData((prevData) => ({
-    ...prevData,
-    [name]: fieldValue,
+        ...prevData,
+        [name]: fieldValue,
     }))
 }
 
 const fetchData = async () => {
     try {
-        console.log("ID", id)
-        const res = await getProject(id)
-        setProject(res)
-        console.log("res", res)
+        const response = await getProject(id)
+        setProject(response.data.data)
     } catch (err) {
         console.error("Error fetching project data:", err)
     }

@@ -45,8 +45,8 @@ function Navbar() {
 
     const fetchProjects = async () => {
         try {
-            const res = await getAllProjects();
-            const projects = res.map(project => ({
+            const res = await getAllProjects()
+            const projects = res.data.data.map(project => ({
                 ...project,
                 name: project.project_name
             }));
@@ -54,16 +54,15 @@ function Navbar() {
         } catch (error) {
             console.error('Error fetching project data:', error);
         }
-    };
-    
+    }
 
     const fetchProspects = async () => {
         try {
             const res = await getAllProspects()
-            const prospects = res.map(prospect => ({
+            const prospects = res.data.data.map(prospect => ({
                 ...prospect,
                 name: prospect.project_name
-            }));
+            }))
             setProspects(prospects)
         } catch (error) {
             console.error('Error fetching project data:', error)

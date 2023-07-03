@@ -16,8 +16,8 @@ const ProspectTable = () => {
     const fetchProspects = async () => {
         setLoading(true)
         try {
-            const projects = await getAllProspects()
-            setProspects(projects)
+            const response = await getAllProspects()
+            setProspects(response.data.data)
         } catch (error) {
             console.error('Error fetching projects:', error)
         }
