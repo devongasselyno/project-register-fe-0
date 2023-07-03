@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import api from '../../api/api'
+import api, { instance } from '../../api/api'
 import sha512 from 'js-sha512';
 import { encode } from 'base64-arraybuffer';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -42,7 +42,7 @@ const Login = () => {
         }
 
         try {
-            const response = await api.post('/user/login', {
+            const response = await instance.post('/user/login', {
                 email,
                 password: encodedHash
             });
@@ -67,6 +67,7 @@ const Login = () => {
             } else {
                 setError('An error occurred');
             }
+            console.log(error)
         }
     };
 

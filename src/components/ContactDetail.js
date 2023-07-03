@@ -58,6 +58,15 @@ const ContactDetail = () => {
         contact_id: parseInt(id, 10)
     })
     const [showAddLocationForm, setShowAddLocationForm] = useState(false)
+    const [locationUpdateData, setLocationUpdateData] = useState({
+        address: "",
+        city_id: 0,
+        province_id: 0,
+        postal_code: "",
+        country: "",
+        geo: "",
+    })
+    const [showLocationUpdateForm, setShowLocationUpdateForm] = useState(false)
 
     const [clientError, setClientError] = useState('')
     const [errors, setErrors] = useState({})
@@ -118,6 +127,7 @@ const ContactDetail = () => {
 
     const handleAddLocationClose = () => {
         setShowAddLocationForm(false)
+        setShowLocationUpdateForm(false)
     }
 
     const validateClient = () => {
@@ -293,7 +303,7 @@ const ContactDetail = () => {
                         <FaTrash />
                     </button>
                     <button
-                        className="text-lg"
+                        className="text-lg" onClick={() => handleLocationUpdateClick(params.row)}
                     >
                         <FaEdit />
                     </button>
@@ -346,6 +356,25 @@ const ContactDetail = () => {
         }
     }
 
+    const handleLocationUpdateChange = async (field, values) => {
+        if (field === 'city_id' || field === 'province_id') {
+            const sublocationId = parseInt(values, 10)
+            if (field === 'province_id') {
+                setLocationUpdateData({ ...locationUpdateData, [field]: sublocationId })
+                try {
+                    const response = await api.get(`/city/filter/${sublocationId}`)
+                    setCities(response.data)
+                } catch (error) {
+                    console.error(error)
+                }
+            } else {
+                setLocationUpdateData({ ...locationUpdateData, [field]: sublocationId })
+            }
+        } else {
+            setLocationUpdateData({ ...locationUpdateData, [field]: values })
+        }
+    }
+
     const handleAddLocation = async () => {
         try {
             await api.post(`/locations/create`, locationData)
@@ -373,6 +402,23 @@ const ContactDetail = () => {
             console.error(error)
         }
         fetchLocations()
+    }
+
+    const handleLocationUpdateClick = (location) => {
+        setLocationUpdateData(location)
+        setShowLocationUpdateForm(true)
+        console.log(locationUpdateData)
+    }
+
+    const updateLocation = async (id) => {
+        try {
+            await api.put(`/locations/${id}`, locationUpdateData)
+            setLocationUpdateData({})
+            console.log(locationUpdateData)
+            handleAddLocationClose()
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     return (
@@ -592,6 +638,118 @@ const ContactDetail = () => {
                                 <div className="flex gap-5 w-full">
                                     <button type="button" onClick={handleAddLocationClose} className="mt-4 font-light bg-red-800 text-white text-base text-bold w-full py-2 px-4 max-w-full rounded-md hover:bg-amber-700 focus:outline-none">Cancel</button>
                                     <button type="submit" onClick={handleAddLocation} className="mt-4 font-light bg-emerald-600 text-white text-base text-bold w-full py-2 px-4 max-w-full rounded-md hover:bg-emerald-700 focus:outline-none">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showLocationUpdateForm && (
+                <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm'>
+                    <div className='bg-white rounded-lg py-6 px-10 w-1/3 absolute text-center'>
+                        <div>
+                            <FaTimes className='ml-auto hover:cursor-pointer' onClick={handleAddLocationClose} />
+                        </div>
+                        <h1 className="text-lg mb-2">
+                            Add a location
+                        </h1>
+                        <div className="self-start flex text-left">
+                            <div className="w-full self-start text-left">
+                                <label htmlFor="country"
+                                    className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">
+                                    Country
+                                </label>
+                                <input
+                                    type="text"
+                                    autoComplete='off'
+                                    className='bg-gray-100 border w-full border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block pb-2 p-2.5'
+                                    id='country'
+                                    value={locationUpdateData.country}
+                                    onChange={(event) => handleLocationUpdateChange('country', event.target.value)}
+                                    placeholder='Insert Country'
+                                />
+                                <div className="flex gap-4">
+                                    <div className="w-1/2 max-w-full">
+                                        <label htmlFor="province"
+                                            className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">
+                                            Province
+                                        </label>
+                                        <select type="number" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5"
+                                            id="province"
+                                            value={locationUpdateData.province_id}
+                                            onChange={(event) => handleLocationUpdateChange('province_id', event.target.value)}
+                                        >
+                                            <option value="">Select Province</option>
+                                            {Array.isArray(provinces.data) &&
+                                                provinces.data.map((province) => (
+                                                    <option key={province.ID} value={province.ID}>
+                                                        {province.province_name}
+                                                    </option>
+                                                ))}
+                                        </select>
+                                    </div>
+                                    <div className="w-1/2 max-w-full">
+                                        <label htmlFor="city"
+                                            className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">
+                                            City
+                                        </label>
+                                        <select type="number" className="bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block w-full p-2.5"
+                                            id="city"
+                                            value={locationUpdateData.city_id}
+                                            onChange={(event) => handleLocationUpdateChange('city_id', event.target.value)}>
+                                            <option value="">Select City</option>
+                                            {Array.isArray(cities.data) &&
+                                                cities.data.map((city) => (
+                                                    <option key={city.ID} value={city.ID}>
+                                                        {city.city_name}
+                                                    </option>
+                                                ))}
+                                        </select>
+                                    </div>
+                                </div>
+                                <label htmlFor="address"
+                                    className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">
+                                    Address
+                                </label>
+                                <input
+                                    type="text"
+                                    autoComplete='off'
+                                    className="bg-gray-100 border w-full border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block pb-2 p-2.5"
+                                    id="address"
+                                    value={locationUpdateData.address}
+                                    onChange={(event) => handleLocationUpdateChange('address', event.target.value)}
+                                    placeholder='Insert Address'
+                                />
+                                <label htmlFor="postcode"
+                                    className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">
+                                    Postal Code
+                                </label>
+                                <input
+                                    type="text"
+                                    autoComplete='off'
+                                    className="bg-gray-100 border w-full border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block pb-2 p-2.5"
+                                    id="postcode"
+                                    value={locationUpdateData.postal_code}
+                                    onChange={(event) => handleLocationUpdateChange('postal_code', event.target.value)}
+                                    placeholder='Insert Postal Code'
+                                />
+                                <label htmlFor="geo"
+                                    className="block text-sm font-medium leading-6 text-gray-900 py-1 pl-1">
+                                    Geo
+                                </label>
+                                <input
+                                    type="text"
+                                    autoComplete='off'
+                                    className="bg-gray-100 border w-full border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 block pb-2 p-2.5"
+                                    id="geo"
+                                    value={locationUpdateData.geo}
+                                    onChange={(event) => handleLocationUpdateChange('geo', event.target.value)}
+                                    placeholder='Insert Geo'
+                                />
+                                <div className="flex gap-5 w-full">
+                                    <button type="button" onClick={handleAddLocationClose} className="mt-4 font-light bg-red-800 text-white text-base text-bold w-full py-2 px-4 max-w-full rounded-md hover:bg-amber-700 focus:outline-none">Cancel</button>
+                                    <button type="submit" onClick={() => updateLocation(locationUpdateData.ID)} className="mt-4 font-light bg-emerald-600 text-white text-base text-bold w-full py-2 px-4 max-w-full rounded-md hover:bg-emerald-700 focus:outline-none">Submit</button>
                                 </div>
                             </div>
                         </div>
