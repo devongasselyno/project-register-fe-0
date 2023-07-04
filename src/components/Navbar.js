@@ -40,6 +40,11 @@ function Navbar() {
         }
     }
 
+    const handleSignout = async() =>  {
+        sessionStorage.clear()
+        navigate('/login')
+    }
+
     const [prospects, setProspects] = useState([])
     const [projects, setProjects] = useState([])
 
@@ -168,7 +173,7 @@ return (
                         <Menu.Item>
                         {({ active }) => (
                             <a
-                            href='login'
+                            onClick={handleSignout}
                             className={classNames(
                             active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                             'block px-4 py-2 text-sm'

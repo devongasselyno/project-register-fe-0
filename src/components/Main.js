@@ -24,11 +24,9 @@ const handleProspectClick = (id) => {
 useEffect(() => {
     const fetchPosts = async () => {
         setLoading(true)
-        console.log("resdatadata")
         const res1 = await getAllProjects()
         const res2 = await getAllProspects()
 
-        console.log("resdatadata", res1)
         const data = [...res1.data.data, ...res2.data.data];
         setPosts(data)
         setLoading(false)

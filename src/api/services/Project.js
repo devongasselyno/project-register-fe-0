@@ -11,10 +11,11 @@ export const createProject = async (projectData) => {
 
 export const getAllProjects = async () => {
     try {
-        const response = await Fetch({url: 'model/project/read', method: 'GET'});
+        const response = await Fetch({url: 'model/project/read', method: 'GET'})
         return response
     } catch (error) {
-        throw new Error(error.response.data.error);
+        console.log("response ke print", error.request.status)
+        throw new Error(error.response.data.error)    
     }
 }
 
