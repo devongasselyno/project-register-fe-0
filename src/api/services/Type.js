@@ -1,8 +1,8 @@
-import api from '../api';
+import Fetch from '../api';
 
 export const createType = async (typeData) => {
     try {
-        const response = await api.post('/type/create', typeData);
+        const response = await Fetch({url: '/type/create', payload: typeData, method: 'POST'});
         return response
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -11,7 +11,7 @@ export const createType = async (typeData) => {
 
 export const getAllProjectTypes = async () => {
     try {
-        const response = await api.get('/type/read');
+        const response = await Fetch({url: '/type/read', method: 'GET'});
         return response
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -20,7 +20,7 @@ export const getAllProjectTypes = async () => {
 
 export const getProjectTypeByID = async (typeId) => {
     try {
-        const response = await api.get(`/type/read/${typeId}`);
+        const response = await Fetch({url: `/type/read/${typeId}`, method:'GET'});
         return response
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -29,7 +29,7 @@ export const getProjectTypeByID = async (typeId) => {
 
 export const searchProjectType = async (searchParams) => {
     try {
-        const response = await api.get('/type/search', { params: searchParams });
+        const response = await Fetch({url: '/type/search',  params: searchParams , method:'GET'});
         return response
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -38,7 +38,7 @@ export const searchProjectType = async (searchParams) => {
 
 export const updateProjectType = async (typeId, typeData) => {
     try {
-        const response = await api.put(`/type/update/${typeId}`, typeData);
+        const response = await Fetch({url:`/type/update/${typeId}`, payload: typeData, method:'PATCH'});
         return response
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -47,7 +47,7 @@ export const updateProjectType = async (typeId, typeData) => {
 
 export const deleteProjectType = async (typeId) => {
     try {
-        const response = await api.delete(`/type/${typeId}`);
+        const response = await Fetch({url:`/type/${typeId}`, method:'DELETE'});
         return response
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -56,7 +56,7 @@ export const deleteProjectType = async (typeId) => {
 
 export const hardDeleteProjectType = async (typeId) => {
     try {
-        const response = await api.delete(`/type/hard/${typeId}`);
+        const response = await Fetch({url:`/type/hard/${typeId}`, method:'DELETE'});
         return response
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -65,7 +65,7 @@ export const hardDeleteProjectType = async (typeId) => {
 
 export const recoverProjectType = async (typeId) => {
     try {
-        const response = await api.post(`/type/recover/${typeId}`);
+        const response = await Fetch({url:`/type/recover/${typeId}`, method:'PATCH'});
         return response
     } catch (error) {
         throw new Error(error.response.data.error);

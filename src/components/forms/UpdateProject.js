@@ -68,9 +68,8 @@ const UpdateProject = () => {
         const fetchproject = async () => {
             try {
                 const response = await getProject(id)
-                const projectData = response
+                const projectData = response.data.data
         
-                console.log("project data", projectData)
                 setFormData({
                     project_id: projectData.ID|| '',
                     project_name: projectData.project_name || '',
@@ -99,8 +98,8 @@ const UpdateProject = () => {
             const clientsResponse = await getAllClients()
             const companiesResponse = await getAllCompanies()
         
-            setClients(clientsResponse)
-            setCompanies(companiesResponse)
+            setClients(clientsResponse.data.data)
+            setCompanies(companiesResponse.data.data)
         } catch (error) {
             console.error('Failed to fetch dropdown data:', error)
         }

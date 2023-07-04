@@ -8,14 +8,15 @@ const instance = axios.create({
 const Fetch = async (props) => {
     const { method, payload, url } = props
     const token = sessionStorage.getItem('token')
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
     if(!token) {
         console.log("kick")
         sessionStorage.removeItem('token')
-        navigate('/login')
+        // navigate('/login')
     }
 
+    console.log("responsnya bisa", url)
     try {
         let response
         instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
@@ -24,7 +25,7 @@ const Fetch = async (props) => {
             response = await instance.post(url, payload)
         } else if (method === 'GET') {
             response = await instance.get(url)
-            console.log("responsnya bisa")
+            
         } else if (method === 'PATCH') {
             response = await instance.patch(url, payload)
         } else if (method === 'DELETE') {
@@ -35,7 +36,7 @@ const Fetch = async (props) => {
     } catch (error) {
         if (error.response && error.response.status === 401) {
             sessionStorage.removeItem('token')
-            navigate('/login')
+            // navigate('/login')
             throw new Error('Unauthorized access')
         }
         throw error

@@ -1,11 +1,8 @@
     import React, { useEffect, useState } from "react";
-    import api from "../../api/posts";
-    import axios from "axios";
     import { useNavigate, useParams } from "react-router-dom";
     import { ToastContainer, toast } from "react-toastify";
     import "react-toastify/dist/ReactToastify.css";
     // import { Navigate } from "react-router-dom"
-    // import { type } from "@testing-library/user-event/dist/type"
     import Popup from "reactjs-popup";
     import { deleteProspect, getProspect } from "../../api/services/Prospect";
     import { getAllProjectTypes } from "../../api/services/Type"
@@ -62,30 +59,27 @@
     const fetchTypes = async () => {
         try {
             const response = await getAllProjectTypes()
-            setTypes(response)
+            setTypes(response.data)
         } catch (error) {
             console.error("Failed to fetch types:", error)
         }
     }
 
-    useEffect(() => {     
+    useEffect(() => { 
+        fetchData()
         fetchTypes()
     }, [])
 
-    useEffect(() => { 
-        fetchData()
-    }, {})
-
     const navigate = useNavigate();
-        const handleDelete = async () => {
-            try {
-                await deleteProspect(id)
-                console.log("Prospect deleted successfully");
-                navigate("/dashboard")
-            } catch (err) {
-                console.error("Error deleting prospect:", err);
-            }
-        };
+    const handleDelete = async () => {
+        try {
+            await deleteProspect(id)
+            console.log("Prospect deleted successfully");
+            navigate("/dashboard")
+        } catch (err) {
+            console.error("Error deleting prospect:", err);
+        }
+    };
     
     const handleConvertProspect = async (selectedType) => {
             const responseData = {

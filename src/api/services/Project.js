@@ -14,7 +14,7 @@ export const getAllProjects = async () => {
         const response = await Fetch({url: 'model/project/read', method: 'GET'})
         return response
     } catch (error) {
-        console.log("response ke print", error.request.status)
+        // console.log("response ke print", error.request.status)
         throw new Error(error.response.data.error)    
     }
 }

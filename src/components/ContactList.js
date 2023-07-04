@@ -13,8 +13,7 @@ const ContactList = () => {
     const fetchcontact = async () => {
         try {
             const response = await getAllContacts()
-            setcontacts(response)
-            console.log(response)
+            setcontacts(response.data.data)
         } catch (error) {
             console.log("Error fetching data")
         }

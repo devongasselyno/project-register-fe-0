@@ -1,8 +1,8 @@
-import api from '../api'
+import Fetch from '../api'
 
 export const createCompany = async (companyData) => {
     try {
-        const response = await api.post('/company/create', companyData);
+        const response = await Fetch({url: '/company/create', payload: companyData, method:'POST'});
         return response
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -11,7 +11,7 @@ export const createCompany = async (companyData) => {
 
 export const getAllCompanies = async () => {
     try {
-        const response = await api.get('/company/read');
+        const response = await Fetch({url:'/company/read', method:'GET'});
         return response
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -20,7 +20,7 @@ export const getAllCompanies = async () => {
 
 export const getCompanyByID = async (id) => {
     try {
-        const response = await api.get(`/company/read/${id}`);
+        const response = await Fetch({url: `/company/read/${id}`, method:'GET'});
         return response
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -29,7 +29,7 @@ export const getCompanyByID = async (id) => {
 
 export const searchCompany = async (query) => {
     try {
-        const response = await api.get('/company/search', { params: { query } });
+        const response = await Fetch('/company/search', { params: { query } });
         return response
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -38,7 +38,7 @@ export const searchCompany = async (query) => {
 
 export const updateCompany = async (id, updatedData) => {
     try {
-        const response = await api.put(`/company/${id}`, updatedData);
+        const response = await Fetch(`/company/${id}`, updatedData);
         return response
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -47,7 +47,7 @@ export const updateCompany = async (id, updatedData) => {
 
 export const deleteCompany = async (id) => {
     try {
-        const response = await api.delete(`/company/${id}`);
+        const response = await Fetch(`/company/${id}`);
         return response
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -56,7 +56,7 @@ export const deleteCompany = async (id) => {
 
 export const hardDeleteCompany = async (id) => {
     try {
-        const response = await api.delete(`/company/hard/${id}`);
+        const response = await Fetch(`/company/hard/${id}`);
         return response
     } catch (error) {
         throw new Error(error.response.data.error);
@@ -65,7 +65,7 @@ export const hardDeleteCompany = async (id) => {
 
 export const recoverCompany = async (companyData) => {
     try {
-        const response = await api.post('/company/recover', companyData);
+        const response = await Fetch('/company/recover', companyData);
         return response
     } catch (error) {
         throw new Error(error.response.data.error);

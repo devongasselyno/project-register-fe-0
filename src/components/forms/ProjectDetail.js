@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Popup from "reactjs-popup"
 import { deleteProject, getProject } from "../../api/services/Project"
+import { getAllProjectTypes } from "../../api/services/Type"
 
 const ProjectDetail = () => {
 const { id } = useParams()
@@ -62,9 +63,8 @@ const fetchData = async () => {
 
 const fetchTypes = async () => {
     try {
-        const response = await api.get('/type/read')
+        const response = await getAllProjectTypes()
         setTypes(response.data)
-        console.log("types",types)
     } catch (error) {
         console.error('Failed to fetch types:', error)
     }

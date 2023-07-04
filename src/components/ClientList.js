@@ -10,8 +10,7 @@ const ClientList = () => {
     const fetchClients = async () => {
         try {
             const response = await getAllClients()
-            setCLients(response)
-            console.log(clients)
+            setCLients(response.data.data)
         } catch (error) {
             console.log("Error fetching data")
         }

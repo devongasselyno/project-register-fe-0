@@ -177,11 +177,9 @@ const ContactDetail = () => {
                 }
 
                 const res = await createClientContact(contactData)
-                console.log("RES.ID", res.ID)
 
                 employmentFormData.client_contact_id = res.ID
 
-                console.log("employmentform", employmentFormData)
                 await createEmployment(employmentFormData)
                 setShowEmploymentForm(false)
                 window.location.reload(false)
@@ -233,8 +231,8 @@ const ContactDetail = () => {
 
     const fetchContact = async () => {
         try {
-            const res = await getContactById(id)
-            setContact(res)
+            const response = await getContactById(id)
+            setContact(response.data.data)
         } catch (error) {
             console.log(error)
         }
@@ -242,9 +240,8 @@ const ContactDetail = () => {
 
     const fetchClients = async () => {
         try {
-
             const res = await getAllClients()
-            setClients(res)
+            setClients(res.data)
         } catch (error) {
             console.log("Error fetching data:", error)
         }
@@ -253,7 +250,7 @@ const ContactDetail = () => {
     const fetchEmployments = async () => {
         try {
             const res = await getAllEmployments()
-            const data = res
+            const data = res.data.data
             setEmployments(data)
         } catch (error) {
             console.log("Error fetching data:", error)

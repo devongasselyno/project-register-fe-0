@@ -82,8 +82,8 @@ const ClientDetail = () => {
 
     const fetchClient = async () => {
         try {
-            const res = await getClientByID(id)
-            setClient(res)
+            const response = await getClientByID(id)
+            setClient(response.data)
         } catch (error) {
             console.log(error)
         }
