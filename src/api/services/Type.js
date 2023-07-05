@@ -2,21 +2,21 @@ import Fetch from '../api';
 
 export const createType = async (typeData) => {
     try {
-        const response = await Fetch({url: '/type/create', payload: typeData, method: 'POST'});
+        const response = await Fetch({url: '/type/create', payload: typeData, method: 'POST'})
         return response
     } catch (error) {
-        throw new Error(error.response.data.error);
+        throw new Error(error.response.data.error)
     }
-};
+}
 
 export const getAllProjectTypes = async () => {
     try {
-        const response = await Fetch({url: '/type/read', method: 'GET'});
+        const response = await Fetch({url: '/type/read', method: 'GET'})
         return response
     } catch (error) {
-        throw new Error(error.response.data.error);
+        throw new Error(error.response.data.error)
     }
-};
+}
 
 export const getProjectTypeByID = async (typeId) => {
     try {
@@ -25,7 +25,7 @@ export const getProjectTypeByID = async (typeId) => {
     } catch (error) {
         throw new Error(error.response.data.error);
     }
-};
+}
 
 export const searchProjectType = async (searchParams) => {
     try {
