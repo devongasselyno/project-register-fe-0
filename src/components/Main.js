@@ -27,7 +27,7 @@ useEffect(() => {
         const res1 = await getAllProjects()
         const res2 = await getAllProspects()
 
-        const data = [...res1.data.data, ...res2.data.data];
+        const data = [...res1?.data?.data, ...res2?.data?.data];
         setPosts(data)
         setLoading(false)
     }

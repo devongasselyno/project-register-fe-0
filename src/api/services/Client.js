@@ -5,7 +5,7 @@ export const createClient = async (clientData) => {
         const response = await Fetch({url: '/client/create', payload: clientData, method: 'POST'})
         return response
     } catch (error) {
-        throw new Error(error.response.data.error);
+        throw new Error(error?.response.data.error);
     }
 };
 
