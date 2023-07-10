@@ -11,6 +11,7 @@ import { getContactById, softDeleteContact } from '../api/services/Contact';
 import { createClientContact } from '../api/services/ClientContact';
 import { createEmployment, getAllEmployments } from '../api/services/Employment';
 import { getAllClients } from '../api/services/Client';
+import { getAllLocations } from '../api/services/Location';
 
 const ContactDetail = () => {
 
@@ -259,7 +260,7 @@ const ContactDetail = () => {
 
     const fetchLocations = async () => {
         try {
-            const res = await api.get(`/contact/locations/${id}`)
+            const res = await getAllLocations()
             const data = res.data.data
             setLocationsList(data)
         } catch (error) {
