@@ -1,31 +1,31 @@
 import axios from "axios"
-import { useNavigate } from 'react-router-dom'
+// import { useEffect } from "react"
+// import { useNavigate } from 'react-router-dom'
 
 const instance = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
 })
 
-const Fetch = async (props) => {
+const Fetch = async(props) => {
     const { method, payload, url } = props
     const token = sessionStorage.getItem('token')
     // const navigate = useNavigate()
 
-    if(!token) {
-        console.log("kick")
+    if (!token) {
         sessionStorage.removeItem('token')
         // navigate('/login')
+        return
     }
 
-    console.log("responsnya bisa", url)
     try {
-        let response
         instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
+
+        let response
 
         if (method === 'POST') {
             response = await instance.post(url, payload)
         } else if (method === 'GET') {
             response = await instance.get(url)
-            
         } else if (method === 'PATCH') {
             response = await instance.patch(url, payload)
         } else if (method === 'DELETE') {
@@ -33,6 +33,7 @@ const Fetch = async (props) => {
         }
 
         return response
+
     } catch (error) {
         if (error.response && error.response.status === 401) {
             sessionStorage.removeItem('token')
