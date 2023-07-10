@@ -19,6 +19,7 @@ import UpdateContact from '../components/forms/UpdateContact'
 import UpdateProject from '../components/forms/UpdateProject'
 import UpdateProspect from '../components/forms/UpdateProspect'
 import ProjectDetail from '../components/forms/ProjectDetail'
+// import HandleApiCall from '../api/HandleApiCall'
 
 const Router = () => {
     return (
@@ -26,7 +27,6 @@ const Router = () => {
             <Routes>
                 <Route path="/" element={<Navigate to="/login" />} />
                 <Route path="/login" element={<Login />} />
-
                 <Route path='/dashboard' element={<App />}>
                     <Route index element={<Main />} />
                 </Route>
