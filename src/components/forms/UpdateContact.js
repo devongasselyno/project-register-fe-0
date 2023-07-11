@@ -112,28 +112,28 @@ const UpdateContact = () => {
         const fetchcontact = async () => {
             try {
                 const response = await getContactById(id)
-                const contactData = response;
+                const contactData = response.data.data;
         
                 setFormData((prevData) => ({
-                ...prevData,
-                contact_name: contactData.contact_name || '',
-                contact_alias: contactData.contact_alias || '',
-                gender: contactData.gender || '',
-                birth_date: contactData.birth_date || '',
-                religion: contactData.religion || '',
-                contact_emails: contactData.contact_emails || [],
-                contact_phones: contactData.contact_phones || [],
-                interests: contactData.interests || [],
-                skills: contactData.skills || [],
-                educations: contactData.educations || [],
-                notes: contactData.notes || '',
-                contact_social_presence: {
-                    linkedin: contactData.contact_social_presence.linkedin || '',
-                    facebook: contactData.contact_social_presence.facebook || '',
-                    twitter: contactData.contact_social_presence.twitter || '',
-                    github: contactData.contact_social_presence.github || '',
-                    other: contactData.contact_social_presence.other || [],
-                },
+                    ...prevData,
+                    contact_name: contactData.contact_name || '',
+                    contact_alias: contactData.contact_alias || '',
+                    gender: contactData.gender || '',
+                    birth_date: contactData.birth_date || '',
+                    religion: contactData.religion || '',
+                    contact_emails: contactData.contact_emails || [],
+                    contact_phones: contactData.contact_phones || [],
+                    interests: contactData.interests || [],
+                    skills: contactData.skills || [],
+                    educations: contactData.educations || [],
+                    notes: contactData.notes || '',
+                    contact_social_presence: {
+                        linkedin: contactData.contact_social_presence.linkedin || '',
+                        facebook: contactData.contact_social_presence.facebook || '',
+                        twitter: contactData.contact_social_presence.twitter || '',
+                        github: contactData.contact_social_presence.github || '',
+                        other: contactData.contact_social_presence.other || [],
+                    },
                 }))
         
                 setLoading(false)

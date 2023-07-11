@@ -1,8 +1,8 @@
-import api from '../api'
+import Fetch from '../api'
 
 export const createClientContact = async (clientContactData) => {
     try {
-        const response = await api.post('/clientcontact/create', clientContactData);
+        const response = await Fetch({url: '/clientcontact/create',payload: clientContactData});
         console.log("clientcontact", response.data.data)
         return response
     } catch (error) {
@@ -12,7 +12,7 @@ export const createClientContact = async (clientContactData) => {
 
 export const getAllClientContacts = async () => {
     try {
-        const response = await api.get('/clientcontact/read');
+        const response = await Fetch({url: '/clientcontact/read'});
         return response
     } catch (error) {
         throw new Error(error.response.data.error);

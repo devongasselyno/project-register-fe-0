@@ -21,7 +21,6 @@ const Fetch = async(props) => {
         instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
         let response
-
         if (method === 'POST') {
             response = await instance.post(url, payload)
         } else if (method === 'GET') {

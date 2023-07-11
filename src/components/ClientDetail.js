@@ -1,12 +1,12 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import api from '../api/posts'
 import { FaTimes } from 'react-icons/fa';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { deleteClient, getClientByID } from '../api/services/Client'
+import { createContact, getAllContacts } from '../api/services/Contact';
 
 const ClientDetail = () => {
     const { id } = useParams()
@@ -65,7 +65,7 @@ const ClientDetail = () => {
 
         if (isValid) {
             try {
-                const response = await api.post('/contact/create', contactData)
+                const response = await createContact(contactData)
                 setSuccessSnackbar('Contact Created')
                 handleContactClose()
                 setContactData({
@@ -83,7 +83,7 @@ const ClientDetail = () => {
     const fetchClient = async () => {
         try {
             const response = await getClientByID(id)
-            setClient(response.data)
+            setClient(response.data.data)
         } catch (error) {
             console.log(error)
         }
@@ -91,7 +91,7 @@ const ClientDetail = () => {
 
     const fetchContacts = async () => {
         try {
-            const response = await api.get('/contact/read')
+            const response = await getAllContacts()
             const data = response.data
             setContacts(data)
         } catch (error) {
@@ -164,7 +164,7 @@ const ClientDetail = () => {
                         {contact.subsidiary && (
                             <div>
                                 <p><span className='font-bold'>Subsidiaries: </span> {contact.subsidiary.subsidiaries?.join(', ') || '-'}</p>
-                                <p><span className='font-bold'>Immediate Parents: </span>  {contact.subsidiary.immediate_parents?.join(', ') || '-'}</p>
+                                <p><span className='font-bold'>Immediate Parents: </span>  {contact.subsidiary.immidiate_parents?.join(', ') || '-'}</p>
                                 <p><span className='font-bold'>Ultimate Parents: </span>{contact.subsidiary.ultimate_parents?.join(', ') || '-'}</p>
                             </div>
                         )}
