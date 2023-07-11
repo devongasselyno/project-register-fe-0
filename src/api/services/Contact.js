@@ -38,7 +38,7 @@ export const getContactById = async (id) => {
 
 export const updateContact = async (id, updatedData) => {
     try {
-        const response = await Fetch({url: `/contact/update/${id}`, payload: updatedData, method: 'GET'});
+        const response = await Fetch({url: `/contact/update/${id}`, payload: updatedData, method: 'PATCH'});
         return response
     } catch (error) {
         throw new Error(error.response.data.error);

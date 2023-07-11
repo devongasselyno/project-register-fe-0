@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import axios from 'axios'
 import { getClientByID, updateClient } from '../../api/services/Client'
 
 const UpdateClient = () => {
@@ -114,7 +113,6 @@ const UpdateClient = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        console.log("formData:", formData)
         try {
             await updateClient(id, formData)
             navigate(`/client/read/${id}`)
@@ -127,7 +125,7 @@ const UpdateClient = () => {
         const fetchClient = async () => {
             try {
                 const response = await getClientByID(id)
-                const clientData = response
+                const clientData = response.data.data
 
                 setFormData((prevData) => ({
                     ...prevData,
@@ -144,7 +142,7 @@ const UpdateClient = () => {
                     },
                     subsidiary: {
                         subsidiaries: clientData.subsidiary.subsidiaries || [],
-                        immidiate_parents: clientData.subsidiary.immediate_parents || [],
+                        immidiate_parents: clientData.subsidiary.immidiate_parents || [],
                         ultimate_parents: clientData.subsidiary.ultimate_parents || [],
                     },
                 }))

@@ -1,17 +1,17 @@
 import { useEffect, useState, React } from 'react'
-import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
-import api from '../api/posts'
 import { FaTimes, FaEdit, FaTrash } from 'react-icons/fa';
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
-import { DataGrid, GridToolbar } from '@mui/x-data-grid'
+import { DataGrid } from '@mui/x-data-grid'
 import { getContactById, softDeleteContact } from '../api/services/Contact';
 import { createClientContact } from '../api/services/ClientContact';
 import { createEmployment, getAllEmployments } from '../api/services/Employment';
-import { getAllClients } from '../api/services/Client';
-import { getAllLocations } from '../api/services/Location';
+import { createClient, getAllClients } from '../api/services/Client';
+import { createLocation, getAllLocations } from '../api/services/Location';
+import { getAllCities, getCityFiltered } from '../api/services/City';
+import { getAllProvinces } from '../api/services/Province';
 
 const ContactDetail = () => {
 
@@ -201,7 +201,7 @@ const ContactDetail = () => {
 
         if (isValid) {
             try {
-                const response = await api.post('/client/create', clientData)
+                const response = await createClient(clientData)
                 setSuccessSnackbar('Client Created')
                 handleClientClose()
                 setClientData({
@@ -251,8 +251,7 @@ const ContactDetail = () => {
     const fetchEmployments = async () => {
         try {
             const res = await getAllEmployments()
-            const data = res.data.data
-            setEmployments(data)
+            setEmployments(res.data)
         } catch (error) {
             console.log("Error fetching data:", error)
         }
@@ -261,8 +260,7 @@ const ContactDetail = () => {
     const fetchLocations = async () => {
         try {
             const res = await getAllLocations()
-            const data = res.data.data
-            setLocationsList(data)
+            setLocationsList(res.data)
         } catch (error) {
             console.error("Failed to fetch locations")
         }
@@ -315,7 +313,7 @@ const ContactDetail = () => {
     useEffect(() => {
         const fetchProvinces = async () => {
             try {
-                const response = await api.get('/province/read')
+                const response = await getAllProvinces()
                 setProvinces(response.data)
             } catch (error) {
                 console.error('Failed to fetch provinces:', error)
@@ -324,7 +322,7 @@ const ContactDetail = () => {
 
         const fetchCities = async () => {
             try {
-                const response = await api.get('/city/read')
+                const response = await getAllCities()
                 setCities(response.data)
             } catch (error) {
                 console.error('Failed to fetch cities:', error)
@@ -341,7 +339,7 @@ const ContactDetail = () => {
             if (field === 'province_id') {
                 setLocationData({ ...locationData, [field]: sublocationId })
                 try {
-                    const response = await api.get(`/city/filter/${sublocationId}`)
+                    const response = await getCityFiltered(sublocationId)
                     setCities(response.data)
                 } catch (error) {
                     console.error(error)
@@ -360,7 +358,7 @@ const ContactDetail = () => {
             if (field === 'province_id') {
                 setLocationUpdateData({ ...locationUpdateData, [field]: sublocationId })
                 try {
-                    const response = await api.get(`/city/filter/${sublocationId}`)
+                    const response = await getCityFiltered(sublocationId)
                     setCities(response.data)
                 } catch (error) {
                     console.error(error)
@@ -375,7 +373,7 @@ const ContactDetail = () => {
 
     const handleAddLocation = async () => {
         try {
-            await api.post(`/locations/create`, locationData)
+            await createLocation(locationData)
 
             setLocationData({
                 address: "",
@@ -395,7 +393,7 @@ const ContactDetail = () => {
 
     const deleteLocation = async (id) => {
         try {
-            api.delete(`/locations/${id}`)
+            await deleteLocation(id)
         } catch (error) {
             console.error(error)
         }
@@ -410,9 +408,8 @@ const ContactDetail = () => {
 
     const updateLocation = async (id) => {
         try {
-            await api.put(`/locations/${id}`, locationUpdateData)
+            await updateLocation(locationUpdateData)
             setLocationUpdateData({})
-            console.log(locationUpdateData)
             handleAddLocationClose()
         } catch (error) {
             console.error(error)
