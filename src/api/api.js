@@ -25,6 +25,8 @@ const Fetch = async(props) => {
             response = await instance.post(url, payload)
         } else if (method === 'GET') {
             response = await instance.get(url)
+        } else if (method === 'PUT') {
+            response = await instance.put(url)
         } else if (method === 'PATCH') {
             response = await instance.patch(url, payload)
         } else if (method === 'DELETE') {

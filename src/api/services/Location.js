@@ -38,7 +38,7 @@ export const searchLocations = async (searchParams) => {
 
 export const updateLocation = async (locationId, locationData) => {
     try {
-        const response = await Fetch({ url: `/locations/update/${locationId}`, payload: locationData, method: 'PATCH' });
+        const response = await Fetch({ url: `/locations/${locationId}`, payload: locationData, method: 'PATCH' });
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.error);

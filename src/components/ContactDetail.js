@@ -9,7 +9,7 @@ import { getContactById, softDeleteContact } from '../api/services/Contact';
 import { createClientContact } from '../api/services/ClientContact';
 import { createEmployment, getAllEmployments } from '../api/services/Employment';
 import { createClient, getAllClients } from '../api/services/Client';
-import { createLocation, getAllLocations } from '../api/services/Location';
+import { createLocation, getAllLocations, updateLocation, deleteLocation } from '../api/services/Location';
 import { getAllCities, getCityFiltered } from '../api/services/City';
 import { getAllProvinces } from '../api/services/Province';
 
@@ -124,6 +124,8 @@ const ContactDetail = () => {
 
     const handleAddLocationClick = () => {
         setShowAddLocationForm(true)
+        // console.log(provinces)
+        // console.log(cities)
     }
 
     const handleAddLocationClose = () => {
@@ -295,7 +297,7 @@ const ContactDetail = () => {
             headerName: 'Actions',
             renderCell: (params) => (
                 <div className="flex gap-3">
-                    <button className="text-lg" onClick={() => deleteLocation(params.row.ID)}>
+                    <button className="text-lg" onClick={() => deleteContactLocation(params.row.ID)}>
                         <FaTrash />
                     </button>
                     <button
@@ -314,7 +316,8 @@ const ContactDetail = () => {
         const fetchProvinces = async () => {
             try {
                 const response = await getAllProvinces()
-                setProvinces(response.data)
+                setProvinces(response)
+                
             } catch (error) {
                 console.error('Failed to fetch provinces:', error)
             }
@@ -323,7 +326,7 @@ const ContactDetail = () => {
         const fetchCities = async () => {
             try {
                 const response = await getAllCities()
-                setCities(response.data)
+                setCities(response)
             } catch (error) {
                 console.error('Failed to fetch cities:', error)
             }
@@ -340,7 +343,7 @@ const ContactDetail = () => {
                 setLocationData({ ...locationData, [field]: sublocationId })
                 try {
                     const response = await getCityFiltered(sublocationId)
-                    setCities(response.data)
+                    setCities(response)
                 } catch (error) {
                     console.error(error)
                 }
@@ -359,7 +362,7 @@ const ContactDetail = () => {
                 setLocationUpdateData({ ...locationUpdateData, [field]: sublocationId })
                 try {
                     const response = await getCityFiltered(sublocationId)
-                    setCities(response.data)
+                    setCities(response)
                 } catch (error) {
                     console.error(error)
                 }
@@ -389,9 +392,10 @@ const ContactDetail = () => {
         } catch (error) {
             console.error(error)
         }
+
     }
 
-    const deleteLocation = async (id) => {
+    const deleteContactLocation = async (id) => {
         try {
             await deleteLocation(id)
         } catch (error) {
@@ -403,17 +407,18 @@ const ContactDetail = () => {
     const handleLocationUpdateClick = (location) => {
         setLocationUpdateData(location)
         setShowLocationUpdateForm(true)
-        console.log(locationUpdateData)
+        // console.log(locationUpdateData)
     }
 
-    const updateLocation = async (id) => {
+    const updateLocationData = async (id) => {
         try {
-            await updateLocation(locationUpdateData)
+            await updateLocation(id, locationUpdateData)
             setLocationUpdateData({})
             handleAddLocationClose()
         } catch (error) {
             console.error(error)
         }
+        fetchLocations()
     }
 
     return (
@@ -744,7 +749,7 @@ const ContactDetail = () => {
                                 />
                                 <div className="flex gap-5 w-full">
                                     <button type="button" onClick={handleAddLocationClose} className="mt-4 font-light bg-red-800 text-white text-base text-bold w-full py-2 px-4 max-w-full rounded-md hover:bg-amber-700 focus:outline-none">Cancel</button>
-                                    <button type="submit" onClick={() => updateLocation(locationUpdateData.ID)} className="mt-4 font-light bg-emerald-600 text-white text-base text-bold w-full py-2 px-4 max-w-full rounded-md hover:bg-emerald-700 focus:outline-none">Submit</button>
+                                    <button type="submit" onClick={() => updateLocationData(locationUpdateData.ID)} className="mt-4 font-light bg-emerald-600 text-white text-base text-bold w-full py-2 px-4 max-w-full rounded-md hover:bg-emerald-700 focus:outline-none">Submit</button>
                                 </div>
                             </div>
                         </div>
