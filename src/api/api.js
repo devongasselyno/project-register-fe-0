@@ -1,6 +1,4 @@
 import axios from "axios"
-// import { useEffect } from "react"
-// import { useNavigate } from 'react-router-dom'
 
 const instance = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
@@ -9,11 +7,9 @@ const instance = axios.create({
 const Fetch = async(props) => {
     const { method, payload, url } = props
     const token = sessionStorage.getItem('token')
-    // const navigate = useNavigate()
 
     if (!token) {
         sessionStorage.removeItem('token')
-        // navigate('/login')
         return
     }
 
@@ -36,7 +32,6 @@ const Fetch = async(props) => {
     } catch (error) {
         if (error.response && error.response.status === 401) {
             sessionStorage.removeItem('token')
-            // navigate('/login')
             throw new Error('Unauthorized access')
         }
         throw error
