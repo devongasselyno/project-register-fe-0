@@ -276,25 +276,26 @@ const ContactDetail = () => {
     }, [])
 
     const columns = [
-        { field: 'ID', headerName: 'ID' },
-        { field: 'job_title', headerName: 'Job Title', width: 140 },
-        { field: 'job_start', headerName: 'Job Start', width: 110 },
-        { field: 'job_end', headerName: 'Job End', width: 110 },
-        { field: 'status', headerName: 'Status' },
-        { field: 'client_contact_id', headerName: 'Client Contact ID', width: 125 },
+        { field: 'ID', headerName: 'ID', width:10, headerAlign: 'center', align: 'center', headerClassName: 'bg-[#EE3E23] text-white'},
+        { field: 'job_title', headerName: 'Job Title', width: 140 , headerAlign: 'center', align: 'center', headerClassName: 'bg-[#EE3E23] text-white'},
+        { field: 'job_start', headerName: 'Job Start', width: 110 , headerAlign: 'center', align: 'center', headerClassName: 'bg-[#EE3E23] text-white'},
+        { field: 'job_end', headerName: 'Job End', width: 110 , headerAlign: 'center', align: 'center', headerClassName: 'bg-[#EE3E23] text-white'},
+        { field: 'status', headerName: 'Status' ,  headerAlign: 'center', align: 'center', headerClassName: 'bg-[#EE3E23] text-white'},
     ]
 
     const locationColumns = [
-        { field: 'ID', headerName: 'ID' },
-        { field: 'address', headerName: 'Address', width: 200 },
-        { field: 'city_name', headerName: 'City', width: 150, valueGetter: (params) => params.row.city.city_name },
-        { field: 'province_name', headerName: 'Province', width: 150, valueGetter: (params) => params.row.province.province_name },
-        { field: 'postal_code', headerName: 'Postal Code', width: 120 },
-        { field: 'country', headerName: 'Country', width: 150 },
-        { field: 'geo', headerName: 'Geo', width: 150 },
+        { field: 'ID', headerName: 'ID', headerClassName: 'bg-[#EE3E23] text-white', headerAlign: 'center', align: 'center'},
+        { field: 'address', headerName: 'Address', width: 300, headerClassName: 'bg-[#EE3E23] text-white', headerAlign: 'center'},
+        { field: 'city_name', headerName: 'City', width: 150, valueGetter: (params) => params.row.city.city_name , headerClassName: 'bg-[#EE3E23] text-white', headerAlign: 'center', align: 'center'},
+        { field: 'province_name', headerName: 'Province', width: 150, valueGetter: (params) => params.row.province.province_name, headerClassName: 'bg-[#EE3E23] text-white', headerAlign: 'center', align: 'center'},
+        { field: 'postal_code', headerName: 'Postal Code', width: 120, headerClassName: 'bg-[#EE3E23] text-white', headerAlign: 'center', align: 'center'},
+        { field: 'country', headerName: 'Country', width: 150, headerClassName: 'bg-[#EE3E23] text-white', headerAlign: 'center', align: 'center'},
+        { field: 'geo', headerName: 'Geo', width: 150, headerClassName: 'bg-[#EE3E23] text-white', headerAlign: 'center', align: 'center' },
         {
             field: 'actions',
             headerName: 'Actions',
+            headerClassName: 'bg-[#EE3E23] text-white',
+            headerAlign: 'center', align: 'center',
             renderCell: (params) => (
                 <div className="flex gap-3">
                     <button className="text-lg" onClick={() => deleteContactLocation(params.row.ID)}>
