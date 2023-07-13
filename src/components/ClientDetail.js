@@ -7,6 +7,7 @@ import Alert from '@material-ui/lab/Alert';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { deleteClient, getClientByID } from '../api/services/Client'
 import { createContact, getAllContacts } from '../api/services/Contact';
+import LocationTable from './tables/LocationTable';
 
 const ClientDetail = () => {
     const { id } = useParams()
@@ -173,30 +174,7 @@ const ClientDetail = () => {
                     <div className='py-5'>
                         <p className='font-bold text-xl mb-3'>Locations</p>
 
-                        <table className='border-collapse'>
-                            <thead>
-                                <tr>
-                                    <th className='border px-4 py-2'>Address</th>
-                                    <th className='border px-4 py-2'>City</th>
-                                    <th className='border px-4 py-2'>Province</th>
-                                    <th className='border px-4 py-2'>Postal Code</th>
-                                    <th className='border px-4 py-2'>Country</th>
-                                    <th className='border px-4 py-2'>Geo</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {contact.locations && contact.locations.map(location => (
-                                    <tr key={location.ID}>
-                                        <td className='border px-4 py-2'>{location.address || '-'}</td>
-                                        <td className='border px-4 py-2'>{location.city.city_name || '-'}</td>
-                                        <td className='border px-4 py-2'>{location.province.province_name || '-'}</td>
-                                        <td className='border px-4 py-2'>{location.postal_code || '-'}</td>
-                                        <td className='border px-4 py-2'>{location.country || '-'}</td>
-                                        <td className='border px-4 py-2'>{location.geo || '-'}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                        <LocationTable id={ id }/>
                     </div>
 
                 </div>

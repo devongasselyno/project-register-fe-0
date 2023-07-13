@@ -18,21 +18,39 @@ export const getAllLocations = async () => {
     }
 };
 
-export const getLocationById = async (locationId) => {
+export const getLocationByID = async (locationId) => {
     try {
         const response = await Fetch({ url: `/locations/read/${locationId}`, method: 'GET' });
+        return response.data
+    } catch (error) {
+        throw new Error(error.response.data.error);
+    }
+}
+
+export const getLocationByContactID = async (locationId) => {
+    try {
+        const response = await Fetch({ url: `/locations/read/contact/${locationId}`, method: 'GET' });
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.error);
     }
-};
+}
+
+export const getLocationByClientID = async (locationId) => {
+    try {
+        const response = await Fetch({ url: `/locations/read/client/${locationId}`, method: 'GET' })
+        return response.data
+    } catch (error) {
+        throw new Error(error.response.data.error)
+    }
+}
 
 export const searchLocations = async (searchParams) => {
     try {
-        const response = await Fetch({ url: '/locations/search', params: searchParams, method: 'GET' });
-        return response.data;
+        const response = await Fetch({ url: '/locations/search', params: searchParams, method: 'GET' })
+        return response.data
     } catch (error) {
-        throw new Error(error.response.data.error);
+        throw new Error(error.response.data.error)
     }
 };
 

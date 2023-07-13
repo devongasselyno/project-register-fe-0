@@ -52,13 +52,4 @@ export const softDeleteContact = async (id) => {
     } catch (error) {
         throw new Error(error.response.data.error);
     }
-};
-
-export const getLocationByContactID = async (id) => {
-    try {
-        const response = await Fetch.get({url: `/contact/locations/${id}`, method: 'DELETE'})
-        return response
-    } catch (error) {
-        throw new Error(error.response.data.error);
-    }
-};
+}
