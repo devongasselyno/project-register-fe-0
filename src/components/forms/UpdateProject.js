@@ -15,6 +15,7 @@ const UpdateProject = () => {
         manager: '',
         status: '',
         amount: 0,
+        currency: '',
         kurs: 0,
         total_amount: 0,
         company_id: 0,
@@ -76,6 +77,7 @@ const UpdateProject = () => {
                     manager: projectData.manager || '',
                     status: projectData.status || '',
                     amount: projectData.amount || 0,
+                    currency: 'IDR',
                     company_id: projectData.company_id || 0,
                     client_id: projectData.client_id || 0,
                     jira: projectData.jira || false,
@@ -110,14 +112,18 @@ const UpdateProject = () => {
     }, [])
 
     const currencyOptions = [
-        { code: 'USD', symbol: '$' },
         { code: 'IDR', symbol: 'Rp.' },
-        { code: 'CNY', symbol: '¥' },
+        { code: 'USD', symbol: '$' },
+        { code: 'EUR', symbol: '€' },
+        { code: 'JPY', symbol: '¥' },
+        { code: 'GBP', symbol: '£' },
     ];
 
     const handleCurrencyChange = (e) => {
         const selectedCurrency = e.target.value;
-        setSelectedCurrency(selectedCurrency);
+        setFormData({
+            currency: selectedCurrency
+        })
       
         if (selectedCurrency === 'IDR') {
           setFormData((prevData) => ({
@@ -145,8 +151,6 @@ const UpdateProject = () => {
             setFormData((prevData) => ({ ...prevData, total_amount: '' }));
         }
     };
-
-    const [selectedCurrency, setSelectedCurrency] = useState('')
       
     return (
         <div className='mt-10 mb-20 mx-auto max-w-xl flex-col items-center'>
@@ -173,12 +177,12 @@ const UpdateProject = () => {
 
                 <div className='pb-2 flex gap-3'>
                     <div>
-                        <label htmlFor="Currency" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Currency</label>
+                        <label htmlFor="currency" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Currency</label>
                             <div className='flex items-center gap-2'>
                             <select
                                 id="currency"
                                 name="currency"
-                                value={selectedCurrency}
+                                value={formData.currency}
                                 onChange={handleCurrencyChange}
                                 className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700'
                             >
@@ -195,12 +199,13 @@ const UpdateProject = () => {
                     <div>
                         <label htmlFor="amount" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Amount</label>
                             <div className='flex items-center gap-2'>
-                            <span>{currencyOptions.find((currency) => currency.code === selectedCurrency)?.symbol}</span>
-                                <input id='amount' name='amount' type="text" value={formData.amount.toLocaleString('en-US', { useGrouping: true, minimumFractionDigits: 0 }).replace(/,/g, '.')}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>   
+                                <span>{currencyOptions.find((currency) => currency.code === formData.currency)?.symbol}</span>
+                                <input id='amount' name='amount' type="text" value={formData.amount ? formData.amount.toLocaleString('en-US', { useGrouping: true, minimumFractionDigits: 0 }).replace(/,/g, '.') : ''}  onChange={handleChange} className='w-full bg-gray-100 border border-zinc-400 text-gray-900 text-sm rounded focus:ring-orange-700 focus:border-orange-700 w-1/5'/>   
                             </div>
                         {errors.amount && <p className="text-red-500">{errors.amount}</p>}
                     </div>
-                    {selectedCurrency !== 'IDR' && selectedCurrency !== '' && (
+
+                    {formData.currency !== 'IDR' && formData.currency !== '' && (
                     <div>
                         <label htmlFor="kurs" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Kurs</label>
                         <div className='flex items-center gap-2'>
@@ -210,7 +215,7 @@ const UpdateProject = () => {
                     </div>
                     )}
 
-                    {selectedCurrency !== 'IDR' && selectedCurrency !== '' && (
+                    {formData.currency !== 'IDR' && formData.currency !== '' && (
                     <div>
                         <label htmlFor="total_amount" className='block text-sm font-medium leading-6 text-gray-900 py-1'>Total Amount (IDR)</label>
                         <div className='flex items-center gap-2'>
@@ -254,9 +259,9 @@ const UpdateProject = () => {
                     >
                         <option value=''>Select a client</option>
                         {clients.map((client) => (
-                        <option key={client.ID} value={String(client.ID)}>
-                            {client.client_name}
-                        </option>
+                            <option key={client.ID} value={String(client.ID)}>
+                                {client.client_name}
+                            </option>
                         ))}
                     </select>
                     {errors.client_id && <p className="text-red-500">{errors.client_id}</p>}

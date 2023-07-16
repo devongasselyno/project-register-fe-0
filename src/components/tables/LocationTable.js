@@ -21,7 +21,6 @@ const LocationTable = () => {
         postal_code: "",
         country: "",
         geo: "",
-        contact_id: parseInt(id, 10)
     })
 
     const [showAddLocationForm, setShowAddLocationForm] = useState(false)
@@ -58,8 +57,6 @@ const LocationTable = () => {
         } catch (error) {
             console.error(error)
         }
-
-
         fetchLocations()
     }
 
@@ -112,6 +109,19 @@ const LocationTable = () => {
 
     const handleAddLocation = async () => {
         try {
+            if (url.pathname.includes('/client/')) {
+                setLocationData(prevData => ({
+                    ...prevData,
+                    client_id: parseInt(id, 10)
+                }));
+            }
+            else if (url.pathname.includes('/contact/')) {
+                setLocationData(prevData => ({
+                    ...prevData,
+                    contact_id: parseInt(id, 10)
+                }));
+            }
+
             await createLocation(locationData)
 
             setLocationData({
@@ -121,8 +131,10 @@ const LocationTable = () => {
                 postal_code: "",
                 country: "",
                 geo: "",
+                client_id: parseInt(id, 10),
                 contact_id: parseInt(id, 10)
             })
+
             setShowAddLocationForm(false)
             fetchLocations()
         } catch (error) {
@@ -153,11 +165,9 @@ const LocationTable = () => {
         try {
             let res = ''
             if (url.pathname.includes('/client/')) {
-                console.log("client")
                 res = await getLocationByClientID(id)
             } else if (url.pathname.includes('/contact/')) {
                 res = await getLocationByContactID(id)
-                console.log("contact")
             }
             setLocations(res.data)
         } catch (error) {
@@ -207,7 +217,7 @@ const LocationTable = () => {
                 rows={locations}
                 getRowId={getRowId}
                 columns={locationColumns}
-                sty
+                className='-z-10'
                 initialState={{
                     pagination: {
                         paginationModel: { page: 0, pageSize: 5 },
@@ -224,7 +234,7 @@ const LocationTable = () => {
             </button>
 
             {showAddLocationForm && (
-                <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm'>
+                <div className='fixed z-20 inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm'>
                     <div className='bg-white rounded-lg py-6 px-10 w-1/3 absolute text-center'>
                         <div>
                             <FaTimes className='ml-auto hover:cursor-pointer' onClick={handleAddLocationClose} />

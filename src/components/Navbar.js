@@ -112,7 +112,7 @@ function Navbar() {
 return (
         <div className='flex items-center justify-between h-[70px] shadow-lg px-6'>
     
-            <div className='w-96 ml-16 z-50'>
+            <div className='w-96 ml-16 z-10'>
                 <ReactSearchAutocomplete
                     items={[...prospects, ...projects]}
                     fuseOptions={{ keys: ["project_name"] }}

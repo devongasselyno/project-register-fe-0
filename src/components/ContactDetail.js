@@ -166,7 +166,7 @@ const ContactDetail = () => {
 
         if (isValid) {
             try {
-                const response = await createClient(clientData)
+                await createClient(clientData)
                 setSuccessSnackbar('Client Created')
                 handleClientClose()
                 setClientData({
@@ -207,7 +207,7 @@ const ContactDetail = () => {
     const fetchClients = async () => {
         try {
             const res = await getAllClients()
-            setClients(res.data)
+            setClients(res.data.data)
         } catch (error) {
             console.log("Error fetching data:", error)
         }
@@ -315,6 +315,7 @@ const ContactDetail = () => {
                 <p className='font-bold text-xl mb-3'>Employments</p>
                 <DataGrid
                     rows={employments}
+                    className='-z-10'
                     getRowId={getRowId}
                     columns={columns}
                     sty
@@ -348,7 +349,7 @@ const ContactDetail = () => {
             )}
 
             {showEmploymentForm && (
-                <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm'>
+                <div className='fixed z-20 inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm'>
                     <div className='bg-white rounded-lg py-6 px-10 w-1/3 absolute'>
                         <div>
                             <FaTimes className='ml-auto hover:cursor-pointer' onClick={handleEmploymentClose} />

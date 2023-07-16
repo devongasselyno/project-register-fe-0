@@ -67,7 +67,7 @@ const UpdateProspect = () => {
         const fetchproject = async () => {
             try {
                 const response = await getProspect(id)
-                const projectData = response
+                const projectData = response.data.data
         
                 console.log("prospect data", projectData)
                 setFormData({
@@ -98,9 +98,8 @@ const UpdateProspect = () => {
             const clientsResponse = await getAllClients()
             const companiesResponse = await getAllCompanies()
         
-            setClients(clientsResponse)
-            setCompanies(companiesResponse)
-            console.log("companies:", companies)
+            setClients(clientsResponse.data.data)
+            setCompanies(companiesResponse.data.data)
         } catch (error) {
             console.error('Failed to fetch dropdown data:', error);
         }
